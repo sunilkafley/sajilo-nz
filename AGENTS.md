@@ -1,0 +1,13 @@
+# Sajilo NZ development rules
+- Preserve prototype design and working journeys during incremental migration.
+- Target React + TypeScript + Vite frontend, Django REST Framework API, PostgreSQL.
+- Keep business rules outside UI components. Use feature-oriented modules.
+- For each feature, define observable acceptance criteria and test important rules and integrations.
+- Run npm run check and npm test before handoff. Document any unrun checks.
+- Never commit secrets or personal user data.
+- Do not present example courses, community entries or events as verified/live data.
+- Never generate a verification date merely because code was built or deployed.
+- Content publication needs an official source and a recorded human review; translations require review too.
+- Do not provide personalised immigration eligibility decisions.
+- Keep guest access to public guidance; do not add accounts without a concrete feature need.
+- Do not deploy or change the existing prototype as part of this migration repository.
