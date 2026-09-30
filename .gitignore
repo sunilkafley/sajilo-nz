@@ -6,3 +6,5 @@ __pycache__/
 .venv/
 coverage/
 playwright-report/
+frontend/dist/
+test-results/

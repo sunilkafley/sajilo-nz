@@ -4,10 +4,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test",
-    "check": "node --check prototype/app.js"
+    "dev": "npm run dev --workspace frontend",
+    "build": "npm run build --workspace frontend",
+    "check": "node --check prototype/app.js && npm run check --workspace frontend",
+    "test": "node --test tests/*.test.mjs && npm run test --workspace frontend",
+    "test:e2e": "npm run test:e2e --workspace frontend --"
   },
   "engines": {
-    "node": ">=22"
-  }
+    "node": ">=22.12"
+  },
+  "workspaces": [
+    "frontend"
+  ]
 }
