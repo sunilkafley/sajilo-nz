@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { GuidePage } from './features/guides/GuidePage';
 import { summarise } from './features/checklist/domain';
 import { groupNames, sources, tasks } from './features/checklist/tasks';
 import type { ProgressRepository } from './features/checklist/repository';
@@ -12,9 +13,12 @@ export function App({ repository }: { repository: ProgressRepository }) {
   const location = useLocation();
   const main = useRef<HTMLElement>(null);
   useEffect(() => {
-    document.title = `${location.pathname === '/predeparture' ? 'Pre-departure checklist' : location.pathname === '/sources' ? 'Official sources' : 'Your journey'} · Sajilo NZ`;
-    main.current?.focus();
-  }, [location.pathname]);
+    document.title = `${location.pathname === '/predeparture' ? 'Pre-departure checklist' : location.pathname.startsWith('/guides') ? 'Pre-departure guides' : location.pathname === '/sources' ? 'Official sources' : 'Your journey'} · Sajilo NZ`;
+    const task = new URLSearchParams(location.search).get('task');
+    if (location.pathname === '/predeparture' && task && tasks.some(item => item.id === task)) {
+      document.getElementById(task)?.focus();
+    } else { main.current?.focus(); }
+  }, [location.pathname, location.search]);
   function change(id: string, checked: boolean) {
     const result = updateTask(repository, progress, id, checked, initial.blocked);
     setProgress(result.progress); setWarning(result.warning);
@@ -27,6 +31,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
       <nav aria-label="Main navigation">
         <NavLink to="/" end>Your journey</NavLink>
         <NavLink to="/predeparture">Pre-departure checklist</NavLink>
+        <NavLink to="/guides">Pre-departure guides</NavLink>
         <NavLink to="/sources">Official sources</NavLink>
       </nav>
       <div className="sidebar-note"><strong>A little help, a long way.</strong><p>Prepare at your own pace. One step at a time.</p></div>
@@ -36,15 +41,19 @@ export function App({ repository }: { repository: ProgressRepository }) {
       <main id="main" tabIndex={-1} ref={main}>
         {warning && <div role="alert" className="notice warning"><p>{warning}</p>{!initial.blocked && <button onClick={() => setWarning(retrySave(repository, progress))}>Try saving again</button>}</div>}
         <Routes>
+          <Route path="/guides" element={<GuidePage/>}/>
+          <Route path="/guides/:slug" element={<GuidePage/>}/>
           <Route path="/" element={<>
             <p className="eyebrow">YOUR JOURNEY</p><h1>A little preparation.<br/>A calmer arrival.</h1>
             <p className="intro">Keep your essentials in one place and take your next step towards New Zealand.</p>
             <section className="hero-card"><div><span className="badge">BEFORE YOU FLY</span><h2>Your pre-departure checklist</h2><p>Documents, packing, money and the details to check before leaving Nepal.</p><Link className="button" to="/predeparture">{summary.completed ? 'Continue my checklist' : 'Start my checklist'}</Link></div><div className="hero-progress"><strong>{summary.completed}<span> / {summary.total}</span></strong><p>tasks completed</p></div></section>
+            <section className="card"><h2>Know what to prepare</h2><p>Read reviewed guides and follow the related checklist steps.</p><Link to="/guides">Browse pre-departure guides</Link></section>
             <section className="card"><h2>Your progress stays with you on this browser</h2><p>No account is needed. Clearing browser data removes saved progress. This release does not yet support offline access or syncing between devices.</p></section>
           </>}/>
           <Route path="/predeparture" element={<>
             <p className="eyebrow">JOURNEY / BEFORE YOU FLY</p><h1>Your pre-departure checklist</h1><p className="intro">Pack your essentials, prepare your documents and feel ready.</p>
             <section className="progress-card" aria-label="Checklist progress"><div><h2 aria-live="polite">{summary.completed} of {summary.total} completed</h2><span>{summary.percent}%</span></div><progress aria-label="Tasks completed" value={summary.completed} max={summary.total}/></section>
+            <p><Link to="/guides">Read pre-departure guides</Link></p>
             <div className="groups">{groupNames.map(group => <section className="card" key={group}><h2>{group}</h2>{tasks.filter(task => task.group === group).map(task => <div className={`task ${progress.completed.includes(task.id) ? 'done' : ''}`} key={task.id}><input id={task.id} type="checkbox" checked={progress.completed.includes(task.id)} onChange={event => change(task.id, event.target.checked)}/><label htmlFor={task.id}>{task.label}</label></div>)}</section>)}</div>
             <div className="notice"><strong>Use this as a planning checklist.</strong><p>Last verified: not yet reviewed. Check the current official guidance for your circumstances.</p><Link to="/sources">View official sources</Link></div>
           </>}/>
