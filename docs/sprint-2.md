@@ -25,3 +25,10 @@ Starter command creates three drafts: English/Nepali travel documents and Englis
 
 ## Scope limits
 No production deployment, public accounts, cross-device sync, offline guide cache, search, content revision history, full UI translation or personalised immigration advice. Windows setup and real iPhone Safari require user validation. Next sprint: search/bookmarks/offline behaviour after reviewing this slice with users.
+
+## Python alignment and manual review — 2026-10-01
+
+- Runtime target: standard CPython 3.14.8, pinned in `.python-version` and consumed by CI. No dependency changes were needed for the initial alignment; CI validates the existing pins, PostgreSQL integration and browser journeys.
+- User verified dependency installation, Django system checks and all 14 backend tests on Windows with Python 3.14.8 and SQLite.
+- User confirmed the unreviewed-publication guardrail and successful reviewed publication → React guide → checklist completion → refresh persistence. This records functional testing, not a blanket editorial review of all starter content.
+- Real iPhone Safari validation remains outstanding.

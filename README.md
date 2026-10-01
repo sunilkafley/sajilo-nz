@@ -45,14 +45,19 @@ The Vite development server proxies `/api` to Django. Production API routing/hos
 
 ### Windows PowerShell — backend setup
 
-From the repository root, with Python 3.12 installed:
+From the repository root, with Python 3.14.8 installed (the version recorded in `.python-version` and used by CI):
 
 ```powershell
-py -3.12 -m venv .venv
+py -3.14 -m venv .venv
+.\.venv\Scripts\python.exe --version
 .\.venv\Scripts\python.exe -m pip install -r backend/requirements.txt
 $env:DJANGO_SECRET_KEY = & .\.venv\Scripts\python.exe -c "import secrets; print(secrets.token_urlsafe(50))"
 $env:DJANGO_DEBUG = "true"
 ```
+
+Confirm the version command prints `Python 3.14.8`. If you already have a working 3.14.8 `.venv`, keep it and skip environment creation. If an existing environment uses another version, stop its servers and rename it before creating a fresh `.venv`; do not overwrite it in place.
+
+Future Python patch upgrades should update `.python-version` and this setup guide together, then pass CI before adoption.
 
 Choose a database. For a quick local preview without installing PostgreSQL:
 
