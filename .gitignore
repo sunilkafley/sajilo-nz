@@ -8,3 +8,5 @@ coverage/
 playwright-report/
 frontend/dist/
 test-results/
+*.sqlite3
+backend/staticfiles/
