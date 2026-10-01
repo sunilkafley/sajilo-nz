@@ -40,3 +40,16 @@ it('rejects malformed content and unsafe source URLs', async () => {
   mount(); expect(await screen.findByRole('alert')).toHaveTextContent('Unexpected guide data');
   expect(screen.queryByRole('link',{name:'Unsafe'})).not.toBeInTheDocument();
 });
+it('keeps a saved copy on API failure and removes its body after a successful withdrawal check', async () => {
+  const fetch = vi.fn().mockResolvedValue({ok:true,json:async()=>[guide]}); vi.stubGlobal('fetch',fetch);
+  mount('/guides/travel-documents');
+  await userEvent.click(await screen.findByRole('button',{name:'Save guide'}));
+  fetch.mockRejectedValue(new Error('offline'));
+  await userEvent.click(screen.getByRole('link',{name:'View saved guides'}));
+  expect(await screen.findByText(/Showing saved copies only/)).toBeInTheDocument();
+  expect(screen.getByRole('link',{name:'Prepare documents'})).toBeInTheDocument();
+  fetch.mockResolvedValue({ok:true,json:async()=>[]});
+  await userEvent.click(screen.getByRole('button',{name:'Try again'}));
+  expect(await screen.findByText(/This guide is no longer available/)).toBeInTheDocument();
+  expect(screen.queryByRole('link',{name:'Prepare documents'})).not.toBeInTheDocument();
+});

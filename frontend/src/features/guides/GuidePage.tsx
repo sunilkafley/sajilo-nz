@@ -38,6 +38,7 @@ export function GuidePage({ savedOnly = false }: { savedOnly?: boolean }) {
   const guide = available?.find(item => item.slug === slug);
   const savedCopy = copies.find(item => item.slug === slug);
   function toggle(guide: Guide) {
+    setMessage('');
     const exists = copies.some(item => item.slug === guide.slug);
     if (persist(items => exists ? items.filter(item => !(item.slug === guide.slug && item.language === language)) : [...items.filter(item => !(item.slug === guide.slug && item.language === language)), snapshot(guide)])) setMessage(exists ? 'Saved guide removed.' : 'Guide saved to this browser.');
   }

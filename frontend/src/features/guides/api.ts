@@ -23,7 +23,7 @@ export function parseGuide(value: unknown): Guide {
   return value as Guide;
 }
 export async function fetchGuides(language: Language, signal?: AbortSignal): Promise<Guide[]> {
-  const response = await fetch(`/api/guides/?lang=${language}`, { signal, cache: 'no-store' });
+  const response = await fetch(`/api/guides/?lang=${language}`, { signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(8000)]) : AbortSignal.timeout(8000), cache: 'no-store' });
   if (!response.ok) throw new GuideError('Guides are unavailable right now. Your checklist still works.');
   const data: unknown = await response.json();
   if (!Array.isArray(data)) throw new GuideError('Unexpected guide data. Please try again later.');
