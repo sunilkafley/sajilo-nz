@@ -1,6 +1,6 @@
 # Sajilo NZ
 
-A student companion for the journey from Nepal to New Zealand. This first React development slice includes navigation, a 27-item pre-departure checklist, official source links and browser-local progress. The original prototype is preserved in `prototype/`.
+A student companion for the journey from Nepal to New Zealand. This development version includes a React checklist with browser-local progress and a Django API for reviewed English/Nepali guides. The original prototype is preserved in `prototype/`.
 
 ## Run locally
 Use Node.js 22.12+ and npm. From the repository root:
@@ -10,7 +10,7 @@ npm ci
 npm run dev
 ```
 
-Open the localhost URL printed by Vite. No backend or account is required.
+Open the localhost URL printed by Vite. The checklist works without a backend or reader account. For guides, complete the Django setup below.
 
 ## Checks
 
@@ -18,9 +18,9 @@ Open the localhost URL printed by Vite. No backend or account is required.
 npm run check
 npm test
 npm run build
-npx playwright install chromium
-npm run test:e2e
 ```
+
+Browser tests also require the Python environment; see the Sprint 2 setup below.
 
 `npm test` runs the six prototype regression tests and the React/domain/storage tests. Playwright covers keyboard completion, reload persistence, navigation, responsive overflow and failed storage writes on desktop and a Chromium mobile viewport. Mobile emulation is not a substitute for testing Safari on a real iPhone.
 
@@ -34,7 +34,7 @@ npm run test:e2e
 Progress uses a versioned localStorage record. Unknown task IDs are ignored; unsupported or corrupt records are preserved and writes blocked for that session. Write failures keep progress in memory and show a retry action. Legacy checklist progress is imported only when it exists on the **same origin**. Data on the old hosted Site cannot automatically transfer to localhost or a new domain. The original legacy record is never deleted.
 
 ## Scope and review
-This is an English-only frontend development slice, not a production release. Nepali localisation, offline support, device sync, reviewed content, Django REST Framework and PostgreSQL are planned. Source links do not mean the checklist has been editorially verified; the UI explicitly says it has not yet been reviewed.
+This is a development version, not a production release. Django REST Framework and PostgreSQL configuration are included. Guides support English and Nepali; the interface remains English. Full interface localisation, offline support and device sync are planned. Starter guides await human review. Source links do not mean the checklist has been editorially verified; the UI explicitly says it has not yet been reviewed.
 
 Use feature branches and small pull requests. Quality checks run on push and PR; branch protection is a separate GitHub setting. No deployment or existing Site changes are included.
 
