@@ -123,3 +123,20 @@ npm run test:e2e
 ```
 
 Browser tests create synthetic published content in a temporary database, never in your local editorial database. PostgreSQL integration tests run in GitHub CI under the existing required **quality** check. See [Sprint 2 acceptance criteria](docs/sprint-2.md).
+
+### Sprint 3: search, saved guides and offline use
+
+Search the selected language's reviewed guides by title, summary or body. Use **Save guide** to keep a copy on this browser; **Saved guides** lists those bookmarks. English and Nepali copies are saved separately. Clearing browser data removes them, and they do not sync between devices.
+
+To test offline locally, keep Django running and use a production frontend build (the development server does not register an offline worker):
+
+```powershell
+npm run build
+npm run preview -- --host 127.0.0.1 --port 4173
+```
+
+Open `http://127.0.0.1:4173`, wait for **App ready for offline use**, then save a reviewed guide. In browser developer tools, set the Network panel to Offline and refresh the guide. Its body and original review dates should remain visible with a saved-copy warning. Follow a checklist task, complete it and refresh again. Restore the network when finished. Official websites still require a connection.
+
+If the guide is returned to draft in Django, reconnect and reopen the guide or Saved guides: its cached body is removed after the successful publication check. When offline or when the API fails, the app cannot check withdrawals or changes; it explicitly labels the saved copy. A storage failure never confirms a successful save. Limits: 50 text guides and approximately 1 MB per browser. Browser storage can be cleared or evicted.
+
+Offline access needs a browser supporting service workers on HTTPS or localhost. Opening a phone against a laptop's plain HTTP LAN address does not provide this capability. Real iPhone Safari acceptance testing remains outstanding.

@@ -6,3 +6,8 @@
 .guide-body { max-width:850px; overflow-wrap:anywhere; line-height:1.8; }
 .guide-body li { margin-bottom:12px; }
 .task:focus-within { outline:2px solid #177356; outline-offset:3px; border-radius:8px; }
+
+.guide-search { display:flex; gap: .75rem; flex-wrap:wrap; align-items:center; margin:1.5rem 0; }
+.guide-search input { font:inherit; padding:.7rem; border:1px solid #718179; border-radius:.5rem; max-width:100%; }
+.offline-status { font-size:.85rem; color:#52645b; }
+.card button { margin:.5rem 0; }
