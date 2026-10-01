@@ -9,7 +9,8 @@
     "check": "node --check prototype/app.js && npm run check --workspace frontend",
     "test": "node --test tests/*.test.mjs && npm run test --workspace frontend",
     "test:e2e": "npm run test:e2e --workspace frontend --",
-    "preview": "npm run preview --workspace frontend --"
+    "preview": "node node_modules/vite/bin/vite.js preview frontend --host 127.0.0.1 --port 4173 --strictPort",
+    "preview:lan": "node node_modules/vite/bin/vite.js preview frontend --host 0.0.0.0 --port 4173 --strictPort"
   },
   "engines": {
     "node": ">=22.12"
