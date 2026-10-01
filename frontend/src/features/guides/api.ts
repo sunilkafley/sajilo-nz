@@ -7,11 +7,12 @@ export interface Guide {
 }
 export class GuideError extends Error {}
 const officialHosts = new Set(['www.immigration.govt.nz', 'www.mpi.govt.nz', 'www.travellerdeclaration.govt.nz']);
-function parseGuide(value: unknown): Guide {
+export function parseGuide(value: unknown): Guide {
   if (!value || typeof value !== 'object') throw new GuideError('Unexpected guide data. Please try again later.');
   const g = value as Record<string, unknown>;
   const strings = ['slug', 'stage', 'title', 'summary', 'body', 'verified_on', 'next_review_on'];
-  const valid = strings.every(key => typeof g[key] === 'string' && g[key]) &&
+  const validDate = (value: unknown) => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) && Number.isFinite(Date.parse(value)) && new Date(value).toISOString().slice(0, 10) === value;
+  const valid = typeof g.slug === 'string' && /^[a-zA-Z0-9_-]+$/.test(g.slug) && validDate(g.verified_on) && validDate(g.next_review_on) && strings.every(key => typeof g[key] === 'string' && g[key]) &&
     (g.language === 'en' || g.language === 'ne') && typeof g.review_overdue === 'boolean' &&
     Array.isArray(g.checklist_ids) && g.checklist_ids.every(id => tasks.some(task => task.id === id)) &&
     Array.isArray(g.sources) && g.sources.length > 0 && g.sources.every(source => {
@@ -22,9 +23,11 @@ function parseGuide(value: unknown): Guide {
   return value as Guide;
 }
 export async function fetchGuides(language: Language, signal?: AbortSignal): Promise<Guide[]> {
-  const response = await fetch(`/api/guides/?lang=${language}`, { signal });
+  const response = await fetch(`/api/guides/?lang=${language}`, { signal, cache: 'no-store' });
   if (!response.ok) throw new GuideError('Guides are unavailable right now. Your checklist still works.');
   const data: unknown = await response.json();
   if (!Array.isArray(data)) throw new GuideError('Unexpected guide data. Please try again later.');
-  return data.map(parseGuide);
+  const guides = data.map(parseGuide);
+  if (guides.some(guide => guide.language !== language) || new Set(guides.map(guide => guide.slug)).size !== guides.length) throw new GuideError('Unexpected guide data. Please try again later.');
+  return guides;
 }

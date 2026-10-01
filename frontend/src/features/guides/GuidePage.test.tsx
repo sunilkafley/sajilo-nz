@@ -15,7 +15,7 @@ it('reads a guide, shows overdue review and follows a task to persistent checkli
   mount();
   await userEvent.click(await screen.findByRole('link',{name:'Prepare documents'}));
   expect(await screen.findByText('Check your documents.')).toBeInTheDocument();
-  expect(screen.getByRole('status')).toHaveTextContent('Review due');
+  expect(screen.getByText('Review due — check the official sources for updates.')).toHaveAttribute('role', 'status');
   await userEvent.click(screen.getByRole('link',{name:'Passport'}));
   const checkbox = screen.getByRole('checkbox',{name:'Passport'});
   expect(checkbox).toHaveFocus();

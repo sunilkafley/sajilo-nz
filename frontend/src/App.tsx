@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { OfflineStatus } from './OfflineStatus';
 import { GuidePage } from './features/guides/GuidePage';
 import { summarise } from './features/checklist/domain';
 import { groupNames, sources, tasks } from './features/checklist/tasks';
@@ -13,7 +14,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
   const location = useLocation();
   const main = useRef<HTMLElement>(null);
   useEffect(() => {
-    document.title = `${location.pathname === '/predeparture' ? 'Pre-departure checklist' : location.pathname.startsWith('/guides') ? 'Pre-departure guides' : location.pathname === '/sources' ? 'Official sources' : 'Your journey'} · Sajilo NZ`;
+    document.title = `${location.pathname === '/predeparture' ? 'Pre-departure checklist' : (location.pathname.startsWith('/guides') || location.pathname === '/saved') ? 'Pre-departure guides' : location.pathname === '/sources' ? 'Official sources' : 'Your journey'} · Sajilo NZ`;
     const task = new URLSearchParams(location.search).get('task');
     if (location.pathname === '/predeparture' && task && tasks.some(item => item.id === task)) {
       document.getElementById(task)?.focus();
@@ -32,6 +33,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
         <NavLink to="/" end>Your journey</NavLink>
         <NavLink to="/predeparture">Pre-departure checklist</NavLink>
         <NavLink to="/guides">Pre-departure guides</NavLink>
+        <NavLink to="/saved">Saved guides</NavLink>
         <NavLink to="/sources">Official sources</NavLink>
       </nav>
       <div className="sidebar-note"><strong>A little help, a long way.</strong><p>Prepare at your own pace. One step at a time.</p></div>
@@ -40,7 +42,9 @@ export function App({ repository }: { repository: ProgressRepository }) {
       <header className="topbar"><span>NEPAL <span aria-hidden="true"> / </span> NEW ZEALAND</span><span className="badge">My student space</span></header>
       <main id="main" tabIndex={-1} ref={main}>
         {warning && <div role="alert" className="notice warning"><p>{warning}</p>{!initial.blocked && <button onClick={() => setWarning(retrySave(repository, progress))}>Try saving again</button>}</div>}
+        <OfflineStatus/>
         <Routes>
+          <Route path="/saved" element={<GuidePage savedOnly/>}/>
           <Route path="/guides" element={<GuidePage/>}/>
           <Route path="/guides/:slug" element={<GuidePage/>}/>
           <Route path="/" element={<>
@@ -48,7 +52,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
             <p className="intro">Keep your essentials in one place and take your next step towards New Zealand.</p>
             <section className="hero-card"><div><span className="badge">BEFORE YOU FLY</span><h2>Your pre-departure checklist</h2><p>Documents, packing, money and the details to check before leaving Nepal.</p><Link className="button" to="/predeparture">{summary.completed ? 'Continue my checklist' : 'Start my checklist'}</Link></div><div className="hero-progress"><strong>{summary.completed}<span> / {summary.total}</span></strong><p>tasks completed</p></div></section>
             <section className="card"><h2>Know what to prepare</h2><p>Read reviewed guides and follow the related checklist steps.</p><Link to="/guides">Browse pre-departure guides</Link></section>
-            <section className="card"><h2>Your progress stays with you on this browser</h2><p>No account is needed. Clearing browser data removes saved progress. This release does not yet support offline access or syncing between devices.</p></section>
+            <section className="card"><h2>Your progress stays with you on this browser</h2><p>No account is needed. Save reviewed guides for reading offline once the app is ready. Clearing browser data removes saved guides and checklist progress. Data does not sync between devices.</p></section>
           </>}/>
           <Route path="/predeparture" element={<>
             <p className="eyebrow">JOURNEY / BEFORE YOU FLY</p><h1>Your pre-departure checklist</h1><p className="intro">Pack your essentials, prepare your documents and feel ready.</p>
