@@ -36,17 +36,22 @@ jobs:
         with:
           python-version-file: '.python-version'
           cache: pip
-          cache-dependency-path: backend/requirements.txt
+          cache-dependency-path: backend/requirements*.txt
       - run: python --version
-      - run: python -m pip install -r backend/requirements.txt
+      - run: python -m pip install -r backend/requirements-deploy.txt
       - run: python -m pip check
       - run: python backend/manage.py check
       - run: python backend/manage.py makemigrations --check --dry-run
+      - run: python -m unittest discover -s backend -p "test_staging_policy.py"
+      - run: python scripts/check_staging.py
       - run: python backend/manage.py test guides
       - run: npm ci
       - run: npm run check
       - run: npm test
       - run: npm run build
+      - run: python scripts/check_render.py
+      - run: docker build -t sajilo-staging-check .
+      - run: python scripts/check_container.py
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v4

@@ -132,7 +132,7 @@ To test offline locally, keep Django running and use a production frontend build
 
 ```powershell
 npm run build
-npm run preview -- --host 127.0.0.1 --port 4173
+npm run preview
 ```
 
 Open `http://127.0.0.1:4173`, wait for **App ready for offline use**, then save a reviewed guide. In browser developer tools, set the Network panel to Offline and refresh the guide. Its body and original review dates should remain visible with a saved-copy warning. Follow a checklist task, complete it and refresh again. Restore the network when finished. Official websites still require a connection.
@@ -140,3 +140,11 @@ Open `http://127.0.0.1:4173`, wait for **App ready for offline use**, then save 
 If the guide is returned to draft in Django, reconnect and reopen the guide or Saved guides: its cached body is removed after the successful publication check. When offline or when the API fails, the app cannot check withdrawals or changes; it explicitly labels the saved copy. A storage failure never confirms a successful save. Limits: 50 text guides and approximately 1 MB per browser. Browser storage can be cleared or evicted.
 
 Offline access needs a browser supporting service workers on HTTPS or localhost. Opening a phone against a laptop's plain HTTP LAN address does not provide this capability. Real iPhone Safari acceptance testing remains outstanding.
+
+### Sprint 4 — staging and pilot readiness
+
+Current implementation stage and acceptance work: [Sprint 4 plan](docs/sprint-4.md). Provider-neutral HTTPS deployment requirements: [staging runbook](docs/staging.md).
+
+On Windows, `npm run preview` now supplies host and port directly, without forwarding flags through nested npm commands. Use `npm run preview:lan` for same-Wi-Fi iPhone layout checks; offline acceptance still requires HTTPS.
+
+Free hosting setup: [Render + Neon instructions](docs/render-neon.md). The blueprint deploys one Docker-based Free web service; enter Neon credentials privately in Render. Merge the reviewed configuration before using New → Blueprint.

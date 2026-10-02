@@ -1,0 +1,37 @@
+# One FREE staging service. PostgreSQL is supplied separately by Neon Free.
+services:
+  - type: web
+    name: sajilo-nz-staging
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    autoDeployTrigger: "off"
+    healthCheckPath: /api/health/
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.render
+      - key: DJANGO_SECRET_SEED
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "false"
+      - key: DJANGO_USE_SQLITE
+        value: "false"
+      - key: DJANGO_TRUST_PROXY_HTTPS
+        value: "true"
+      - key: POSTGRES_SSLMODE
+        value: verify-full
+      - key: POSTGRES_SSLROOTCERT
+        value: /etc/ssl/certs/ca-certificates.crt
+      - key: POSTGRES_PORT
+        value: "5432"
+      - key: POSTGRES_HOST
+        sync: false
+      - key: POSTGRES_DB
+        sync: false
+      - key: POSTGRES_USER
+        sync: false
+      - key: POSTGRES_PASSWORD
+        sync: false
