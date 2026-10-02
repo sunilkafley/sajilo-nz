@@ -146,3 +146,5 @@ Offline access needs a browser supporting service workers on HTTPS or localhost.
 Current implementation stage and acceptance work: [Sprint 4 plan](docs/sprint-4.md). Provider-neutral HTTPS deployment requirements: [staging runbook](docs/staging.md).
 
 On Windows, `npm run preview` now supplies host and port directly, without forwarding flags through nested npm commands. Use `npm run preview:lan` for same-Wi-Fi iPhone layout checks; offline acceptance still requires HTTPS.
+
+Free hosting setup: [Render + Neon instructions](docs/render-neon.md). The blueprint deploys one Docker-based Free web service; enter Neon credentials privately in Render. Merge the reviewed configuration before using New → Blueprint.

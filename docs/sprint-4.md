@@ -20,7 +20,7 @@ Make the existing pre-departure journey available on a stable HTTPS staging URL 
 
 ## Work slices
 - 4A, in this branch: opt-in staging configuration and validation; reliable Windows preview commands; deployment runbook and pilot protocol.
-- 4B, pending hosting choice: configure separate staging resources, same-origin frontend/API routing, TLS, static assets, secrets, backups and release/rollback steps. Choose provider, account, region, domain and cost limit before provisioning.
+- 4B, configuration added; actual deployment pending: configure separate staging resources, same-origin frontend/API routing, TLS, static assets, secrets, backups and release/rollback steps. User selected free tiers and created Render/Neon accounts. Target Singapore and a Render-provided hostname; use docs/render-neon.md.
 - 4C, human editorial work: review a small English/Nepali guide set against official sources; record reviewer and actual verification dates. No automated publication or fabricated review dates.
 - 4D, device and pilot work: complete the protocol below; log issues and fix reproducible blockers with regression tests.
 

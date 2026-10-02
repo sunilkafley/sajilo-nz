@@ -1,6 +1,6 @@
 # Staging deployment runbook
 
-Status: configuration prepared; no provider selected and no deployment performed. Do not use this document as proof of a completed deployment.
+Status: provider-neutral baseline below; Render Free + Neon Free has now been selected. See docs/render-neon.md for the concrete deployment setup. No deployment performed. Do not use this document as proof of a completed deployment.
 
 ## Intended topology
 Use a separate staging hostname and database. Serve the React production build and `/api/` through the same HTTPS origin; route `/admin/` to Django for authenticated editors and `/static/` to collected Django assets. Keep the application/database on private network paths where possible. This avoids introducing cross-origin API credentials or changing the current frontend API URLs. Preserve the existing hosted prototype.
