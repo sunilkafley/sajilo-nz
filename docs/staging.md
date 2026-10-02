@@ -1,11 +1,11 @@
 # Staging deployment runbook
 
-Status: provider-neutral baseline below; Render Free + Neon Free has now been selected. See docs/render-neon.md for the concrete deployment setup. No deployment performed. Do not use this document as proof of a completed deployment.
+Status: provider-neutral baseline below; Render Free + Neon Free has now been selected. See docs/render-neon.md for the concrete deployment setup. Deployment and user-reported acceptance are recorded in docs/sprint-4.md; recovery remains pending in docs/recovery-drill.md.
 
 ## Intended topology
 Use a separate staging hostname and database. Serve the React production build and `/api/` through the same HTTPS origin; route `/admin/` to Django for authenticated editors and `/static/` to collected Django assets. Keep the application/database on private network paths where possible. This avoids introducing cross-origin API credentials or changing the current frontend API URLs. Preserve the existing hosted prototype.
 
-Hosting choice is still open. Confirm account, provider, region, recurring cost ceiling and stable staging hostname before provisioning. The chosen provider must support a production WSGI/ASGI process, Python 3.14.8, PostgreSQL, static hosting/reverse proxy, TLS, environment secrets, logs and backups. Vite preview and Django runserver are local testing tools, not the staging process. Pin and test the production server dependency once the platform is selected.
+Render Free + Neon Free is selected, with a stable onrender.com hostname. The chosen provider must support a production WSGI/ASGI process, Python 3.14.8, PostgreSQL, static hosting/reverse proxy, TLS, environment secrets, logs and backups. Vite preview and Django runserver are local testing tools, not the staging process. Pin and test the production server dependency once the platform is selected.
 
 ## Required environment
 Set `DJANGO_SETTINGS_MODULE=config.staging` in the application process and all release commands. Django does not automatically load .env files.
