@@ -1,5 +1,19 @@
 """Same-origin React/Django service behind Render's HTTPS edge."""
 import os
+import base64
+from django.core.exceptions import ImproperlyConfigured
+
+# Render generates 32 random bytes encoded as 44 base64 characters.
+# Re-encode as 64 hex characters for Django's length check; entropy is unchanged.
+if not os.environ.get('DJANGO_SECRET_KEY'):
+    try:
+        seed = base64.b64decode(os.environ.get('DJANGO_SECRET_SEED', ''), validate=True)
+    except ValueError as error:
+        raise ImproperlyConfigured('Invalid Render secret seed.') from error
+    if len(seed) != 32:
+        raise ImproperlyConfigured('Render must supply a 256-bit DJANGO_SECRET_SEED.')
+    os.environ['DJANGO_SECRET_KEY'] = seed.hex()
+
 
 hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME', '')
 if hostname:

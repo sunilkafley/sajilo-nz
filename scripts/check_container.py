@@ -1,5 +1,6 @@
 """Smoke-test the built Linux image without touching a database."""
 import json
+import base64
 import secrets
 import subprocess
 import time
@@ -8,7 +9,7 @@ from urllib.request import Request, urlopen
 values = {
     'DJANGO_SETTINGS_MODULE': 'config.render',
     'RENDER_EXTERNAL_HOSTNAME': 'container-test.onrender.com',
-    'DJANGO_SECRET_KEY': secrets.token_urlsafe(64),
+    'DJANGO_SECRET_SEED': base64.b64encode(secrets.token_bytes(32)).decode(),
     'DJANGO_TRUST_PROXY_HTTPS': 'true',
     'POSTGRES_HOST': 'db.example.com', 'POSTGRES_DB': 'test',
     'POSTGRES_USER': 'test', 'POSTGRES_PASSWORD': 'test-only', 'POSTGRES_SSLMODE': 'verify-full',

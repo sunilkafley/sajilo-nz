@@ -13,7 +13,7 @@ services:
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: config.render
-      - key: DJANGO_SECRET_KEY
+      - key: DJANGO_SECRET_SEED
         generateValue: true
       - key: DJANGO_DEBUG
         value: "false"

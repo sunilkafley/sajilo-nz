@@ -21,7 +21,7 @@ These settings are separate fields, not a DATABASE_URL. The template sets port 5
 1. In Render, choose New → Blueprint and connect GitHub with access to `sunilkafley/sajilo-nz`.
 2. Select that repository, main branch and `render.yaml` path if prompted.
 3. Inspect the proposed resources: exactly one `sajilo-nz-staging` web service, Docker runtime, Singapore, **Free** instance. Stop if a paid resource appears. Resource names must not collide with an existing service you want to preserve.
-4. Enter the four Neon values above in the requested secret fields. Render generates DJANGO_SECRET_KEY. The service derives its allowed hostname/CSRF origin from RENDER_EXTERNAL_HOSTNAME.
+4. Enter the four Neon values above in the requested secret fields. Render generates DJANGO_SECRET_SEED; the app re-encodes those 32 random bytes as a 64-character Django secret without changing their entropy. The service derives its allowed hostname/CSRF origin from RENDER_EXTERNAL_HOSTNAME.
 5. Create/deploy the blueprint. Docker builds React, installs pinned backend packages and collects admin static files. On startup, migrations run before Gunicorn starts. A database connection or migration error prevents startup; inspect logs without sharing credentials.
 6. Open the generated HTTPS onrender.com address. Check `/api/health/`, `/api/guides/?lang=en` and `/admin/login/`. Empty guides are expected for a new database. The liveness endpoint does not claim ongoing database health.
 

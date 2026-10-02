@@ -1,5 +1,6 @@
 """Test same-origin production routing with disposable settings and built assets."""
 import os
+import base64
 from pathlib import Path
 import secrets
 import sys
@@ -9,12 +10,12 @@ sys.path.insert(0, str(root / 'backend'))
 os.environ.update({
     'DJANGO_SETTINGS_MODULE': 'config.render',
     'RENDER_EXTERNAL_HOSTNAME': 'sajilo-test.onrender.com',
-    'DJANGO_SECRET_KEY': secrets.token_urlsafe(64), 'DJANGO_DEBUG': 'false',
+    'DJANGO_SECRET_SEED': base64.b64encode(secrets.token_bytes(32)).decode(), 'DJANGO_DEBUG': 'false',
     'DJANGO_USE_SQLITE': 'false', 'DJANGO_TRUST_PROXY_HTTPS': 'true',
     'POSTGRES_DB': 'test', 'POSTGRES_USER': 'test', 'POSTGRES_PASSWORD': 'test-only',
     'POSTGRES_HOST': 'db.example.com', 'POSTGRES_SSLMODE': 'verify-full',
 })
-for key in ('DJANGO_ALLOWED_HOSTS', 'DJANGO_CSRF_TRUSTED_ORIGINS'):
+for key in ('DJANGO_SECRET_KEY', 'DJANGO_ALLOWED_HOSTS', 'DJANGO_CSRF_TRUSTED_ORIGINS'):
     os.environ.pop(key, None)
 import django
 from django.core.management import call_command
