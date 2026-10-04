@@ -1,6 +1,6 @@
 # Free staging: Render + Neon
 
-This is a deployable configuration, not a record of a completed deployment. User confirmed both accounts created. Use one Render Free web service and one Neon Free PostgreSQL project; no Render database, worker, paid disk or purchased domain. Choose Singapore for both. Stay within free quotas. Render may sleep after 15 idle minutes, delaying first access; Neon compute can also suspend. Do not use artificial keepalive traffic to avoid platform limits.
+Deployment is live at https://sajilo-nz-staging.onrender.com/. Acceptance evidence and remaining gates are in docs/sprint-4.md; recovery instructions are in docs/recovery-drill.md. Use one Render Free web service and one Neon Free PostgreSQL project; no Render database, worker, paid disk or purchased domain. Choose Singapore for both. Stay within free quotas. Render may sleep after 15 idle minutes, delaying first access; Neon compute can also suspend. Do not use artificial keepalive traffic to avoid platform limits.
 
 ## Before deploying
 Merge the reviewed Sprint 4 PR with passing CI into main. `render.yaml` must be present on main. The Docker build bundles React assets and a Python 3.14.8 Django server. You do not need Docker on your Windows laptop. Automatic deployment is off; later releases must be deliberately deployed after CI passes.
@@ -33,6 +33,16 @@ Render Free has no interactive shell. After startup migrations succeed, open Pow
 ```powershell
 python scripts/create_staging_admin.py
 ```
+
+On Windows, if the connection fails with `certificate verify failed`, use the verified session workaround with the virtual environment active:
+
+```powershell
+python -m pip install --upgrade certifi
+$env:SSL_CERT_FILE = (python -m certifi).Trim()
+python scripts/create_staging_admin.py
+```
+
+User confirmed this resolved the error and the remote superuser was created. Full TLS verification stays enabled. The environment variable applies to this PowerShell session.
 
 The script asks for the target Neon direct host, database and role; prints the target for confirmation; then requests the database password without echo. It creates an admin in that remote staging database only. Django then prompts for the editor username/email/password. Use that editor login at the staging `/admin/`. This script doesn't copy your local SQLite data, create guides or publish anything. It uses a temporary process-local Django secret, which is sufficient for password creation and is not the website's signing key.
 
