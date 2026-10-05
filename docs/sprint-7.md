@@ -1,6 +1,6 @@
 # Sprint 7 — arrival essentials
 
-Started 5 October 2026 (New Zealand), after the user confirmed PR #12 complete. GitHub confirmed it merged at `4c3f2f83951b3f871232fa6cbc69965478ffe7f0`. Status: **7A implemented for review; Sprint 7 remains open.**
+Started 5 October 2026 (New Zealand), after the user confirmed PR #12 complete. GitHub confirmed it merged at `4c3f2f83951b3f871232fa6cbc69965478ffe7f0`. Status: **7A reviewed and merged in PR #13 at `8c52f61`; Sprint 7 remains open.** On 6 October the user requested a [Home discovery layout](home-discovery.md), implemented as a separate small PR ahead of 7B without replacing the arrival-guidance plan.
 
 Base: merged PR #12 (`4c3f2f8`). Branch: `codex/sprint-7a-first-week`. Staging remains recorded at `f0bf8b3`; no deployment, publication or staging seed is part of this increment.
 
@@ -57,7 +57,7 @@ No database/API/schema/migration, source-host allowlist, dependency, hosting or 
 
 ## Carry-forward and next action
 
-Review 7A as a small engineering PR. Next, scope 7B's first arrival guide and explicit task-link contract: the current guide model supports pre-departure only, so arrival content must not be forced into that stage or published with task IDs older clients cannot interpret without compatibility assessment.
+Review the Home discovery follow-up separately. Next, scope 7B's first arrival guide and explicit task-link contract: the current guide model supports pre-departure only, so arrival content must not be forced into that stage or published with task IDs older clients cannot interpret without compatibility assessment.
 
 Keep [Sprint 5](sprint-5.md)'s human English/Nepali reviews (including travel-document drafts), real Safari model/iOS/mode and remaining per-case outcomes, 2–3 consenting anonymous structured sessions, private backup size/hash/retention and disposable restore-database cleanup confirmation open. Keep [Christchurch human review](content/christchurch-review.md) and [6C update/rollback compatibility](sprint-6.md) open. A merged engineering PR does not satisfy these gates.
 

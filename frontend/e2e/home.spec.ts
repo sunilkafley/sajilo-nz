@@ -10,6 +10,9 @@ test('Home matches prototype composition and connects next steps, city and guide
     await page.setViewportSize({width,height:1000});
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
     await expect(page.getByRole('progressbar')).toBeVisible();
+    const grid=page.locator('.home-discovery');
+    expect(await grid.evaluate(element=>getComputedStyle(element).gridTemplateColumns.split(' ').length)).toBe(width<900?2:3);
+    await page.screenshot({path:testInfo.outputPath(`home-${width}.png`),fullPage:true});
   }
   const tools=page.getByRole('region',{name:'A few handy tools'});
   await expect(tools.getByRole('link')).toHaveCount(0);
@@ -26,6 +29,26 @@ test('Home matches prototype composition and connects next steps, city and guide
   await page.getByRole('link',{name:'Home',exact:true}).click();
   await page.getByRole('link',{name:'Search pre-departure guides'}).click();
   await expect(page.getByRole('searchbox')).toBeVisible();
+});
+
+test('Home discovery and prominent help keep working destinations, keyboard focus and offline shell',async({page,context})=>{
+  await page.goto('/');
+  const discovery=page.getByRole('region',{name:'Start exploring'});
+  await expect(discovery.getByRole('article')).toHaveCount(6);
+  await expect(discovery.getByText('Planned',{exact:true})).toHaveCount(3);
+  const priority=page.getByRole('region',{name:'Budget and emergency help'});
+  await expect(priority.getByRole('link',{name:'NZ Police emergency information (online)'})).toHaveAttribute('href','https://www.police.govt.nz/contact-us/111-police-emergency');
+  await expect(priority.getByText('External website — internet required.',{exact:false})).toBeVisible();
+  await priority.getByRole('link',{name:'Open first-month budget step'}).focus();await page.keyboard.press('Enter');
+  await expect(page.getByRole('checkbox',{name:'First-month budget',exact:true})).toBeFocused();
+  await page.getByRole('checkbox',{name:'First-month budget',exact:true}).check();
+  await page.getByRole('link',{name:'Home',exact:true}).click();
+  await expect(page.getByText('App ready for offline use.',{exact:false})).toBeVisible();
+  await context.setOffline(true);await page.reload();
+  await expect(discovery.getByRole('article')).toHaveCount(6);
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow','1');
+  await discovery.getByRole('link',{name:'First-week planning',exact:true}).click();
+  await expect(page.getByRole('heading',{name:'Your first week, one step at a time.'})).toBeVisible();
 });
 
 test('Home bookmarks retain language and open saved copies offline without bypassing withdrawals',async({page,context})=>{

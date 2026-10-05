@@ -3,6 +3,7 @@ import type { Progress } from '../checklist/domain';
 import { iconPaths } from '../explore/catalog';
 import { homeJourney, plannedTools } from './domain';
 import { useSavedPreview } from './useSavedPreview';
+import { discoveryCards, emergencyResource } from './discovery';
 import './home.css';
 
 function Icon({ name }: { name: keyof typeof iconPaths }) {
@@ -23,9 +24,17 @@ export function HomePage({ progress }: { progress: Progress }) {
           </div>
           <div className="home-hero-bottom"><span>A new beginning, at your own pace</span><Link to="/predeparture">{journey.completed ? 'Continue my checklist' : 'Start my checklist'}<Icon name="arrow"/></Link></div>
         </section>
+        <section aria-labelledby="home-discovery"><h2 id="home-discovery">Start exploring</h2><div className="home-discovery">{discoveryCards.map(card => <article className="home-discovery-card" key={card.title}>
+          <span className="home-icon-tile"><Icon name={card.icon}/></span><h3>{card.title}</h3><p>{card.description}</p><span className="home-planned">{card.availability}</span>
+          <div className="home-discovery-links">{card.links.map(link => link.external ? <a key={link.to} href={link.to}>{link.label}</a> : <Link key={link.to} to={link.to}>{link.label}</Link>)}</div>
+        </article>)}</div><p className="home-small">Planned hubs are not available yet. Official links open external websites and need a connection. No personalised immigration assessment is provided.</p></section>
         <section className="card" aria-labelledby="home-next"><div className="home-section-head"><h2 id="home-next">Your next steps</h2><span>Before you fly</span></div>
           {journey.nextSteps.length ? <ol className="home-next-steps">{journey.nextSteps.map(task => <li key={task.id}><Icon name="journey"/><div><Link to={`/predeparture?task=${task.id}`}>{task.label}</Link><p>{task.group} · Open checklist step</p></div><Icon name="arrow"/></li>)}</ol> : <p role="status">All 27 planning tasks completed. You can revisit your checklist; completion does not confirm travel eligibility.</p>}
           <p className="home-small">Planning checklist — not yet editorially reviewed.</p><Link className="home-text-link" to="/predeparture">See all steps<Icon name="arrow"/></Link>
+        </section>
+        <section className="home-priority" aria-label="Budget and emergency help">
+          <article className="card home-budget"><span className="home-icon-tile"><Icon name="wallet"/></span><h2>Budget</h2><p>Keep your budget preparation on your checklist.</p><Link className="home-text-link" to="/predeparture?task=budget">Open first-month budget step<Icon name="arrow"/></Link><p className="home-small">Unreviewed planning prompt. Budget calculator: Planned.</p></article>
+          <article className="card home-emergency"><span className="home-icon-tile"><Icon name="heart"/></span><h2>Emergency Help</h2><p>Open the official emergency information directly.</p><a className="home-text-link" href={emergencyResource.url}>{emergencyResource.label}<Icon name="arrow"/></a><p className="home-small">External website — internet required. Sajilo NZ is not an emergency service; reviewed in-app emergency guidance is not available.</p></article>
         </section>
         <section aria-labelledby="home-tools"><h2 id="home-tools">A few handy tools</h2><p className="home-small">These tools are planned, not available yet.</p><div className="home-tools">{plannedTools.map(tool => <article className="home-tool" key={tool.title}><span className="home-icon-tile"><Icon name={tool.icon}/></span><h3>{tool.title}</h3><span className="home-planned">Planned</span></article>)}</div></section>
         <section className="card" aria-labelledby="home-saved"><div className="home-section-head"><h2 id="home-saved">Keep your favourites close</h2><Link to="/saved">View saved</Link></div>

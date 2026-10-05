@@ -1,6 +1,6 @@
 # Delivery roadmap
 
-Updated 5 October 2026 (New Zealand), following the user's decision to start Explore while content is refined. Sprints describe delivery increments; no calendar deadlines or unperformed acceptance outcomes are implied.
+Updated 6 October 2026 (New Zealand), following PR #13's merge and the user's Home discovery layout request. Sprints describe delivery increments; no calendar deadlines or unperformed acceptance outcomes are implied.
 
 | Increment | Outcome | Status and next step |
 | --- | --- | --- |
@@ -8,7 +8,7 @@ Updated 5 October 2026 (New Zealand), following the user's decision to start Exp
 | Sprint 5 | Useful reviewed bilingual pre-departure journey | 5A merged in PR #8 at `4a0c92e`. Human publication, remaining device checks, 2–3 structured sessions and housekeeping remain open. |
 | Sprint 6 | Explore discovery page, topic browsing and one useful city journey | 6A/6B merged in PRs #9/#10; Christchurch 6C merged in PR #11 at `db0d340`. City publication review remains pending. |
 | Sprint 6D | Prototype-style Home dashboard | Merged in PR #12 at `4c3f2f8`: actual checklist progress/next steps, saved bookmarks and Christchurch card. Unimplemented tools stay Planned; no copied example announcements/events. |
-| Sprint 7 | Arrival essentials | [7A](sprint-7.md) first-week planner implemented for review with independent progress and explicitly unreviewed prompts. Next: 7B arrival guide/task-link contract and human review, then explicit Home journey choice and human validation. |
+| Sprint 7 | Arrival essentials | [7A](sprint-7.md) merged in PR #13 at `8c52f61`, with independent progress and explicitly unreviewed prompts. Small [Home discovery follow-up](home-discovery.md) implemented for review. Next: 7B arrival guide/task-link contract and human review, then explicit Home journey choice and human validation. |
 | Later | Housing/budget tools, study/course discovery, jobs and community | Order and scope depend on usability findings, source availability and editorial capacity. No live catalogues, directories or events are promised. |
 
 ## Two work streams
