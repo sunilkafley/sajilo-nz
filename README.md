@@ -158,4 +158,6 @@ The [Sprint 5 plan](docs/sprint-5.md) covers expanded reviewed English/Nepali gu
 
 Open **Explore** in the navigation to find the existing checklist, guide search, saved guides and official sources. Other prototype categories, introduction topics and city guides are labelled **Planned** and are not clickable destinations yet. The page works offline after the production app is ready; guide availability still depends on publication or a previously saved copy.
 
+**Browse travel guides** opens Documents, Packing, Money or Before leaving Nepal. Topic membership uses the guide's reviewed checklist links; a guide may appear in several topics. Language and topic are retained through reading and saved-guide navigation. Choose **All topics** for unlinked guides or an empty topic. Filtering never publishes drafts or changes review dates; offline topic browsing uses previously saved copies only.
+
 See the [Sprint 6 plan](docs/sprint-6.md) for topic browsing and the first city journey, and the [roadmap](docs/roadmap.md) for arrival essentials and later features. Explore development proceeds alongside Sprint 5's outstanding work. Merge, deployment and content publication remain separate review decisions.
