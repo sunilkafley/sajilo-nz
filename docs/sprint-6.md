@@ -1,6 +1,6 @@
 # Sprint 6 — Explore
 
-Started 5 October 2026 (New Zealand). Status: 6A merged in PR #9 at `4651e1a`; 6B merged in PR #10 at `5b39805`; 6C Christchurch implemented for PR review, human publication review pending. User approved the [revised roadmap](roadmap.md), allowing Explore engineering alongside the outstanding Sprint 5 human work. Sprint 5 remains open.
+Started 5 October 2026 (New Zealand). Status: 6A merged in PR #9 at `4651e1a`; 6B merged in PR #10 at `5b39805`; 6C Christchurch merged in PR #11 at `db0d340`; 6D Home implemented for PR review. Human city publication review remains pending. User approved the [revised roadmap](roadmap.md), allowing engineering alongside the outstanding Sprint 5 human work. Sprint 5 remains open.
 
 Base: `4a0c92e` (merged PR #8). Branch: `codex/sprint-6a-explore`. Staging is still recorded at `f0bf8b3`; no deployment is part of this slice.
 
@@ -13,6 +13,7 @@ A guest can discover available Sajilo NZ resources through a familiar Explore pa
 | 6A — landing page | React route/navigation, prototype category cards, Aotearoa topics and city list; links only to implemented destinations | Acceptance below, passing CI and user review |
 | 6B — topic browsing | Browse published guidance by category while retaining language, review metadata and saved/offline rules | Define topic/API contracts in a small follow-up PR; test draft exclusion, empty/error states, filters and saved copies |
 | 6C — one city journey | One useful city page with sourced, reviewed resources connected to working tools | Select city with user; validate sources and review records; test responsive navigation and available/unavailable states before expanding |
+| 6D — Home dashboard | Prototype-style composition using real progress, incomplete tasks, saved bookmarks and featured Christchurch | Keyboard/responsive/offline integration, storage safety and PR review; no fabricated live news/events |
 
 6B must assess any schema change and migration/rollback compatibility before release. 6C must not copy the prototype's illustrative costs or example listings into live claims. The remaining prototype categories are navigation planning, not a commitment to implement all destinations in this sprint. Full interface translation, global search, course catalogues, community/events, accounts and new hosting remain outside 6A.
 
@@ -54,7 +55,7 @@ The landing page itself makes no API request and has no new storage writes. It i
 
 ## Handoff and next action
 
-Review 6C's PR before merge; review city content separately before publication. Deployment requires a separate user decision. Recommended next slice is 6D Home dashboard, followed by Sprint 7 arrival essentials; do not silently mark Sprint 5 finished or expand Explore into every planned category.
+Review 6D's PR before merge; review city content separately before publication. Deployment requires a separate user decision. Sprint 7 arrival essentials is next to plan after Home review; do not silently mark Sprint 5 finished or expand Explore into every planned category.
 
 ## 6B implementation and contract
 
@@ -121,3 +122,36 @@ The create-only draft seeder adds English and Nepali preparation starters with n
 - Local PostgreSQL, container/deployment-policy, source-link checks on a deployed release, cross-version app update/rollback, real Safari and human acceptance were not run. Existing quality CI supplies PostgreSQL/container/policy coverage; record its actual outcome in the PR.
 
 Sprint 5 and recovery housekeeping follow-ups retain their existing status. Human English/Nepali city review remains pending. Home dashboard is a proposed next engineering slice, not included here.
+
+## 6D — prototype-style Home dashboard
+
+User authorised this slice after merging PR #11. Base: `db0d340`. Branch: `codex/sprint-6d-home-dashboard`. This engineering increment does not close Sprint 5's human work or the city publication gate.
+
+Home replaces the earlier minimal `/` journey screen; the root navigation item/title is now Home. Existing guide/checklist/Explore routes and persistence are unchanged. It follows the prototype's welcome header, dark forest journey hero/ring, next steps, four pastel tool tiles, favourites and right-hand guidance/Christchurch/community cards. The prototype files stay unchanged.
+
+### Data and interaction contract
+
+- `features/home/domain.ts` derives genuine completion from the existing 27 stable task IDs and selects the first three incomplete tasks in catalogue order. Task links focus the existing checklist controls. Complete-all state invites revisiting the checklist without inventing another journey stage or implying eligibility. Failed-write in-memory progress retains the existing global warning/retry behaviour.
+- `useSavedPreview` reads validated existing saved storage at mount, on relevant cross-tab storage events and on window focus. It performs no API call or storage write. It counts bookmarks independently from non-null saved copies and selects two most recently fetched entries without mutating their order or dates. Both languages retain independent identities and language-specific destinations.
+- Home previews bookmark titles only, never cached guide bodies, verification dates as a Home endorsement, or presumed current publication. Existing guide screens perform full-language publication checks and offline warnings. Known withdrawn bookmarks link to the selected-language Saved guides screen for removal. A saved-storage read error preserves data, hides counts and shows an alert; it never claims zero saved items.
+- Christchurch is explicitly featured, not detected. The city card links to the existing review-gated page. The general guidance card links to guide/source screens rather than copying the prototype's dated immigration announcement.
+- Course finder, budget planner, Can I bring it? and skills roadmap are noninteractive Planned tiles. Community/events are Planned with no live/sample listing or fabricated date. Search is a working link to pre-departure guide search, not fake global search. No profile/account, geolocation, new stage, live news feed or interface translation is implemented.
+- No backend, schema, source-allowlist, storage-format, task-ID, dependency, hosting or editorial-content changes. The 6C cross-version source-host saved-copy limitation remains a release gate; no rollback compatibility is newly claimed. Staging remains recorded at `f0bf8b3`.
+
+### Observable 6D acceptance
+
+1. Guest lands on Home with correct title, active navigation and main focus. Prototype composition is readable at desktop/mobile widths; progress remains visible and no horizontal overflow occurs at 320/768/1440px.
+2. Ring reflects actual zero/partial/all-complete state. Next-step link focuses its real checklist control; completing it removes it from Home's suggestions and survives reload. Failed writes retain selected progress and warning without claiming persistence.
+3. Saved preview shows independent English/Nepali links and bookmark/copy counts, remains read-only and updates on storage removal/focus. Malformed data is preserved, with an error rather than fabricated counts.
+4. Home refreshes offline after app readiness and opens a saved Nepali guide through the normal offline flow. Successful withdrawal checking removes its body, and Home then shows a zero-copy removable bookmark rather than live guidance.
+5. All available links use implemented destinations; Planned tools have no dead controls. No example immigration announcement, event, review date or personalised location/eligibility is implied.
+6. Existing checklist, language, city, publication, storage-failure and offline tests remain passing. Real Safari and human content/device/usability work remain pending, not inferred from mobile Chromium.
+
+### 6D validation — 5 October 2026
+
+- `npm run check` passed after removing unsupported `exact` options from new Testing Library queries. The initial type-check failure is resolved.
+- `npm test` passed: 6 prototype + 48 frontend/domain tests. One initial all-complete assertion matched both existing offline and completion status elements; scoping it to Your next steps resolved the test ambiguity.
+- `npm run test:e2e` passed: 38 desktop/mobile Chromium tests, including a production build and isolated synthetic Django API.
+- Generated Home desktop/mobile screenshots were inspected; files remain ignored outputs. `git diff --check` passed.
+- Local Django/PostgreSQL, migration/container/deployment-policy, deployed update/rollback, real Safari and human acceptance checks were not run for this frontend-only slice. Existing quality CI continues its full PostgreSQL/container/policy workflow; record its actual result in the PR.
+- No deployment, merge, publication, staging seed or new human review performed. Remaining Sprint 5 reviews, Safari cases, 2–3 sessions and recovery housekeeping retain their recorded status.

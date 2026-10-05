@@ -5,7 +5,7 @@ test('keyboard completion persists through reload and navigation', async ({ page
   await passport.focus(); await page.keyboard.press('Space');
   await expect(page.getByRole('heading',{name:'1 of 27 completed'})).toBeVisible();
   await page.reload(); await expect(passport).toBeChecked();
-  await page.getByRole('link',{name:'Your journey',exact:true}).click();
+  await page.getByRole('link',{name:'Home',exact:true}).click();
   await page.getByRole('link',{name:'Continue my checklist'}).click();
   await expect(passport).toBeChecked();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
