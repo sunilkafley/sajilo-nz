@@ -17,9 +17,10 @@ export function topicGuides(guides: Guide[], topic: string | null): Guide[] {
   return guides.filter(guide => guide.stage === 'predeparture' && guide.checklist_ids.some(id => ids.has(id)));
 }
 
-export function guideLocation(path: string, language: Language, topic: string | null, city?: string | null): string {
+export function guideLocation(path: string, language: Language, topic: string | null, city?: string | null, stage?: string): string {
   const params = new URLSearchParams({ lang: language });
   if (topic) params.set('topic', topic);
   if (city) params.set('city', city);
+  if (stage === 'firstweek') params.set('stage', stage);
   return `${path}?${params}`;
 }

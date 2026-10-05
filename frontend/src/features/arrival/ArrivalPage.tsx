@@ -19,7 +19,8 @@ export function ArrivalPage({ repository }: { repository?: ProgressRepository })
   return <>
     <p className="eyebrow">JOURNEY / SETTLE IN</p><h1>Your first week, one step at a time.</h1>
     <p className="intro">There’s a lot that’s new. Keep your planning steps together without changing your pre-departure checklist.</p>
-    <p className="notice">Unreviewed planning prompts — not a list of legal, immigration or provider requirements. Last verified: not yet reviewed. Reviewed arrival guidance is planned separately; these ticks do not establish eligibility or readiness.</p>
+    <p className="notice">Unreviewed planning prompts — not a list of legal, immigration or provider requirements. Last verified: not yet reviewed. Guides require separate human review; these ticks do not establish eligibility or readiness.</p>
+    <p><Link to="/guides?stage=firstweek">Browse first-week guides</Link> · <Link to="/saved?stage=firstweek">Saved first-week guides</Link></p>
     {warning && <div role="alert" className="notice warning"><p>{warning}</p>{!initial.blocked && <button onClick={() => setWarning(retrySave(repo,progress))}>Try saving first-week progress again</button>}</div>}
     <section className="progress-card" aria-label="First-week progress"><div><h2 aria-live="polite">{summary.completed} of {summary.total} first-week steps completed</h2><span>{summary.percent}%</span></div><progress aria-label="First-week steps completed" value={summary.completed} max={summary.total}/></section>
     {!arrivalTasks.some(task => !progress.completed.includes(task.id)) && <p role="status">All first-week planning steps completed. Revisit them whenever needed; no next stage is selected automatically.</p>}

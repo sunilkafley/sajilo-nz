@@ -1,6 +1,6 @@
 # Sprint 7 — arrival essentials
 
-Started 5 October 2026 (New Zealand), after the user confirmed PR #12 complete. GitHub confirmed it merged at `4c3f2f83951b3f871232fa6cbc69965478ffe7f0`. Status: **7A reviewed and merged in PR #13 at `8c52f61`; Sprint 7 remains open.** On 6 October the user requested a [Home discovery layout](home-discovery.md), implemented as a separate small PR ahead of 7B without replacing the arrival-guidance plan.
+Started 5 October 2026 (New Zealand), after the user confirmed PR #12 complete. GitHub confirmed it merged at `4c3f2f83951b3f871232fa6cbc69965478ffe7f0`. Status: **7A merged in PR #13 at `8c52f61`; Home discovery merged in PR #14 at `01ace79`; 7B implemented for review; Sprint 7 remains open.** Both arrival-language reviews and 7C/7D remain pending.
 
 Base: merged PR #12 (`4c3f2f8`). Branch: `codex/sprint-7a-first-week`. Staging remains recorded at `f0bf8b3`; no deployment, publication or staging seed is part of this increment.
 
@@ -57,8 +57,45 @@ No database/API/schema/migration, source-host allowlist, dependency, hosting or 
 
 ## Carry-forward and next action
 
-Review the Home discovery follow-up separately. Next, scope 7B's first arrival guide and explicit task-link contract: the current guide model supports pre-departure only, so arrival content must not be forced into that stage or published with task IDs older clients cannot interpret without compatibility assessment.
+Review 7B's implementation and arrival draft packet separately. Next engineering slice is 7C's explicit guest journey choice; 7D's real-device, editorial and usability work can proceed alongside it. Do not use merged code or synthetic fixture reviews as human publication approval.
 
 Keep [Sprint 5](sprint-5.md)'s human English/Nepali reviews (including travel-document drafts), real Safari model/iOS/mode and remaining per-case outcomes, 2–3 consenting anonymous structured sessions, private backup size/hash/retention and disposable restore-database cleanup confirmation open. Keep [Christchurch human review](content/christchurch-review.md) and [6C update/rollback compatibility](sprint-6.md) open. A merged engineering PR does not satisfy these gates.
 
 Prioritise reproduced data loss, misleading publication/offline states and essential accessibility failures over expansion. Keep React + TypeScript + Vite, Django REST and PostgreSQL, free Render/Neon, guest access and saved/offline behaviour. User review is required before merge or deployment; publication additionally requires official sources and recorded human review for each language.
+
+## 7B — first arrival guide journey
+
+Started 6 October 2026 after PR #14 merge. Base: `01ace790b90d71685fdff809ddf421fcad87558f`. Branch: `codex/sprint-7b-arrival-guidance`.
+
+Small slice: first-week local travel in Christchurch, connected to `arrival-transport`. English/Nepali drafts and matching [human-review packet](content/arrival-travel-review.md) use Metro's official Getting started page. Technical research is not human review; dates/reviewer remain unset. No specific fares, routes, timetables, payment methods or service availability are asserted. Create-only seeding preserves existing records. No new official host is added.
+
+### API, navigation and persistence
+
+- Guide `stage` permits `firstweek` as well as existing `predeparture`; stage-specific task IDs are validated on backend and frontend. Cross-journey/unknown IDs are rejected. All existing human-review, independent-language and draft-invalidation gates remain.
+- Public list/detail API defaults to pre-departure for old clients. `?stage=firstweek` explicitly opts in; unknown stages return 400. There is no mixed/all-stage endpoint. The frontend rejects wrong-stage responses rather than treating them as successful withdrawal checks.
+- `/guides?stage=firstweek` and `/saved?stage=firstweek` preserve stage/language through details, return and saved links, using existing search, review-date, save/offline/error/withdrawal rules. First-week guides have no pre-departure topic selector; incompatible topic context offers recovery. Checklist links use `/firstweek?task=…`. Returning via the checklist's general saved link defaults to English; users choose Nepali again rather than an implied persisted global language.
+- First-week copies use **`sajilo-nz.firstweek-saved-guides.v1`**, separate from existing saved storage. Stage switching remounts the guide view to prevent stale bodies/storage state leaking across journeys. Each journey's limit is 50 copies/approximately 1 MB; identities remain language-specific. Home explicitly previews pre-departure bookmarks only and links to first-week saved copies separately; combining journeys is not implemented by this slice.
+- Reconciliation uses the complete selected-stage/selected-language catalogue before presentation filtering. API failures use only that journey's valid saved copies with original dates/warnings. Successful withdrawal removes that journey/language's cached body, keeping removable bookmarks; other saved records/progress remain untouched.
+
+### Migration and rollback assessment
+
+`0002_guide_firstweek_stage` changes Django field choices only, not the existing varchar type/default or row contents. Local SQLite `sqlmigrate` reports a no-op, and a migration round-trip test preserves both existing and arrival rows. PostgreSQL execution belongs to quality CI; no staging migration is performed.
+
+An older frontend cannot read arrival task IDs, so arrival copies are never placed in its existing record. Older clients ignore the new key and request the unchanged default API. Older backends ignore the stage parameter and may return pre-departure guides; the new frontend rejects that wrong-stage response and uses valid first-week saved copies with an API warning instead of invalidating them. Rollback makes new arrival functionality unavailable, not data deleted. Never relabel arrival rows as pre-departure or clear storage to make old code appear compatible. Prefer forward migration/compatible rollback code; review downgrade admin validation of retained first-week rows before any reversal.
+
+This is a contract assessment and isolated test evidence, **not a passed deployed update/rollback drill**. Before publication/deployment, test old/new app+API combinations with existing and arrival saved copies, including service-worker update behaviour and an approved rollback target. The outstanding 6C source-host compatibility limitation remains independent. The earlier same-commit Render drill does not prove this case.
+
+### Observable acceptance and validation — 6 October 2026
+
+1. API default excludes published arrival records; opt-in list/detail includes only reviewed selected-language arrival records. Invalid stages/cross-stage links fail; both draft languages remain hidden until separately reviewed (Django tests).
+2. A guest navigates from first-week checklist to arrival guides, selects Nepali, reads/saves a guide and follows its real task with keyboard focus. Existing pre-departure guides do not leak into the list (browser tests).
+3. Arrival saves do not alter original saved/progress records. Offline reload retains language/body/original review date; a successful withdrawal removes the arrival body and offers bookmark removal, preserving pre-departure storage (desktop/mobile browser tests).
+4. Corrupt storage is preserved, wrong-stage payloads/writes rejected, and navigation retains stage. Seeder/packet parity, create-only preservation and human publication gates are tested.
+5. Migration backward/forward round-trip preserves all guide row fields in an isolated SQLite test; PostgreSQL and deployed compatibility remain separate checks.
+
+- `npm run check` and `npm test` passed: 6 prototype + 62 frontend/domain tests.
+- Django system check and `makemigrations --check --dry-run` passed. Guide tests passed (22, isolated SQLite), including migration round-trip; SQLite migration SQL is a no-op.
+- Full browser suite passed (48 desktop/mobile Chromium, production build and isolated synthetic API). Initial new test incorrectly expected Nepali after returning through a language-neutral checklist link; explicitly selecting Nepali resolved the test assumption. No production wording/publication issue was inferred.
+- Desktop/mobile synthetic arrival-guide screenshots inspected; generated outputs remain ignored. Diff whitespace check passed.
+- Local PostgreSQL/container/deployment-policy, deployed source links/app update/rollback, real Safari and human acceptance were not run. Existing quality CI remains the PostgreSQL/container/policy gate; record its actual outcome in the PR.
+- No human approval, publication, staging seeding/migration, deployment or merge performed by this task. Engineering completion does not close 7B's editorial gate or Sprint 7.

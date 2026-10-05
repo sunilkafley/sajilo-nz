@@ -1,24 +1,29 @@
 import { parseGuide, type Guide, type Language } from './api';
 export const savedKey = 'sajilo-nz.saved-guides.v1';
+// Do not put arrival IDs in the record that pre-7B clients validate as pre-departure.
+export const arrivalSavedKey = 'sajilo-nz.firstweek-saved-guides.v1';
 export interface SavedGuide { slug: string; language: Language; title: string; guide: Guide | null; fetchedAt: string }
-export function readSaved(storage: Storage = window.localStorage): SavedGuide[] {
-  const raw = storage.getItem(savedKey);
+export function readSaved(storage: Storage = window.localStorage, key = savedKey): SavedGuide[] {
+  const raw = storage.getItem(key);
   if (!raw) return [];
   const data = JSON.parse(raw);
   if (data.version !== 1 || !Array.isArray(data.items) || data.items.length > 50) throw new Error('Invalid saved guides');
   const items: SavedGuide[] = data.items;
   items.forEach(item => {
     if (!item || typeof item.slug !== 'string' || !/^[a-zA-Z0-9_-]+$/.test(item.slug) || !['en', 'ne'].includes(item.language) || typeof item.title !== 'string' || typeof item.fetchedAt !== 'string' || !Number.isFinite(Date.parse(item.fetchedAt))) throw new Error('Invalid saved guide');
-    if (item.guide !== null) { const guide = parseGuide(item.guide); if (guide.slug !== item.slug || guide.language !== item.language) throw new Error('Invalid saved guide'); }
+    if (item.guide !== null) { const guide = parseGuide(item.guide); if (guide.slug !== item.slug || guide.language !== item.language || guide.stage !== (key === arrivalSavedKey ? 'firstweek' : 'predeparture')) throw new Error('Invalid saved guide'); }
   });
   if (new Set(items.map(item => `${item.language}:${item.slug}`)).size !== items.length) throw new Error('Duplicate saved guides');
   return items;
 }
-export function writeSaved(change: (items: SavedGuide[]) => SavedGuide[], storage: Storage = window.localStorage): SavedGuide[] {
-  const items = change(readSaved(storage));
+export function writeSaved(change: (items: SavedGuide[]) => SavedGuide[], storage: Storage = window.localStorage, key = savedKey): SavedGuide[] {
+  const items = change(readSaved(storage, key));
+  for (const item of items) {
+    if (item.guide && parseGuide(item.guide).stage !== (key === arrivalSavedKey ? 'firstweek' : 'predeparture')) throw new Error('Wrong saved-guide journey');
+  }
   const value = JSON.stringify({ version: 1, items });
   if (items.length > 50 || value.length > 500_000) throw new Error('Saved guide limit reached');
-  storage.setItem(savedKey, value);
+  storage.setItem(key, value);
   return items;
 }
 export function snapshot(guide: Guide): SavedGuide { return { slug: guide.slug, language: guide.language, title: guide.title, guide, fetchedAt: new Date().toISOString() }; }

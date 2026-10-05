@@ -182,3 +182,11 @@ Open **First-week checklist** from navigation, Home or Explore's **Arrive & sett
 The planner works offline after production app readiness. It links to existing Christchurch preparation, pre-departure guides and saved guides; reviewed arrival guidance is a separate next slice, not yet available. Home stays on pre-departure progress until explicit journey selection is implemented. See the [Sprint 7 plan](docs/sprint-7.md) for acceptance, 7B–7D and outstanding human/release gates. No deployment or content publication is included.
 
 Home's **Start exploring** cards sit below the hero in two mobile/three desktop columns, followed immediately by the existing next steps and a prominent **Budget and Emergency Help** section. Study, Work and Skills remain Planned; Life currently offers Christchurch preparation only. Residence offers official INZ/IAA links, not eligibility advice. Budget opens its existing checklist step, not a calculator; Emergency Help links to official Police information online, not an in-app emergency service or offline guidance. See the [Home follow-up record](docs/home-discovery.md).
+
+### Sprint 7B — arrival guide journey
+
+From the first-week checklist, open **Browse first-week guides** or **Saved first-week guides**. Only human-reviewed records in the selected language appear; `seed_drafts` adds unpublished English/Nepali Christchurch local-travel starters with a [review packet](docs/content/arrival-travel-review.md). Do not publish to populate the page.
+
+Guide stages use separate task IDs, API opt-in (`stage=firstweek`) and saved-copy records. Existing API requests still return pre-departure only; their saved storage is unchanged. First-week guide links focus the first-week checklist, and reading/saving retains selected stage/language with the normal offline and withdrawal warnings. Saved lists switch between journeys explicitly; Home's preview currently covers pre-departure only. Limits are 50 guides/approximately 1 MB **per journey** on this browser. No sync or new account is added.
+
+Run the normal `migrate` step to record the new choice-only migration before local seeding. See [Sprint 7 compatibility assessment](docs/sprint-7.md) before any release/rollback. Local migration tests are not deployed rollback evidence; content/translation reviews and remaining human checks are still pending.

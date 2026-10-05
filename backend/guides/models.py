@@ -12,11 +12,13 @@ TASK_IDS = {'passport', 'visa', 'offer', 'academic', 'insurance', 'accommodation
             'emergency-money', 'budget', 'passport-validity', 'visa-conditions', 'confirm-accommodation',
             'airport-transport', 'baggage', 'transit', 'contacts', 'biosecurity', 'declaration'}
 CONTENT_FIELDS = ('slug', 'language', 'stage', 'title', 'summary', 'body', 'sources', 'checklist_ids', 'is_sample')
+ARRIVAL_TASK_IDS = {'arrival-accommodation', 'arrival-connectivity', 'arrival-transport',
+                    'arrival-provider', 'arrival-support', 'arrival-budget'}
 
 class Guide(models.Model):
     slug = models.SlugField()
     language = models.CharField(max_length=2, choices=[('en', 'English'), ('ne', 'Nepali')])
-    stage = models.CharField(max_length=20, default='predeparture', choices=[('predeparture', 'Before you fly')])
+    stage = models.CharField(max_length=20, default='predeparture', choices=[('predeparture', 'Before you fly'), ('firstweek', 'First week')])
     title = models.CharField(max_length=200)
     summary = models.TextField()
     body = models.TextField(help_text='Plain text. Separate paragraphs with blank lines.')
@@ -57,7 +59,8 @@ class Guide(models.Model):
                         raise ValidationError('Unapproved source host.')
                 except (ValidationError, ValueError, TypeError, AttributeError):
                     errors['sources'] = 'Use an approved official HTTPS URL; update the reviewed host allowlist for new sources.'
-        if not isinstance(self.checklist_ids, list) or any(not isinstance(item, str) or item not in TASK_IDS for item in self.checklist_ids):
+        valid_ids = ARRIVAL_TASK_IDS if self.stage == 'firstweek' else TASK_IDS
+        if not isinstance(self.checklist_ids, list) or any(not isinstance(item, str) or item not in valid_ids for item in self.checklist_ids):
             errors['checklist_ids'] = 'Use valid checklist task IDs.'
         if self.verified_on and self.verified_on > timezone.localdate():
             errors['verified_on'] = 'A review cannot be in the future.'

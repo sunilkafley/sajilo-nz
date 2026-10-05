@@ -41,3 +41,10 @@ class Command(BaseCommand):
                 'title': title, 'summary': summary, 'body': body, 'sources': sources, 'checklist_ids': ids,
                 'status': 'draft', 'reviewed_by': None, 'verified_on': None, 'next_review_on': None})
             self.stdout.write(f'{slug}/{language}: {"draft created" if created else "unchanged"}')
+        from guides import arrival_drafts
+        for language, text in arrival_drafts.TEXT.items():
+            _, created = Guide.objects.get_or_create(slug=arrival_drafts.SLUG, language=language, defaults={
+                **text, 'stage': 'firstweek', 'sources': arrival_drafts.SOURCES,
+                'checklist_ids': arrival_drafts.TASK_IDS, 'status': 'draft',
+                'reviewed_by': None, 'verified_on': None, 'next_review_on': None})
+            self.stdout.write(f'{arrival_drafts.SLUG}/{language}: {"draft created" if created else "unchanged"}')
