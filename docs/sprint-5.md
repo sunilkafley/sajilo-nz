@@ -1,6 +1,8 @@
 # Sprint 5 — a useful pre-departure journey
 
-Planning opened 5 October 2026 (New Zealand); approved in merged PR #7 (`4d05b1c`). Status: Sprint 5A engineering ready for PR review; editorial review and human acceptance work remain pending.
+Planning opened 5 October 2026 (New Zealand); approved in merged PR #7 (`4d05b1c`). Status: Sprint 5A engineering merged in PR #8 (`4a0c92e`); editorial review and human acceptance work remain pending. Sprint 5 is still open.
+
+On 5 October the user approved moving the next engineering focus to [Sprint 6 — Explore](sprint-6.md) while content is polished. The [roadmap](roadmap.md) carries forward 5B–5E, including all remaining Safari cases, 2–3 structured sessions and recovery housekeeping. PR #8's quick technical review is not recorded as English/Nepali publication review.
 
 Planning branch: `codex/sprint-5-predeparture-plan`, based on `8c59cdf` (PR #6, Sprint 4 closure). PR #7 prepared the plan and proposed slice 5A; it did not implement or publish that slice.
 
