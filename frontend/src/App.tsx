@@ -3,6 +3,7 @@ import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { OfflineStatus } from './OfflineStatus';
 import { GuidePage } from './features/guides/GuidePage';
 import { ExplorePage } from './features/explore/ExplorePage';
+import { HomePage } from './features/home/HomePage';
 import { summarise } from './features/checklist/domain';
 import { groupNames, sources, tasks } from './features/checklist/tasks';
 import type { ProgressRepository } from './features/checklist/repository';
@@ -15,7 +16,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
   const location = useLocation();
   const main = useRef<HTMLElement>(null);
   useEffect(() => {
-    document.title = `${location.pathname === '/cities/christchurch' ? 'Christchurch' : location.pathname.startsWith('/cities/') ? 'City unavailable' : location.pathname === '/explore' ? 'Explore' : location.pathname === '/predeparture' ? 'Pre-departure checklist' : (location.pathname.startsWith('/guides') || location.pathname === '/saved') ? 'Pre-departure guides' : location.pathname === '/sources' ? 'Official sources' : 'Your journey'} · Sajilo NZ`;
+    document.title = `${location.pathname === '/' ? 'Home' : location.pathname === '/cities/christchurch' ? 'Christchurch' : location.pathname.startsWith('/cities/') ? 'City unavailable' : location.pathname === '/explore' ? 'Explore' : location.pathname === '/predeparture' ? 'Pre-departure checklist' : (location.pathname.startsWith('/guides') || location.pathname === '/saved') ? 'Pre-departure guides' : location.pathname === '/sources' ? 'Official sources' : 'Your journey'} · Sajilo NZ`;
     const task = new URLSearchParams(location.search).get('task');
     if (location.pathname === '/predeparture' && task && tasks.some(item => item.id === task)) {
       document.getElementById(task)?.focus();
@@ -31,7 +32,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
       <Link className="brand" to="/">sajilo<span> nz</span></Link>
       <p className="tagline">Your student journey</p>
       <nav aria-label="Main navigation">
-        <NavLink to="/" end>Your journey</NavLink>
+        <NavLink to="/" end>Home</NavLink>
         <NavLink to="/explore">Explore</NavLink>
         <NavLink to="/predeparture">Pre-departure checklist</NavLink>
         <NavLink to="/guides">Pre-departure guides</NavLink>
@@ -51,13 +52,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
           <Route path="/saved" element={<GuidePage savedOnly/>}/>
           <Route path="/guides" element={<GuidePage/>}/>
           <Route path="/guides/:slug" element={<GuidePage/>}/>
-          <Route path="/" element={<>
-            <p className="eyebrow">YOUR JOURNEY</p><h1>A little preparation.<br/>A calmer arrival.</h1>
-            <p className="intro">Keep your essentials in one place and take your next step towards New Zealand.</p>
-            <section className="hero-card"><div><span className="badge">BEFORE YOU FLY</span><h2>Your pre-departure checklist</h2><p>Documents, packing, money and the details to check before leaving Nepal.</p><Link className="button" to="/predeparture">{summary.completed ? 'Continue my checklist' : 'Start my checklist'}</Link></div><div className="hero-progress"><strong>{summary.completed}<span> / {summary.total}</span></strong><p>tasks completed</p></div></section>
-            <section className="card"><h2>Know what to prepare</h2><p>Read reviewed guides and follow the related checklist steps.</p><Link to="/guides">Browse pre-departure guides</Link></section>
-            <section className="card"><h2>Your progress stays with you on this browser</h2><p>No account is needed. Save reviewed guides for reading offline once the app is ready. Clearing browser data removes saved guides and checklist progress. Data does not sync between devices.</p></section>
-          </>}/>
+          <Route path="/" element={<HomePage progress={progress}/>}/>
           <Route path="/predeparture" element={<>
             <p className="eyebrow">JOURNEY / BEFORE YOU FLY</p><h1>Your pre-departure checklist</h1><p className="intro">Pack your essentials, prepare your documents and feel ready.</p>
             <section className="progress-card" aria-label="Checklist progress"><div><h2 aria-live="polite">{summary.completed} of {summary.total} completed</h2><span>{summary.percent}%</span></div><progress aria-label="Tasks completed" value={summary.completed} max={summary.total}/></section>

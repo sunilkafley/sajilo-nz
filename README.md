@@ -26,6 +26,7 @@ Browser tests also require the Python environment; see the Sprint 2 setup below.
 
 ## Architecture
 - `frontend/src/features/checklist/`: stable task IDs, domain rules, storage repository and use cases.
+- `frontend/src/features/home/`: prototype-style Home layout, derived progress/next steps and read-only saved-bookmark preview.
 - `frontend/src/features/explore/`: Explore landing page, scoped styles and available/planned destination catalogue.
 - `frontend/src/features/cities/`: curated Christchurch guide membership and city preparation layout, reusing the existing guide publication/saved flow.
 - `frontend/src/App.tsx`: accessible navigation and React screens; storage mutations go through use cases.
@@ -164,3 +165,11 @@ Open **Explore** in the navigation to find the existing checklist, guide search,
 Christchurch uses `/cities/christchurch` and lists only its curated `christchurch-arrival-plan` guide when published in the selected language. It connects to the existing airport transport/accommodation checklist tasks and saved/offline reading. `seed_drafts` supplies unreviewed English/Nepali starters and preserves existing records. The [city review packet](docs/content/christchurch-review.md) must be completed before publication; an empty city page does not bypass review. No listings, fares, booking, location tracking or new accounts are included.
 
 See the [Sprint 6 plan](docs/sprint-6.md) for topic browsing and the first city journey, and the [roadmap](docs/roadmap.md) for arrival essentials and later features. Explore development proceeds alongside Sprint 5's outstanding work. Merge, deployment and content publication remain separate review decisions.
+
+### Sprint 6D — Home dashboard
+
+**Home** is the default `/` page: the prototype welcome, dark journey card, next steps, tools and right-hand city/guidance/community cards are recreated using the working pre-departure journey. Progress reflects the real 27-task checklist. The first three incomplete steps open and focus their existing checklist controls; Home does not add new task IDs or write separate progress.
+
+The saved preview counts language-specific bookmarks and available local copies separately, and shows the two most recently fetched bookmarks. It never displays cached guide bodies or claims current publication. Opening a bookmark goes through the normal guide checks/offline warnings; withdrawn bookmarks link to Saved guides for removal. Home reads existing storage only and handles unreadable data without overwriting it or showing false zero counts.
+
+Christchurch is a featured city, not a detected or saved visitor location. Search is explicitly pre-departure guide search. Course finder, budget planner, Can I bring it?, skills roadmap and community/events remain clearly Planned. No prototype immigration news, example event, fabricated review date, profile/account or full-interface language toggle is added.

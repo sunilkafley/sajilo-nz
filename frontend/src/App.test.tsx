@@ -9,7 +9,7 @@ it('completes a task, navigates home and restores it after remount', async () =>
   const view = render(<MemoryRouter initialEntries={['/predeparture']}><App repository={repo}/></MemoryRouter>);
   await user.click(screen.getByRole('checkbox', { name: 'Passport' }));
   expect(screen.getByRole('heading', { name: '1 of 27 completed' })).toBeInTheDocument();
-  await user.click(screen.getByRole('link', { name: 'Your journey' }));
+  await user.click(screen.getByRole('link', { name: 'Home' }));
   expect(screen.getByRole('link', { name: 'Continue my checklist' })).toBeInTheDocument();
   view.unmount();
   render(<MemoryRouter initialEntries={['/predeparture']}><App repository={repo}/></MemoryRouter>);
