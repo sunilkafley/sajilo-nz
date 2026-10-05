@@ -5,13 +5,13 @@ type Category = {
   title: string;
   description: string;
   icon: IconName;
-} & ({ status: 'available'; to: '/predeparture' | '/sources'; action: string } | { status: 'planned' });
+} & ({ status: 'available'; to: '/predeparture' | '/sources' | '/firstweek'; action: string } | { status: 'planned' });
 
 export const categories: Category[] = [
   { id: 'predeparture', title: 'Prepare to travel', description: 'Keep track of documents, packing, money and your next steps.', icon: 'plane', status: 'available', to: '/predeparture', action: 'Open checklist' },
   { id: 'immigration', title: 'Immigration', description: 'Find official source links to check current guidance for your circumstances.', icon: 'shield', status: 'available', to: '/sources', action: 'View official sources' },
   { id: 'study', title: 'Study & courses', description: 'Course and campus discovery.', icon: 'cap', status: 'planned' },
-  { id: 'arrival', title: 'Arrive & settle', description: 'Small steps for your first weeks in New Zealand.', icon: 'journey', status: 'planned' },
+  { id: 'arrival', title: 'Arrive & settle', description: 'Keep first-week planning steps separate from your travel preparation.', icon: 'journey', status: 'available', to: '/firstweek', action: 'Open first-week checklist' },
   { id: 'housing', title: 'Housing & flatting', description: 'Finding a place and understanding your responsibilities.', icon: 'home', status: 'planned' },
   { id: 'money', title: 'Money & budgeting', description: 'Tools for planning everyday and unexpected costs.', icon: 'wallet', status: 'planned' },
   { id: 'work', title: 'Work & careers', description: 'Resources for your job search and career preparation.', icon: 'briefcase', status: 'planned' },

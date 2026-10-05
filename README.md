@@ -26,6 +26,7 @@ Browser tests also require the Python environment; see the Sprint 2 setup below.
 
 ## Architecture
 - `frontend/src/features/checklist/`: stable task IDs, domain rules, storage repository and use cases.
+- `frontend/src/features/arrival/`: separate first-week planning catalogue and browser-local progress, reusing checklist rules.
 - `frontend/src/features/home/`: prototype-style Home layout, derived progress/next steps and read-only saved-bookmark preview.
 - `frontend/src/features/explore/`: Explore landing page, scoped styles and available/planned destination catalogue.
 - `frontend/src/features/cities/`: curated Christchurch guide membership and city preparation layout, reusing the existing guide publication/saved flow.
@@ -173,3 +174,9 @@ See the [Sprint 6 plan](docs/sprint-6.md) for topic browsing and the first city 
 The saved preview counts language-specific bookmarks and available local copies separately, and shows the two most recently fetched bookmarks. It never displays cached guide bodies or claims current publication. Opening a bookmark goes through the normal guide checks/offline warnings; withdrawn bookmarks link to Saved guides for removal. Home reads existing storage only and handles unreadable data without overwriting it or showing false zero counts.
 
 Christchurch is a featured city, not a detected or saved visitor location. Search is explicitly pre-departure guide search. Course finder, budget planner, Can I bring it?, skills roadmap and community/events remain clearly Planned. No prototype immigration news, example event, fabricated review date, profile/account or full-interface language toggle is added.
+
+### Sprint 7A — first-week planning
+
+Open **First-week checklist** from navigation, Home or Explore's **Arrive & settle** category. Six explicitly unreviewed planning prompts have their own browser-local progress, independent from the 27 pre-departure tasks. They do not establish eligibility or readiness. No legacy progress is imported into this journey; saved guides remain unchanged. Corrupt storage is preserved, and failed writes show session-only/retry warnings.
+
+The planner works offline after production app readiness. It links to existing Christchurch preparation, pre-departure guides and saved guides; reviewed arrival guidance is a separate next slice, not yet available. Home stays on pre-departure progress until explicit journey selection is implemented. See the [Sprint 7 plan](docs/sprint-7.md) for acceptance, 7B–7D and outstanding human/release gates. No deployment or content publication is included.

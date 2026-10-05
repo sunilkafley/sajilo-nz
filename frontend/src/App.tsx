@@ -4,6 +4,8 @@ import { OfflineStatus } from './OfflineStatus';
 import { GuidePage } from './features/guides/GuidePage';
 import { ExplorePage } from './features/explore/ExplorePage';
 import { HomePage } from './features/home/HomePage';
+import { ArrivalPage } from './features/arrival/ArrivalPage';
+import { arrivalTasks } from './features/arrival/tasks';
 import { summarise } from './features/checklist/domain';
 import { groupNames, sources, tasks } from './features/checklist/tasks';
 import type { ProgressRepository } from './features/checklist/repository';
@@ -16,9 +18,9 @@ export function App({ repository }: { repository: ProgressRepository }) {
   const location = useLocation();
   const main = useRef<HTMLElement>(null);
   useEffect(() => {
-    document.title = `${location.pathname === '/' ? 'Home' : location.pathname === '/cities/christchurch' ? 'Christchurch' : location.pathname.startsWith('/cities/') ? 'City unavailable' : location.pathname === '/explore' ? 'Explore' : location.pathname === '/predeparture' ? 'Pre-departure checklist' : (location.pathname.startsWith('/guides') || location.pathname === '/saved') ? 'Pre-departure guides' : location.pathname === '/sources' ? 'Official sources' : 'Your journey'} · Sajilo NZ`;
+    document.title = `${location.pathname === '/firstweek' ? 'First-week checklist' : location.pathname === '/' ? 'Home' : location.pathname === '/cities/christchurch' ? 'Christchurch' : location.pathname.startsWith('/cities/') ? 'City unavailable' : location.pathname === '/explore' ? 'Explore' : location.pathname === '/predeparture' ? 'Pre-departure checklist' : (location.pathname.startsWith('/guides') || location.pathname === '/saved') ? 'Pre-departure guides' : location.pathname === '/sources' ? 'Official sources' : 'Your journey'} · Sajilo NZ`;
     const task = new URLSearchParams(location.search).get('task');
-    if (location.pathname === '/predeparture' && task && tasks.some(item => item.id === task)) {
+    if (task && ((location.pathname === '/predeparture' && tasks.some(item => item.id === task)) || (location.pathname === '/firstweek' && arrivalTasks.some(item => item.id === task)))) {
       document.getElementById(task)?.focus();
     } else { main.current?.focus(); }
   }, [location.pathname, location.search]);
@@ -35,6 +37,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
         <NavLink to="/" end>Home</NavLink>
         <NavLink to="/explore">Explore</NavLink>
         <NavLink to="/predeparture">Pre-departure checklist</NavLink>
+        <NavLink to="/firstweek">First-week checklist</NavLink>
         <NavLink to="/guides">Pre-departure guides</NavLink>
         <NavLink to="/saved">Saved guides</NavLink>
         <NavLink to="/sources">Official sources</NavLink>
@@ -53,6 +56,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
           <Route path="/guides" element={<GuidePage/>}/>
           <Route path="/guides/:slug" element={<GuidePage/>}/>
           <Route path="/" element={<HomePage progress={progress}/>}/>
+          <Route path="/firstweek" element={<ArrivalPage/>}/>
           <Route path="/predeparture" element={<>
             <p className="eyebrow">JOURNEY / BEFORE YOU FLY</p><h1>Your pre-departure checklist</h1><p className="intro">Pack your essentials, prepare your documents and feel ready.</p>
             <section className="progress-card" aria-label="Checklist progress"><div><h2 aria-live="polite">{summary.completed} of {summary.total} completed</h2><span>{summary.percent}%</span></div><progress aria-label="Tasks completed" value={summary.completed} max={summary.total}/></section>
