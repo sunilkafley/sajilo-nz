@@ -1,6 +1,6 @@
 # Sprint 6 — Explore
 
-Started 5 October 2026 (New Zealand). Status: 6A merged in PR #9 at `4651e1a`; 6B merged in PR #10 at `5b39805`; 6C Christchurch merged in PR #11 at `db0d340`; 6D Home implemented for PR review. Human city publication review remains pending. User approved the [revised roadmap](roadmap.md), allowing engineering alongside the outstanding Sprint 5 human work. Sprint 5 remains open.
+Started 5 October 2026 (New Zealand). Status: 6A merged in PR #9 at `4651e1a`; 6B merged in PR #10 at `5b39805`; 6C Christchurch merged in PR #11 at `db0d340`; 6D Home merged in PR #12 at `4c3f2f8`. Human city publication review remains pending. User approved the [revised roadmap](roadmap.md), allowing engineering alongside the outstanding Sprint 5 human work. Sprint 5 remains open.
 
 Base: `4a0c92e` (merged PR #8). Branch: `codex/sprint-6a-explore`. Staging is still recorded at `f0bf8b3`; no deployment is part of this slice.
 
@@ -55,7 +55,7 @@ The landing page itself makes no API request and has no new storage writes. It i
 
 ## Handoff and next action
 
-Review 6D's PR before merge; review city content separately before publication. Deployment requires a separate user decision. Sprint 7 arrival essentials is next to plan after Home review; do not silently mark Sprint 5 finished or expand Explore into every planned category.
+6D merged after user review; review city content separately before publication. Deployment requires a separate user decision. [Sprint 7](sprint-7.md) begins with an independent first-week planner; do not silently mark Sprint 5 finished or expand Explore into every planned category.
 
 ## 6B implementation and contract
 
