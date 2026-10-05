@@ -22,4 +22,16 @@ with TemporaryDirectory(prefix='sajilo-e2e-') as directory:
         sources=[{'title':'Immigration New Zealand', 'url':'https://www.immigration.govt.nz/'}],
         checklist_ids=['passport'], status='published', reviewed_by=reviewer,
         verified_on=timezone.localdate(), next_review_on=timezone.localdate()+timedelta(days=30))
+    # A separate bilingual slug keeps test-documents/ne genuinely unavailable.
+    # Synthetic review metadata belongs only to this temporary test database.
+    for language, title, body, age in [
+        ('en', 'Test bilingual documents', 'Synthetic English guide for the bilingual journey.', 3),
+        ('ne', 'परीक्षण यात्रा कागजात', 'यो नेपाली सामग्री परीक्षणका लागि मात्र हो।', 7),
+    ]:
+        Guide.objects.create(slug='test-bilingual-documents', language=language, title=title,
+            summary=body, body=body,
+            sources=[{'title': 'Immigration New Zealand', 'url': 'https://www.immigration.govt.nz/'}],
+            checklist_ids=['passport'], status='published', reviewed_by=reviewer,
+            verified_on=timezone.localdate()-timedelta(days=age),
+            next_review_on=timezone.localdate()+timedelta(days=30-age))
     call_command('runserver', '127.0.0.1:8000', use_reloader=False)

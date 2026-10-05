@@ -50,3 +50,43 @@ test('storage failures show no false save confirmation and language never falls 
   await page.getByRole('link',{name:'View saved guides'}).click();
   await expect(page.getByRole('heading',{name:'No saved guides in this language'})).toBeVisible();
 });
+
+test('Nepali offline copy keeps its review dates and progress independently of English', async ({page, context}) => {
+  test.setTimeout(60_000); // Several deliberate offline request timeouts on both viewports.
+  await page.goto('/#/guides/test-bilingual-documents');
+  await expect(page.getByText('App ready for offline use.', {exact:false})).toBeVisible();
+  await page.getByRole('button', {name:'Save guide', exact:true}).click();
+  await expect(page.getByRole('button', {name:'Remove saved guide'})).toBeVisible();
+  await page.getByRole('combobox').selectOption('ne');
+  await page.getByRole('button', {name:'Save guide', exact:true}).click();
+  await expect(page.getByRole('button', {name:'Remove saved guide'})).toBeVisible();
+  const before = await page.evaluate(key => JSON.parse(localStorage.getItem(key)!).items, key);
+  expect(before).toHaveLength(2);
+  const nepali = before.find((item: {language:string}) => item.language === 'ne').guide;
+  const english = before.find((item: {language:string}) => item.language === 'en');
+  expect(nepali.verified_on).not.toBe(english.guide.verified_on);
+
+  await context.setOffline(true);
+  await page.reload();
+  await expect(page.locator('article.guide-body')).toHaveAttribute('lang', 'ne');
+  await expect(page.getByText(nepali.body, {exact:true})).toBeVisible();
+  await expect(page.getByText(english.guide.body, {exact:true})).toHaveCount(0);
+  await expect(page.getByText('Showing saved copies only.', {exact:false})).toBeVisible();
+  await expect(page.getByText('This is not a new review date.', {exact:false})).toBeVisible();
+  await expect(page.locator('article.guide-body time').nth(0)).toHaveAttribute('datetime', nepali.verified_on);
+  await expect(page.locator('article.guide-body time').nth(1)).toHaveAttribute('datetime', nepali.next_review_on);
+  await page.getByRole('link', {name:'Passport', exact:true}).click();
+  await page.getByRole('checkbox', {name:'Passport', exact:true}).check();
+  await page.reload();
+  await expect(page.getByRole('checkbox', {name:'Passport', exact:true})).toBeChecked();
+
+  await page.getByRole('link', {name:'Saved guides', exact:true}).click();
+  await page.getByRole('combobox').selectOption('ne');
+  await page.getByRole('link', {name:'परीक्षण यात्रा कागजात', exact:true}).click();
+  await page.getByRole('button', {name:'Remove saved guide'}).click();
+  await page.reload();
+  await expect(page.getByRole('heading', {name:'Guide unavailable in this language'})).toBeVisible();
+  expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)!).items, key)).toEqual([english]);
+  await page.getByRole('combobox').selectOption('en');
+  await expect(page.getByText(english.guide.body, {exact:true})).toBeVisible();
+});

@@ -1,8 +1,12 @@
 # Sprint 5 — a useful pre-departure journey
 
-Planning opened 5 October 2026 (New Zealand). Status: proposed; implementation, editorial review and acceptance work are pending.
+Planning opened 5 October 2026 (New Zealand); approved in merged PR #7 (`4d05b1c`). Status: Sprint 5A engineering ready for PR review; editorial review and human acceptance work remain pending.
 
-Planning branch: `codex/sprint-5-predeparture-plan`, based on `8c59cdf` (PR #6, Sprint 4 closure). This PR prepares the plan and proposes slice 5A; it does not implement or publish that slice.
+Planning branch: `codex/sprint-5-predeparture-plan`, based on `8c59cdf` (PR #6, Sprint 4 closure). PR #7 prepared the plan and proposed slice 5A; it did not implement or publish that slice.
+
+Implementation branch: `codex/sprint-5a-travel-documents`, based on PR #7. Slice 5A expands the two create-only draft starters, adds the [human review packet](content/travel-documents-review.md), and tests preservation of editorial records and the Nepali online/offline journey. All review metadata stays unset on new drafts; no publication, deployment, real-device pass or completed human review is claimed.
+
+Local engineering checks on 5 October: `npm run check` passed; `npm test` passed (6 prototype + 27 frontend); Django system/migration-drift checks and 16 guide tests passed using Python 3.14.8 with isolated SQLite; `npm run test:e2e` built the production frontend and passed 18 desktop/mobile Chromium tests. The initial browser attempt could not launch because the matching Chromium executable was missing; after installing it, all 18 passed. All ten draft body paragraphs were compared against the review packet and matched. PostgreSQL integration and deployment/container checks were not run locally; their CI results belong in the PR. Human A3/A6 review, Safari acceptance and usability sessions remain pending.
 
 ## Baseline and goal
 
@@ -119,6 +123,6 @@ Treat lost progress, misleading review/publication/offline states and inaccessib
 
 Use small feature branches and PRs to `main`, retaining the existing `.github/workflows/ci.yml` **quality** check. Run `npm run check` and `npm test` locally and record results/unrun checks in each PR. Implementation PRs also run production build, Django checks/tests, migration-drift check and affected browser journeys. CI additionally verifies PostgreSQL integration, deployment policy, Render/container setup and Chromium browser tests. CI does not perform editorial review, real-device acceptance or usability sessions.
 
-This planning PR changes documentation only. Local check and CI results will be recorded in the PR. Identify backend/container/browser checks not run locally as unrun; do not borrow Sprint 4 results.
+Planning PR #7 changed documentation only. Implementation results are recorded above and in the corresponding PR; identify any checks not run as unrun and do not borrow Sprint 4 results.
 
 Sprint 5 may close when the agreed reviewed English/Nepali pilot set supports the full guest journey, required CI passes on the proposed release, device cases have recorded outcomes, 2–3 structured sessions are evidenced, blockers are resolved/retested, recovery follow-ups are resolved or explicitly accepted as deferred, and Sunil accepts the increment. Any incomplete criterion retains its actual status in the closure decision. No merge, deployment, publication or completed human test is implied by this plan.
