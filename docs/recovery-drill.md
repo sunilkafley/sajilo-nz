@@ -1,6 +1,6 @@
 # Sprint 4 recovery drill
 
-Status: prepared, not executed. Owner: Sunil. Keep credentials, dumps and admin records off GitHub and out of chat. This drill keeps the existing `neondb` staging database intact. No paid resources are required.
+Status: backup/isolated restore and same-commit rollback passed on 5 October 2026 (NZDT). Evidence and limitations are recorded below. Owner: Sunil. Keep credentials, dumps and admin records off GitHub and out of chat. This drill keeps the existing `neondb` staging database intact. No paid resources are required.
 
 ## 1. Prerequisites
 
@@ -77,16 +77,18 @@ From Deploys, choose the earlier successful deployment's Rollback action and con
 
 Check the homepage, `/api/health/`, `/api/guides/?lang=en`, admin login, the published guide, and iPhone saved guide/progress. Keep automatic deploys off. Free services retain only the two most recent previous deploys for rollback, so record your known-good target before a release. Record source/target deploy IDs, commit, time and observed results. A same-commit drill verifies the platform rollback operation, not compatibility of future schema changes.
 
-## Completion record (fill only after execution)
+## Completion record — 5 October 2026 (NZDT)
 
 | Evidence | Result |
 | --- | --- |
-| Backup time, archive size and SHA256 (no archive contents) | Pending |
-| Source/target database names, restore exit status | Pending |
-| Guide/user/migration counts and digests match | Pending |
-| Published source/review metadata preserved | Pending |
-| Live staging unaffected | Pending |
-| Render original/redeploy/rollback deploy IDs and commit | Pending |
-| Post-rollback app/API/admin/iPhone checks | Pending |
+| Backup time, archive size and SHA256 (no archive contents) | Backup succeeded on 5 October, user-reported; screenshot showed readable archive listing. Exact time, size and SHA256 were not captured. |
+| Source/target database names, restore exit status | `neondb` → separate `sajilo_restore_check`; user confirmed successful restore. Numeric exit status not separately captured. |
+| Guide/user/migration counts and digests match | Screenshots of both databases: 1 guide, 1 user, 19 migrations; all three full-record fingerprints match. |
+| Published source/review metadata preserved | Included in matching full guide-record fingerprint; separate manual field inspection not reported. |
+| Live staging unaffected | User confirmed app/published guide and admin work after rollback. |
+| Render original/redeploy/rollback deploy IDs and commit | Both original and manual redeploy screenshots show `f0bf8b3` (full SHA `f0bf8b35111060903433c06e9232c86259f625c4`). Rollback screenshot identifies target `dep-davhinnavr4c73c2047g`, Live at 14:33:05 NZDT, duration 31 seconds. Redeploy/new rollback IDs were not shown. |
+| Post-rollback app/API/admin/iPhone checks | User: "All those four checks pass": health endpoint, app/published guide, admin login, and iPhone checklist completion after refresh. Screenshot also shows repeated health HTTP 200 responses. Separate guides API and saved-guide recheck not reported at this step. |
+
+This validates the isolated restore and platform rollback for the tested staging increment. It does not prove rollback compatibility with future schema changes or compare every database table. No credentials, dump contents or user-record fingerprints are stored here. Private backup retention, archive metadata and test-database cleanup remain follow-up housekeeping, not claimed completed.
 
 References: https://www.postgresql.org/docs/17/app-pgdump.html ; https://www.postgresql.org/docs/17/app-pgrestore.html ; https://render.com/docs/rollbacks ; https://render.com/docs/free
