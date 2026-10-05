@@ -5,7 +5,8 @@ from django.core.validators import URLValidator
 from django.db import models
 from django.utils import timezone
 
-OFFICIAL_HOSTS = {'www.immigration.govt.nz', 'www.mpi.govt.nz', 'www.travellerdeclaration.govt.nz'}
+OFFICIAL_HOSTS = {'www.immigration.govt.nz', 'www.mpi.govt.nz', 'www.travellerdeclaration.govt.nz',
+                  'www.christchurchairport.co.nz', 'www.metroinfo.co.nz'}
 TASK_IDS = {'passport', 'visa', 'offer', 'academic', 'insurance', 'accommodation', 'flight', 'emergency-contacts',
             'clothing', 'laptop', 'chargers', 'medication', 'document-copies', 'personal', 'cash', 'cards',
             'emergency-money', 'budget', 'passport-validity', 'visa-conditions', 'confirm-accommodation',

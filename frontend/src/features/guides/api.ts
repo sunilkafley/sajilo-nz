@@ -6,7 +6,7 @@ export interface Guide {
   verified_on: string; next_review_on: string; review_overdue: boolean;
 }
 export class GuideError extends Error {}
-const officialHosts = new Set(['www.immigration.govt.nz', 'www.mpi.govt.nz', 'www.travellerdeclaration.govt.nz']);
+const officialHosts = new Set(['www.immigration.govt.nz', 'www.mpi.govt.nz', 'www.travellerdeclaration.govt.nz', 'www.christchurchairport.co.nz', 'www.metroinfo.co.nz']);
 export function parseGuide(value: unknown): Guide {
   if (!value || typeof value !== 'object') throw new GuideError('Unexpected guide data. Please try again later.');
   const g = value as Record<string, unknown>;

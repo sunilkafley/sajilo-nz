@@ -1,0 +1,4 @@
+.city-intro { display: flex; gap: 24px; align-items: flex-start; overflow-wrap: anywhere; }
+.city-intro > div:last-child { min-width: 0; flex: 1; }
+.city-monogram { border-radius: 14px; background: #dfe9df; color: #658370; padding: 24px; font-size: 2rem; font-weight: 700; letter-spacing: .12em; }
+@media (max-width: 560px) { .city-intro { flex-direction: column; gap: 16px; } .city-monogram { padding: 16px 24px; } }

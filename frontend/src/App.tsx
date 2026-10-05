@@ -15,7 +15,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
   const location = useLocation();
   const main = useRef<HTMLElement>(null);
   useEffect(() => {
-    document.title = `${location.pathname === '/explore' ? 'Explore' : location.pathname === '/predeparture' ? 'Pre-departure checklist' : (location.pathname.startsWith('/guides') || location.pathname === '/saved') ? 'Pre-departure guides' : location.pathname === '/sources' ? 'Official sources' : 'Your journey'} · Sajilo NZ`;
+    document.title = `${location.pathname === '/cities/christchurch' ? 'Christchurch' : location.pathname.startsWith('/cities/') ? 'City unavailable' : location.pathname === '/explore' ? 'Explore' : location.pathname === '/predeparture' ? 'Pre-departure checklist' : (location.pathname.startsWith('/guides') || location.pathname === '/saved') ? 'Pre-departure guides' : location.pathname === '/sources' ? 'Official sources' : 'Your journey'} · Sajilo NZ`;
     const task = new URLSearchParams(location.search).get('task');
     if (location.pathname === '/predeparture' && task && tasks.some(item => item.id === task)) {
       document.getElementById(task)?.focus();
@@ -47,6 +47,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
         <OfflineStatus/>
         <Routes>
           <Route path="/explore" element={<ExplorePage/>}/>
+          <Route path="/cities/:cityId" element={<GuidePage/>}/>
           <Route path="/saved" element={<GuidePage savedOnly/>}/>
           <Route path="/guides" element={<GuidePage/>}/>
           <Route path="/guides/:slug" element={<GuidePage/>}/>

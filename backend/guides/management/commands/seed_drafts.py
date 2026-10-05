@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from guides.models import Guide
+from guides.christchurch_drafts import SLUG, SOURCES, TASK_IDS, TEXT
 
 class Command(BaseCommand):
     help = 'Create unreviewed draft starters; never overwrites existing content or publishes.'
@@ -33,6 +34,8 @@ class Command(BaseCommand):
             ('packing-biosecurity', 'en', 'Check what you are packing', 'Check official biosecurity guidance before packing.',
              'Read the Ministry for Primary Industries guidance before deciding what to pack.\n\nCheck the New Zealand Traveller Declaration website for the declaration process. These links are starting points, not personalised advice.',
              [{'title': 'Ministry for Primary Industries', 'url': 'https://www.mpi.govt.nz/'}], ['biosecurity', 'declaration'])]
+        drafts.extend((SLUG, language, text['title'], text['summary'], text['body'], SOURCES, TASK_IDS)
+                      for language, text in TEXT.items())
         for slug, language, title, summary, body, sources, ids in drafts:
             _, created = Guide.objects.get_or_create(slug=slug, language=language, defaults={
                 'title': title, 'summary': summary, 'body': body, 'sources': sources, 'checklist_ids': ids,

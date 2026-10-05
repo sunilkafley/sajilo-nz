@@ -17,8 +17,9 @@ export function topicGuides(guides: Guide[], topic: string | null): Guide[] {
   return guides.filter(guide => guide.stage === 'predeparture' && guide.checklist_ids.some(id => ids.has(id)));
 }
 
-export function guideLocation(path: string, language: Language, topic: string | null): string {
+export function guideLocation(path: string, language: Language, topic: string | null, city?: string | null): string {
   const params = new URLSearchParams({ lang: language });
   if (topic) params.set('topic', topic);
+  if (city) params.set('city', city);
   return `${path}?${params}`;
 }
