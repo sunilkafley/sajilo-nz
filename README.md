@@ -26,6 +26,7 @@ Browser tests also require the Python environment; see the Sprint 2 setup below.
 
 ## Architecture
 - `frontend/src/features/checklist/`: stable task IDs, domain rules, storage repository and use cases.
+- `frontend/src/features/explore/`: Explore landing page, scoped styles and available/planned destination catalogue.
 - `frontend/src/App.tsx`: accessible navigation and React screens; storage mutations go through use cases.
 - `frontend/e2e/`: browser tests.
 - `prototype/`: unchanged design reference. Run `python -m http.server 8000 --directory prototype` to view it.
@@ -151,4 +152,10 @@ Free hosting setup: [Render + Neon instructions](docs/render-neon.md). The bluep
 
 ### Sprint 5 — useful pre-departure journey
 
-The [Sprint 5 proposal](docs/sprint-5.md) covers expanded reviewed English/Nepali guidance, remaining device checks and 2–3 structured usability sessions. Its first proposed implementation slice prepares the travel-documents guide pair for separate human reviews using the existing publication and offline journey. The planning PR does not publish content or deploy an application change; merge and deployment require user review.
+The [Sprint 5 plan](docs/sprint-5.md) covers expanded reviewed English/Nepali guidance, remaining device checks and 2–3 structured usability sessions. Slice 5A merged in PR #8 with travel-document drafts and a [human review packet](docs/content/travel-documents-review.md). Publication review and the remaining human checks are pending.
+
+### Sprint 6 — Explore
+
+Open **Explore** in the navigation to find the existing checklist, guide search, saved guides and official sources. Other prototype categories, introduction topics and city guides are labelled **Planned** and are not clickable destinations yet. The page works offline after the production app is ready; guide availability still depends on publication or a previously saved copy.
+
+See the [Sprint 6 plan](docs/sprint-6.md) for topic browsing and the first city journey, and the [roadmap](docs/roadmap.md) for arrival essentials and later features. Explore development proceeds alongside Sprint 5's outstanding work. Merge, deployment and content publication remain separate review decisions.

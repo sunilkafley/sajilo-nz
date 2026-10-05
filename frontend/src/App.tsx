@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { OfflineStatus } from './OfflineStatus';
 import { GuidePage } from './features/guides/GuidePage';
+import { ExplorePage } from './features/explore/ExplorePage';
 import { summarise } from './features/checklist/domain';
 import { groupNames, sources, tasks } from './features/checklist/tasks';
 import type { ProgressRepository } from './features/checklist/repository';
@@ -14,7 +15,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
   const location = useLocation();
   const main = useRef<HTMLElement>(null);
   useEffect(() => {
-    document.title = `${location.pathname === '/predeparture' ? 'Pre-departure checklist' : (location.pathname.startsWith('/guides') || location.pathname === '/saved') ? 'Pre-departure guides' : location.pathname === '/sources' ? 'Official sources' : 'Your journey'} · Sajilo NZ`;
+    document.title = `${location.pathname === '/explore' ? 'Explore' : location.pathname === '/predeparture' ? 'Pre-departure checklist' : (location.pathname.startsWith('/guides') || location.pathname === '/saved') ? 'Pre-departure guides' : location.pathname === '/sources' ? 'Official sources' : 'Your journey'} · Sajilo NZ`;
     const task = new URLSearchParams(location.search).get('task');
     if (location.pathname === '/predeparture' && task && tasks.some(item => item.id === task)) {
       document.getElementById(task)?.focus();
@@ -31,6 +32,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
       <p className="tagline">Your student journey</p>
       <nav aria-label="Main navigation">
         <NavLink to="/" end>Your journey</NavLink>
+        <NavLink to="/explore">Explore</NavLink>
         <NavLink to="/predeparture">Pre-departure checklist</NavLink>
         <NavLink to="/guides">Pre-departure guides</NavLink>
         <NavLink to="/saved">Saved guides</NavLink>
@@ -44,6 +46,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
         {warning && <div role="alert" className="notice warning"><p>{warning}</p>{!initial.blocked && <button onClick={() => setWarning(retrySave(repository, progress))}>Try saving again</button>}</div>}
         <OfflineStatus/>
         <Routes>
+          <Route path="/explore" element={<ExplorePage/>}/>
           <Route path="/saved" element={<GuidePage savedOnly/>}/>
           <Route path="/guides" element={<GuidePage/>}/>
           <Route path="/guides/:slug" element={<GuidePage/>}/>
