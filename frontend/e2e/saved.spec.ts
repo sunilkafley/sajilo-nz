@@ -45,7 +45,7 @@ test('storage failures show no false save confirmation and language never falls 
   await expect(page.getByRole('alert')).toContainText('Could not save changes');
   await expect(page.getByRole('button',{name:'Remove saved guide'})).toHaveCount(0);
   await page.reload(); await page.getByRole('button',{name:'Save guide',exact:true}).click();
-  await page.getByRole('combobox').selectOption('ne');
+  await page.getByLabel('Guide language / भाषा').selectOption('ne');
   await expect(page.getByRole('heading',{name:'Guide unavailable in this language'})).toBeVisible();
   await page.getByRole('link',{name:'View saved guides'}).click();
   await expect(page.getByRole('heading',{name:'No saved guides in this language'})).toBeVisible();
@@ -57,7 +57,7 @@ test('Nepali offline copy keeps its review dates and progress independently of E
   await expect(page.getByText('App ready for offline use.', {exact:false})).toBeVisible();
   await page.getByRole('button', {name:'Save guide', exact:true}).click();
   await expect(page.getByRole('button', {name:'Remove saved guide'})).toBeVisible();
-  await page.getByRole('combobox').selectOption('ne');
+  await page.getByLabel('Guide language / भाषा').selectOption('ne');
   await page.getByRole('button', {name:'Save guide', exact:true}).click();
   await expect(page.getByRole('button', {name:'Remove saved guide'})).toBeVisible();
   const before = await page.evaluate(key => JSON.parse(localStorage.getItem(key)!).items, key);
@@ -81,12 +81,12 @@ test('Nepali offline copy keeps its review dates and progress independently of E
   await expect(page.getByRole('checkbox', {name:'Passport', exact:true})).toBeChecked();
 
   await page.getByRole('link', {name:'Saved guides', exact:true}).click();
-  await page.getByRole('combobox').selectOption('ne');
+  await page.getByLabel('Guide language / भाषा').selectOption('ne');
   await page.getByRole('link', {name:'परीक्षण यात्रा कागजात', exact:true}).click();
   await page.getByRole('button', {name:'Remove saved guide'}).click();
   await page.reload();
   await expect(page.getByRole('heading', {name:'Guide unavailable in this language'})).toBeVisible();
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)!).items, key)).toEqual([english]);
-  await page.getByRole('combobox').selectOption('en');
+  await page.getByLabel('Guide language / भाषा').selectOption('en');
   await expect(page.getByText(english.guide.body, {exact:true})).toBeVisible();
 });

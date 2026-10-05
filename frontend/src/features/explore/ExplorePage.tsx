@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { categories, cities, iconPaths, introductionTopics } from './catalog';
 import './explore.css';
+import { topics } from '../guides/topics';
 
 function Icon({ name }: { name: keyof typeof iconPaths }) {
   return <svg className="explore-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d={iconPaths[name]}/></svg>;
@@ -18,6 +19,12 @@ export function ExplorePage() {
       <Icon name="arrow"/>
     </Link>
     <p className="explore-saved"><Link to="/saved">Open saved guides</Link> <span>Keep reading saved copies when you are offline.</span></p>
+
+    <section className="explore-section" aria-labelledby="explore-travel-topics">
+      <h2 id="explore-travel-topics">Browse travel guides</h2>
+      <p>Browse reviewed guides linked to your checklist. Some topics may not have published guidance yet.</p>
+      <div className="explore-grid">{topics.map(topic => <Link className="explore-card explore-card-link" key={topic.id} to={`/guides?topic=${topic.id}`}><h3>{topic.title}</h3><span className="explore-action">Browse guides<Icon name="arrow"/></span></Link>)}</div>
+    </section>
 
     <section aria-labelledby="explore-categories">
       <h2 id="explore-categories">Explore by topic</h2>

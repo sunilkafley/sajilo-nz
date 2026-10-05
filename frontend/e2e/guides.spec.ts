@@ -27,7 +27,7 @@ test('guest finds a reviewed Nepali guide and follows its task through reload', 
   const guide = (await response.json()).find((item: {slug: string}) => item.slug === 'test-bilingual-documents');
   expect(guide).toBeTruthy();
   await page.goto('/#/guides');
-  await page.getByRole('combobox').selectOption('ne');
+  await page.getByLabel('Guide language / भाषा').selectOption('ne');
   await page.getByRole('searchbox').fill('यात्रा कागजात');
   await page.getByRole('link', {name:'परीक्षण यात्रा कागजात', exact:true}).click();
   const body = page.locator('article.guide-body');

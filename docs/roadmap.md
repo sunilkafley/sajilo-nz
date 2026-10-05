@@ -6,7 +6,7 @@ Updated 5 October 2026 (New Zealand), following the user's decision to start Exp
 | --- | --- | --- |
 | Sprint 4 | Free HTTPS staging and recovery baseline | Closed. Preserve [closure evidence](sprint-4.md) and [recovery limitations](recovery-drill.md). |
 | Sprint 5 | Useful reviewed bilingual pre-departure journey | 5A merged in PR #8 at `4a0c92e`. Human publication, remaining device checks, 2–3 structured sessions and housekeeping remain open. |
-| Sprint 6 | Explore discovery page, topic browsing and one useful city journey | Current engineering focus. [6A landing page](sprint-6.md) first; 6B topic browsing next, then 6C one city. Each is a small reviewable PR. |
+| Sprint 6 | Explore discovery page, topic browsing and one useful city journey | 6A merged in PR #9 at `4651e1a`. [6B topic browsing](sprint-6.md) implemented for review; 6C one city follows a user choice. Each is a small reviewable PR. |
 | Sprint 7 | Arrival essentials | Planned next: arrival guide, first-week checklist and links to practical resources. Define task IDs, acceptance and reviewed content before implementing. |
 | Later | Housing/budget tools, study/course discovery, jobs and community | Order and scope depend on usability findings, source availability and editorial capacity. No live catalogues, directories or events are promised. |
 
