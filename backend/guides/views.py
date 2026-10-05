@@ -17,7 +17,11 @@ class PublicGuides:
         language = self.request.query_params.get('lang', 'en')
         if language not in ('en', 'ne'):
             raise ValidationError({'lang': 'Choose en or ne.'})
-        return Guide.objects.filter(status='published', is_sample=False, language=language,
+        # Older clients never opt in and must not receive unsupported arrival IDs.
+        stage = self.request.query_params.get('stage', 'predeparture')
+        if stage not in ('predeparture', 'firstweek'):
+            raise ValidationError({'stage': 'Choose predeparture or firstweek.'})
+        return Guide.objects.filter(status='published', is_sample=False, language=language, stage=stage,
             reviewed_by__isnull=False, verified_on__lte=timezone.localdate(), next_review_on__isnull=False).exclude(sources=[])
 
 class GuideList(PublicGuides, generics.ListAPIView):

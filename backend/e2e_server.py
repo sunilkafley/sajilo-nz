@@ -43,4 +43,12 @@ with TemporaryDirectory(prefix='sajilo-e2e-') as directory:
         verified_on=timezone.localdate()-timedelta(days=5), next_review_on=timezone.localdate()+timedelta(days=25))
     Guide.objects.create(slug='christchurch-arrival-plan', language='ne', title='Unreviewed test city translation',
         summary='Synthetic draft only.', body='Never shown in the public city journey.', sources=[], status='draft')
+    for language, title in [('en', 'Test first-week travel'), ('ne', 'परीक्षण पहिलो हप्ताको यात्रा')]:
+        Guide.objects.create(slug='test-firstweek', language=language, stage='firstweek', title=title,
+            summary='Synthetic arrival fixture.', body='Synthetic first-week content, not travel advice.',
+            sources=[{'title':'Metro', 'url':'https://www.metroinfo.co.nz/'}],
+            checklist_ids=['arrival-transport'], status='published', reviewed_by=reviewer,
+            verified_on=timezone.localdate()-timedelta(days=4), next_review_on=timezone.localdate()+timedelta(days=26))
+    Guide.objects.create(slug='test-firstweek-draft', language='ne', stage='firstweek', title='Unreviewed arrival translation',
+        summary='Synthetic draft.', body='Do not expose.', sources=[], status='draft')
     call_command('runserver', '127.0.0.1:8000', use_reloader=False)

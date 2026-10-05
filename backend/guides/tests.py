@@ -3,7 +3,7 @@ from io import StringIO
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.management import call_command
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 from django.utils import timezone
 from .models import Guide
 
@@ -103,6 +103,49 @@ class GuideTests(TestCase):
     def test_unknown_task_fails(self):
         with self.assertRaises(ValidationError):
             self.guide(checklist_ids=['nonexistent'])
+
+    def test_arrival_stage_is_opt_in_and_task_links_cannot_cross_stages(self):
+        self.published()
+        self.published(slug='arrival', stage='firstweek', checklist_ids=['arrival-transport'])
+        self.assertEqual([g['stage'] for g in self.client.get('/api/guides/').json()], ['predeparture'])
+        self.assertEqual([g['stage'] for g in self.client.get('/api/guides/?stage=firstweek').json()], ['firstweek'])
+        self.assertEqual(self.client.get('/api/guides/arrival/').status_code, 404)
+        self.assertEqual(self.client.get('/api/guides/arrival/?stage=firstweek').status_code, 200)
+        self.assertEqual(self.client.get('/api/guides/?stage=unknown').status_code, 400)
+        for stage, ids in [('predeparture', ['arrival-transport']), ('firstweek', ['passport'])]:
+            with self.subTest(stage=stage), self.assertRaises(ValidationError):
+                self.guide(slug='invalid-stage-links', stage=stage, checklist_ids=ids)
+
+    def test_arrival_drafts_and_packet_need_independent_review_and_are_create_only(self):
+        from pathlib import Path
+        from guides import arrival_drafts as draft
+        packet = (Path(__file__).resolve().parents[2] / 'docs/content/arrival-travel-review.md').read_text(encoding='utf-8')
+        self.assertIn(draft.REVISION, packet)
+        call_command('seed_drafts', stdout=StringIO())
+        for language, text in draft.TEXT.items():
+            g = Guide.objects.get(slug=draft.SLUG, language=language)
+            self.assertEqual(g.stage, 'firstweek')
+            self.assertEqual(g.body, text['body'])
+            self.assertEqual(g.checklist_ids, draft.TASK_IDS)
+            self.assertEqual(g.sources, draft.SOURCES)
+            self.assertIsNone(g.reviewed_by_id)
+            self.assertIsNone(g.verified_on)
+            self.assertIsNone(g.next_review_on)
+            for value in [text['title'], text['summary'], *text['body'].split('\n\n')]:
+                self.assertIn(value, packet)
+            g.status = 'published'
+            with self.assertRaises(ValidationError): g.save()
+        english = Guide.objects.get(slug=draft.SLUG, language='en')
+        english.status = 'published'
+        english.reviewed_by = self.reviewer
+        english.verified_on = self.today
+        english.next_review_on = self.today + timedelta(days=30)
+        english.save()
+        before = list(Guide.objects.filter(slug=draft.SLUG).order_by('language').values())
+        call_command('seed_drafts', stdout=StringIO())
+        self.assertEqual(before, list(Guide.objects.filter(slug=draft.SLUG).order_by('language').values()))
+        self.assertEqual(self.client.get(f'/api/guides/{draft.SLUG}/?stage=firstweek').status_code, 200)
+        self.assertEqual(self.client.get(f'/api/guides/{draft.SLUG}/?stage=firstweek&lang=ne').status_code, 404)
 
     def test_edits_require_draft_and_invalidate_review(self):
         guide = self.published()
@@ -233,3 +276,21 @@ class GuideTests(TestCase):
         guide.refresh_from_db()
         self.assertIsNone(guide.verified_on)
         self.assertEqual(self.client.get('/api/guides/travel-documents/').status_code, 404)
+
+
+class ArrivalMigrationTests(TransactionTestCase):
+    def test_choice_migration_roundtrip_preserves_existing_and_arrival_rows(self):
+        from django.db import connection
+        from django.db.migrations.executor import MigrationExecutor
+        pre = Guide.objects.create(slug='existing', language='en', title='Existing', summary='Draft', body='Draft')
+        arrival = Guide.objects.create(slug='arrival', language='en', stage='firstweek', title='Arrival', summary='Draft', body='Draft', checklist_ids=['arrival-budget'])
+        before = list(Guide.objects.order_by('pk').values())
+        try:
+            MigrationExecutor(connection).migrate([('guides', '0001_initial')])
+            self.assertEqual(list(Guide.objects.order_by('pk').values()), before)
+            MigrationExecutor(connection).migrate([('guides', '0002_guide_firstweek_stage')])
+            self.assertEqual(list(Guide.objects.order_by('pk').values()), before)
+            self.assertEqual(Guide.objects.get(pk=pre.pk).stage, 'predeparture')
+            self.assertEqual(Guide.objects.get(pk=arrival.pk).stage, 'firstweek')
+        finally:
+            MigrationExecutor(connection).migrate([('guides', '0002_guide_firstweek_stage')])
