@@ -50,6 +50,56 @@ class GuideTests(TestCase):
         with self.assertRaises(ValidationError):
             self.published(next_review_on=self.today)
 
+    def test_city_sources_accept_exact_official_hosts_only(self):
+        from guides.christchurch_drafts import SOURCES
+        guide = self.guide(sources=SOURCES)
+        self.assertEqual(guide.sources, SOURCES)
+        for url in ['https://www.metroinfo.co.nz.evil.com/', 'http://www.metroinfo.co.nz/',
+                    'https://user@www.christchurchairport.co.nz/', 'https://www.metroinfo.co.nz:123/']:
+            with self.subTest(url=url), self.assertRaises(ValidationError):
+                self.guide(slug='invalid-city', sources=[{'title': 'Invalid', 'url': url}])
+
+    def test_city_starters_require_separate_review_and_preserve_existing_records(self):
+        from guides.christchurch_drafts import SLUG, SOURCES, TASK_IDS, TEXT
+        call_command('seed_drafts', stdout=StringIO())
+        for language, text in TEXT.items():
+            guide = Guide.objects.get(slug=SLUG, language=language)
+            self.assertEqual(guide.body, text['body'])
+            self.assertEqual(guide.sources, SOURCES)
+            self.assertEqual(guide.checklist_ids, TASK_IDS)
+            self.assertIsNone(guide.reviewed_by_id)
+            self.assertIsNone(guide.verified_on)
+            self.assertIsNone(guide.next_review_on)
+            self.assertEqual(self.client.get(f'/api/guides/{SLUG}/?lang={language}').status_code, 404)
+            guide.status = 'published'
+            with self.assertRaises(ValidationError):
+                guide.save()
+        english = Guide.objects.get(slug=SLUG, language='en')
+        english.status = 'published'
+        english.reviewed_by = self.reviewer
+        english.verified_on = self.today
+        english.next_review_on = self.today + timedelta(days=30)
+        english.save()
+        nepali = Guide.objects.get(slug=SLUG, language='ne')
+        nepali.title = 'Editor translation in progress'
+        nepali.save()
+        before = list(Guide.objects.filter(slug=SLUG).order_by('language').values())
+        call_command('seed_drafts', stdout=StringIO())
+        self.assertEqual(list(Guide.objects.filter(slug=SLUG).order_by('language').values()), before)
+        self.assertEqual(self.client.get(f'/api/guides/{SLUG}/?lang=en').status_code, 200)
+        self.assertEqual(self.client.get(f'/api/guides/{SLUG}/?lang=ne').status_code, 404)
+
+    def test_city_review_packet_matches_seed_text(self):
+        from pathlib import Path
+        from guides.christchurch_drafts import TEXT, REVISION
+        packet = (Path(__file__).resolve().parents[2] / 'docs/content/christchurch-review.md').read_text(encoding='utf-8')
+        self.assertIn(REVISION, packet)
+        for text in TEXT.values():
+            self.assertIn(text['title'], packet)
+            self.assertIn(text['summary'], packet)
+            for paragraph in text['body'].split('\n\n'):
+                self.assertIn(paragraph, packet)
+
     def test_unknown_task_fails(self):
         with self.assertRaises(ValidationError):
             self.guide(checklist_ids=['nonexistent'])

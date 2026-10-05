@@ -34,4 +34,13 @@ with TemporaryDirectory(prefix='sajilo-e2e-') as directory:
             checklist_ids=['passport'], status='published', reviewed_by=reviewer,
             verified_on=timezone.localdate()-timedelta(days=age),
             next_review_on=timezone.localdate()+timedelta(days=30-age))
+    # City slug is real routing identity, but text/review are synthetic and isolated.
+    Guide.objects.create(slug='christchurch-arrival-plan', language='en', title='Test Christchurch preparation',
+        summary='Synthetic city browser fixture.', body='Synthetic Christchurch guidance, not travel advice.',
+        sources=[{'title':'Christchurch Airport', 'url':'https://www.christchurchairport.co.nz/travellers/parking-and-transport/'},
+                 {'title':'Metro', 'url':'https://www.metroinfo.co.nz/travel-information/getting-started-with-metro/'}],
+        checklist_ids=['airport-transport'], status='published', reviewed_by=reviewer,
+        verified_on=timezone.localdate()-timedelta(days=5), next_review_on=timezone.localdate()+timedelta(days=25))
+    Guide.objects.create(slug='christchurch-arrival-plan', language='ne', title='Unreviewed test city translation',
+        summary='Synthetic draft only.', body='Never shown in the public city journey.', sources=[], status='draft')
     call_command('runserver', '127.0.0.1:8000', use_reloader=False)

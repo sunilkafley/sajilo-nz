@@ -10,7 +10,7 @@ test('Explore is keyboard accessible and every available destination works', asy
   await expect(explore).toHaveAttribute('aria-current', 'page');
   await expect(page.getByRole('heading', {name:'A new country. A world of possibilities.'})).toBeVisible();
   await expect(page.getByRole('article', {name:'Study & courses'})).toContainText('Planned');
-  await expect(page.getByRole('region', {name:'Find your city'}).getByRole('link')).toHaveCount(0);
+  await expect(page.getByRole('region', {name:'Find your city'}).getByRole('link')).toHaveCount(1);
   await page.screenshot({path: testInfo.outputPath('explore.png'), fullPage:true});
 
   const destinations = [
@@ -18,6 +18,7 @@ test('Explore is keyboard accessible and every available destination works', asy
     ['Open saved guides', 'Saved guides'],
     ['Prepare to travel', 'Your pre-departure checklist'],
     ['Immigration', 'Check the official guidance'],
+    ['Christchurch', 'Christchurch'],
   ];
   for (const [label, heading] of destinations) {
     await page.getByRole('main').getByRole('link', {name:label}).click();

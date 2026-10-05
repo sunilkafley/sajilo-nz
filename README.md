@@ -27,6 +27,7 @@ Browser tests also require the Python environment; see the Sprint 2 setup below.
 ## Architecture
 - `frontend/src/features/checklist/`: stable task IDs, domain rules, storage repository and use cases.
 - `frontend/src/features/explore/`: Explore landing page, scoped styles and available/planned destination catalogue.
+- `frontend/src/features/cities/`: curated Christchurch guide membership and city preparation layout, reusing the existing guide publication/saved flow.
 - `frontend/src/App.tsx`: accessible navigation and React screens; storage mutations go through use cases.
 - `frontend/e2e/`: browser tests.
 - `prototype/`: unchanged design reference. Run `python -m http.server 8000 --directory prototype` to view it.
@@ -156,8 +157,10 @@ The [Sprint 5 plan](docs/sprint-5.md) covers expanded reviewed English/Nepali gu
 
 ### Sprint 6 — Explore
 
-Open **Explore** in the navigation to find the existing checklist, guide search, saved guides and official sources. Other prototype categories, introduction topics and city guides are labelled **Planned** and are not clickable destinations yet. The page works offline after the production app is ready; guide availability still depends on publication or a previously saved copy.
+Open **Explore** in the navigation to find the existing checklist, guide search, saved guides and official sources. **Christchurch** opens a city preparation page. Other prototype categories, introduction topics and cities remain **Planned**. The page works offline after the production app is ready; guide availability still depends on publication or a previously saved copy.
 
 **Browse travel guides** opens Documents, Packing, Money or Before leaving Nepal. Topic membership uses the guide's reviewed checklist links; a guide may appear in several topics. Language and topic are retained through reading and saved-guide navigation. Choose **All topics** for unlinked guides or an empty topic. Filtering never publishes drafts or changes review dates; offline topic browsing uses previously saved copies only.
+
+Christchurch uses `/cities/christchurch` and lists only its curated `christchurch-arrival-plan` guide when published in the selected language. It connects to the existing airport transport/accommodation checklist tasks and saved/offline reading. `seed_drafts` supplies unreviewed English/Nepali starters and preserves existing records. The [city review packet](docs/content/christchurch-review.md) must be completed before publication; an empty city page does not bypass review. No listings, fares, booking, location tracking or new accounts are included.
 
 See the [Sprint 6 plan](docs/sprint-6.md) for topic browsing and the first city journey, and the [roadmap](docs/roadmap.md) for arrival essentials and later features. Explore development proceeds alongside Sprint 5's outstanding work. Merge, deployment and content publication remain separate review decisions.

@@ -53,8 +53,8 @@ export function ExplorePage() {
 
     <section className="explore-section" aria-labelledby="explore-cities">
       <h2 id="explore-cities">Find your city</h2>
-      <p>City guides are planned for these places. There are no city listings to browse yet.</p>
-      <ul className="explore-cities">{cities.map(city => <li key={city}><Icon name="pin"/>{city}<span className="explore-planned">Planned</span></li>)}</ul>
+      <p>Start with Christchurch preparation. Other city pages are planned; guidance is available only after publication review.</p>
+      <ul className="explore-cities">{cities.map(city => <li key={city}><Icon name="pin"/>{city === 'Christchurch' ? <Link to="/cities/christchurch">Christchurch</Link> : <>{city}<span className="explore-planned">Planned</span></>}</li>)}</ul>
     </section>
   </div>;
 }

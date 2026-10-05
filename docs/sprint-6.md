@@ -1,6 +1,6 @@
 # Sprint 6 — Explore
 
-Started 5 October 2026 (New Zealand). Status: 6A merged in PR #9 at `4651e1a`; 6B implemented for PR review; 6C planned. User approved the [revised roadmap](roadmap.md), allowing Explore engineering alongside the outstanding Sprint 5 human work. Sprint 5 remains open.
+Started 5 October 2026 (New Zealand). Status: 6A merged in PR #9 at `4651e1a`; 6B merged in PR #10 at `5b39805`; 6C Christchurch implemented for PR review, human publication review pending. User approved the [revised roadmap](roadmap.md), allowing Explore engineering alongside the outstanding Sprint 5 human work. Sprint 5 remains open.
 
 Base: `4a0c92e` (merged PR #8). Branch: `codex/sprint-6a-explore`. Staging is still recorded at `f0bf8b3`; no deployment is part of this slice.
 
@@ -54,7 +54,7 @@ The landing page itself makes no API request and has no new storage writes. It i
 
 ## Handoff and next action
 
-Review 6B's PR before merge. Deployment requires a separate user decision. Next, select one city with the user for 6C. Plan Sprint 7 arrival essentials after the Explore increment; do not silently mark Sprint 5 finished or expand Explore into every planned category.
+Review 6C's PR before merge; review city content separately before publication. Deployment requires a separate user decision. Recommended next slice is 6D Home dashboard, followed by Sprint 7 arrival essentials; do not silently mark Sprint 5 finished or expand Explore into every planned category.
 
 ## 6B implementation and contract
 
@@ -85,3 +85,39 @@ No API/schema/migration, storage-format, source allowlist, hosting, prototype or
 - Local PostgreSQL, container/deployment-policy and real-device Safari checks were not run. The existing GitHub quality workflow remains the PostgreSQL integration gate; its outcome belongs in the PR.
 
 Sprint 5's human reviews, remaining device cases, 2–3 sessions and recovery housekeeping remain open; no publication or deployment is part of 6B.
+
+## 6C — Christchurch preparation
+
+City chosen by Sunil, who is based in Christchurch. Base: merged PR #10 (`5b39805`). Branch: `codex/sprint-6c-christchurch`. Engineering implementation does not close the city content-review acceptance gate.
+
+Small slice: prepare the airport-to-accommodation journey before departure. `/cities/christchurch` reuses the guide list, language/search/topic controls, dates/sources, save and offline-copy flow. A feature catalogue explicitly maps Christchurch to `christchurch-arrival-plan`; it does not infer location from titles, collect a user's address or approve content. Other city links remain Planned. Unknown cities show a recovery link, never unrelated guide results.
+
+Detail/saved/return links retain `city=christchurch` and selected language/topic. The API still supplies the full selected-language catalogue; reconciliation occurs before city/topic filtering. A successful publication check removes withdrawn city bodies and retains removable bookmarks, including in a city-filtered saved list. API failures preserve saved copies and show warnings. Existing airport transport/accommodation task links keep stable IDs and browser persistence; they are explicitly not newly reviewed.
+
+The create-only draft seeder adds English and Nepali preparation starters with no review metadata. The [review packet](content/christchurch-review.md) contains matching text, source-to-claim mapping and separate pending review records. Official source research used Christchurch Airport's parking/transport page and Metro's getting-started page. No specific fare, route, timetable, payment method, accommodation availability or community listing is asserted. Source fetching and PR review do not approve wording or translation.
+
+### Publication and compatibility
+
+- Backend and frontend source allowlists add only exact HTTPS `www.christchurchairport.co.nz` and `www.metroinfo.co.nz`; unsafe schemes, lookalikes, credentials and nonstandard ports remain rejected.
+- No database schema/migration, API field, task-ID, saved-storage format, dependency, prototype or hosting changes. No seeding of staging, deployment, publication or merge by this task.
+- A pre-6C frontend rejects saved guides containing these newly allowed source hosts and preserves, but cannot read, that saved record. Therefore rollback to older code after city publication is **not** established as seamless offline compatibility. Before a release, test existing and city saved copies through app update/rollback with an approved compatible target; do not clear user storage or reverse migrations to mask failure. The earlier same-commit Render drill does not prove this cross-version case.
+- Publication requires a deployed compatible release and an editor's separate approval for each language. No review date is inferred from code or deployment.
+
+### Observable acceptance
+
+1. Guest follows Christchurch from Explore to its focused guide list, with keyboard focus/title and no overflow at phone/tablet widths.
+2. Only curated, published language records appear. Unreviewed city translation and unrelated reviewed guides do not leak into the city list; unknown/empty/error states offer useful recovery.
+3. Detail, language, search/topic, saved and return navigation retain city context. Successful full-catalogue refresh preserves unrelated saved copies.
+4. Saved city content reads offline with original dates and warning; its checklist task completion survives refresh. Withdrawn city content is removed only after successful publication checking and its bookmark remains removable.
+5. Seeder preserves existing edited/published records; publication needs separate human review for English/Nepali. Exact source validation and packet/seed parity are tested.
+6. Actual human English/Nepali approval, real Safari cases and 2–3 usability sessions remain pending. Automated synthetic fixtures do not satisfy these gates.
+
+### 6C validation record
+
+- `npm run check` passed; `npm test` passed (6 prototype + 40 frontend/domain tests).
+- `npm run test:e2e` passed (32 desktop/mobile Chromium tests), including production build and isolated synthetic Django API. City navigation, unpublished Nepali exclusion, error recovery, offline reading/original dates and persistent task completion passed.
+- Django system check and `makemigrations --check --dry-run` passed (no migrations). Final `manage.py test guides` passed (19, isolated SQLite), including exact source-host validation, independent publication review, create-only preservation and review-packet/seed parity.
+- Generated desktop/mobile Christchurch screenshots were inspected; files remain ignored test outputs. `git diff --check` passed.
+- Local PostgreSQL, container/deployment-policy, source-link checks on a deployed release, cross-version app update/rollback, real Safari and human acceptance were not run. Existing quality CI supplies PostgreSQL/container/policy coverage; record its actual outcome in the PR.
+
+Sprint 5 and recovery housekeeping follow-ups retain their existing status. Human English/Nepali city review remains pending. Home dashboard is a proposed next engineering slice, not included here.

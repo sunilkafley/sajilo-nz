@@ -17,16 +17,19 @@ it('offers implemented destinations without making planned topics or cities inte
   expect(document.title).toBe('Explore · Sajilo NZ');
   expect(main).toHaveFocus();
   expect(screen.getByRole('link', {name:'Explore'})).toHaveAttribute('aria-current', 'page');
-  expect(within(main).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/guides', '/saved', '/guides?topic=documents', '/guides?topic=packing', '/guides?topic=money', '/guides?topic=travel-checks', '/predeparture', '/sources']);
+  expect(within(main).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/guides', '/saved', '/guides?topic=documents', '/guides?topic=packing', '/guides?topic=money', '/guides?topic=travel-checks', '/predeparture', '/sources', '/cities/christchurch']);
   const plannedCategory = screen.getByRole('article', {name:'Study & courses'});
   expect(plannedCategory).toHaveTextContent('Planned');
   expect(within(plannedCategory).queryByRole('link')).not.toBeInTheDocument();
-  for (const name of ['Get to know Aotearoa', 'Find your city']) {
+  for (const name of ['Get to know Aotearoa']) {
     const region = screen.getByRole('region', {name});
     expect(within(region).queryByRole('link')).not.toBeInTheDocument();
     expect(within(region).queryByRole('button')).not.toBeInTheDocument();
     expect(region).toHaveTextContent('Planned');
   }
+  const cities = screen.getByRole('region', {name:'Find your city'});
+  expect(within(cities).getAllByRole('link')).toHaveLength(1);
+  expect(within(cities).getByRole('link',{name:'Christchurch'})).toHaveAttribute('href','/cities/christchurch');
   expect(fetch).not.toHaveBeenCalled();
 });
 

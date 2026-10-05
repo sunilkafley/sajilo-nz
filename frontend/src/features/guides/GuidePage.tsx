@@ -4,6 +4,8 @@ import { readSaved, writeSaved, snapshot, reconcile, searchGuides, reviewDue, sa
 import { tasks } from '../checklist/tasks';
 import { fetchGuides, GuideError, type Guide, type Language } from './api';
 import { topics, topicGuides, guideLocation } from './topics';
+import { findCity, cityGuides } from '../cities/catalog';
+import { CityIntro } from '../cities/CityIntro';
 export function GuidePage({ savedOnly = false }: { savedOnly?: boolean }) {
   const [saved, setSaved] = useState<SavedGuide[]>([]);
   const [storageError, setStorageError] = useState('');
@@ -15,8 +17,11 @@ export function GuidePage({ savedOnly = false }: { savedOnly?: boolean }) {
     catch { setStorageError('Could not save changes to this browser. Check available storage and try again. Existing saved data has been preserved.'); return false; }
   }
   useEffect(() => { reloadSaved(); const listener = (event: StorageEvent) => { if (event.key === savedKey || event.key === null) reloadSaved(); }; window.addEventListener('storage', listener); return () => window.removeEventListener('storage', listener); }, []);
-  const { slug } = useParams();
+  const { slug, cityId } = useParams();
   const [params, setParams] = useSearchParams();
+  const cityKey = cityId ?? params.get('city');
+  const city = findCity(cityKey);
+  const unknownCity = !!cityKey && !city;
   const language: Language = params.get('lang') === 'ne' ? 'ne' : 'en';
   const topic = params.get('topic');
   const unknownTopic = !!topic && !topics.some(item => item.id === topic);
@@ -36,15 +41,15 @@ export function GuidePage({ savedOnly = false }: { savedOnly?: boolean }) {
       if (!controller.signal.aborted) setState({ language, error: error instanceof GuideError ? error.message : 'Could not connect to guides. Check your connection and try again.' });
     });
     return () => controller.abort();
-  }, [language, attempt, savedOnly, slug]);
+  }, [language, attempt, savedOnly, slug, cityId]);
   const live = state.language === language ? state.guides : undefined;
   const error = state.language === language ? state.error : undefined;
   const copies = saved.filter(item => item.language === language);
   const fallback = !live && !!error;
   const available = live ?? (fallback ? copies.flatMap(item => item.guide ? [item.guide] : []) : undefined);
   // Reconcile the full language catalogue above before applying presentation filters.
-  const guides = available && searchGuides(topicGuides(savedOnly ? available.filter(guide => copies.some(item => item.slug === guide.slug)) : available, topic), query);
-  const guide = available?.find(item => item.slug === slug);
+  const guides = available && searchGuides(topicGuides(cityGuides(savedOnly ? available.filter(guide => copies.some(item => item.slug === guide.slug)) : available, cityKey), topic), query);
+  const guide = available && cityGuides(available, cityKey).find(item => item.slug === slug);
   const savedCopy = copies.find(item => item.slug === slug);
   function toggle(guide: Guide) {
     setMessage('');
@@ -53,8 +58,10 @@ export function GuidePage({ savedOnly = false }: { savedOnly?: boolean }) {
   }
   function saveButton(guide: Guide) { return <button onClick={() => toggle(guide)}>{copies.some(item => item.slug === guide.slug) ? 'Remove saved guide' : 'Save guide'}</button>; }
   return <>
-    <p className="eyebrow">BEFORE YOU FLY / GUIDES</p>
-    <h1>{slug ? (guide?.title ?? 'Pre-departure guide') : savedOnly ? 'Saved guides' : 'Prepare with confidence'}</h1>
+    <p className="eyebrow">{cityKey ? 'EXPLORE / CITY GUIDES' : 'BEFORE YOU FLY / GUIDES'}</p>
+    <h1>{unknownCity ? 'City unavailable' : slug ? (guide?.title ?? 'Pre-departure guide') : savedOnly ? (city ? `Saved ${city.title} guides` : 'Saved guides') : city ? city.title : 'Prepare with confidence'}</h1>
+    {cityId && city && <><p className="intro">Your city, one step at a time. Start with preparation for your arrival.</p><CityIntro/></>}
+    {unknownCity && <p role="alert" className="notice warning">This city is not available yet. <Link to="/explore">Return to Explore</Link></p>}
     <div className="guide-language"><label htmlFor="guide-language">Guide language / भाषा</label>{' '}
       <select id="guide-language" value={language} onChange={event => changeParam('lang', event.target.value)}>
         <option value="en">English</option><option value="ne">नेपाली</option>
@@ -70,21 +77,22 @@ export function GuidePage({ savedOnly = false }: { savedOnly?: boolean }) {
     <p className="intro">Read reviewed guidance, check the official sources and take your next step.</p>
     {storageError && <p role="alert" className="notice warning">{storageError}</p>}
     {message && <p role="status">{message}</p>}
-    <p><Link to={guideLocation(savedOnly ? '/guides' : '/saved', language, topic)}>{savedOnly ? 'Browse all guides' : 'View saved guides'}</Link></p>
+    <p><Link to={guideLocation(savedOnly && city ? `/cities/${city.id}` : savedOnly ? '/guides' : '/saved', language, topic, cityKey)}>{savedOnly ? (city ? 'Browse Christchurch guides' : 'Browse all guides') : 'View saved guides'}</Link>{city && <> · <Link to={`/guides?lang=${language}`}>Browse all pre-departure guides</Link> · <Link to="/explore">Back to Explore</Link></>}</p>
     {!slug && <div className="guide-search"><label htmlFor="guide-search">Search guides</label><input id="guide-search" type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Search titles and guidance"/>{query && <button onClick={() => setQuery('')}>Clear search</button>}</div>}
     {fallback && <p className="notice warning">Showing saved copies only. Publication status and changes cannot be checked until you reconnect. Official source links require an internet connection.</p>}
     {fallback && guide && savedCopy && <p>Copy saved: <time dateTime={savedCopy.fetchedAt}>{savedCopy.fetchedAt.slice(0, 10)}</time>. This is not a new review date.</p>}
     {error && <div role="alert" className="notice warning"><p>{error}</p><button onClick={() => setAttempt(n => n + 1)}>Try again</button></div>}
     {!guides && !error && <p role="status">Loading guides…</p>}
     {guides && !slug && !unknownTopic && topic && !guides.length && <p className="notice">No guides match this topic in the selected language{fallback ? ' among your saved copies' : ''}. Choose All topics to browse other guidance.</p>}
-    {guides && !slug && !unknownTopic && (guides.length ? <div className="groups">{guides.map(item => <article className="card" key={item.slug} lang={language}>
-      <h2><Link to={guideLocation(`/guides/${item.slug}`, language, topic)}>{item.title}</Link></h2><p>{item.summary}</p>
+    {guides && !slug && !unknownTopic && !unknownCity && (guides.length ? <div className="groups">{guides.map(item => <article className="card" key={item.slug} lang={language}>
+      <h2><Link to={guideLocation(`/guides/${item.slug}`, language, topic, cityKey)}>{item.title}</Link></h2><p>{item.summary}</p>
       {saveButton(item)}
       <p>Last verified: <time dateTime={item.verified_on}>{item.verified_on}</time></p>
       {reviewDue(item) && <p className="notice">Review due — check the official source for updates.</p>}
     </article>)}</div> : <div className="card"><h2>{query ? 'No matching guides' : savedOnly ? 'No saved guides in this language' : fallback ? 'No saved copies available' : 'No reviewed guides available yet'}</h2><p>{query ? 'Try different words or clear your search.' : 'Save a reviewed guide while connected. You can still use your planning checklist.'}</p></div>)}
     {guides && slug && !guide && <div className="card"><h2>Guide unavailable in this language</h2><p>It may not have been published or reviewed yet. Try another language or return to all guides.</p></div>}
-    {savedOnly && !query && !topic && copies.filter(item => !item.guide && (!live || !live.some(guide => guide.slug === item.slug))).map(item => <article className="card" key={item.slug}><h2>{item.title}</h2><p>This guide is no longer available. Its saved content has been removed.</p><button onClick={() => persist(items => items.filter(saved => !(saved.slug === item.slug && saved.language === language)))}>Remove unavailable guide</button></article>)}
+    {city && guides && !slug && !guides.length && !query && <p className="notice">No {fallback ? 'saved copies' : 'published guides'} match Christchurch, this topic and this language. City drafts require human content and translation review before publication. You can still use the checklist or browse all pre-departure guides.</p>}
+    {savedOnly && !query && !topic && !unknownCity && copies.filter(item => (!city || city.guideSlugs.some(slug => slug === item.slug)) && !item.guide && (!live || !live.some(guide => guide.slug === item.slug))).map(item => <article className="card" key={item.slug}><h2>{item.title}</h2><p>This guide is no longer available. Its saved content has been removed.</p><button onClick={() => persist(items => items.filter(saved => !(saved.slug === item.slug && saved.language === language)))}>Remove unavailable guide</button></article>)}
     {guide && <article className="card guide-body" lang={language}>
       {saveButton(guide)}
       <p>Last verified: <time dateTime={guide.verified_on}>{guide.verified_on}</time> · Next review: <time dateTime={guide.next_review_on}>{guide.next_review_on}</time></p>
@@ -94,6 +102,6 @@ export function GuidePage({ savedOnly = false }: { savedOnly?: boolean }) {
       {!!guide.checklist_ids.length && <><h2>Your next steps</h2><ul>{guide.checklist_ids.map(id => <li key={id}><Link to={`/predeparture?task=${encodeURIComponent(id)}`}>{tasks.find(task => task.id === id)?.label}</Link></li>)}</ul></>}
       <p className="notice">General planning guidance. This does not determine your immigration eligibility. Check official information for your circumstances.</p>
     </article>}
-    <div className="guide-actions">{slug && <Link to={guideLocation('/guides', language, topic)}>All guides</Link>}<Link className="button" to="/predeparture">Open my checklist</Link></div>
+    <div className="guide-actions">{slug && <Link to={guideLocation(city ? `/cities/${city.id}` : '/guides', language, topic, cityKey)}>{city ? 'Back to Christchurch' : 'All guides'}</Link>}<Link className="button" to="/predeparture">Open my checklist</Link></div>
   </>;
 }
