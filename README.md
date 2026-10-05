@@ -34,14 +34,14 @@ Browser tests also require the Python environment; see the Sprint 2 setup below.
 Progress uses a versioned localStorage record. Unknown task IDs are ignored; unsupported or corrupt records are preserved and writes blocked for that session. Write failures keep progress in memory and show a retry action. Legacy checklist progress is imported only when it exists on the **same origin**. Data on the old hosted Site cannot automatically transfer to localhost or a new domain. The original legacy record is never deleted.
 
 ## Scope and review
-This is a development version, not a production release. Django REST Framework and PostgreSQL configuration are included. Guides support English and Nepali; the interface remains English. Full interface localisation, offline support and device sync are planned. Starter guides await human review. Source links do not mean the checklist has been editorially verified; the UI explicitly says it has not yet been reviewed.
+This is a development version, not a production release. Django REST Framework and PostgreSQL configuration are included. Guides support English and Nepali; the interface remains English. Saved-guide offline support is implemented; full interface localisation and device sync remain planned. Starter guides await human review. Source links do not mean the checklist has been editorially verified; the UI explicitly says it has not yet been reviewed.
 
 Use feature branches and small pull requests. Quality checks run on push and PR; branch protection is a separate GitHub setting. No deployment or existing Site changes are included.
 
 ## Sprint 2: guides and Django API
 
 Use two terminals: Django on port 8000 and Vite on port 5173 (or the URL Vite prints).
-The Vite development server proxies `/api` to Django. Production API routing/hosting is not configured yet.
+The Vite development server proxies `/api` to Django. Staging serves the frontend and API on the same HTTPS origin; see the Render + Neon instructions below.
 
 ### Windows PowerShell — backend setup
 
@@ -139,12 +139,16 @@ Open `http://127.0.0.1:4173`, wait for **App ready for offline use**, then save 
 
 If the guide is returned to draft in Django, reconnect and reopen the guide or Saved guides: its cached body is removed after the successful publication check. When offline or when the API fails, the app cannot check withdrawals or changes; it explicitly labels the saved copy. A storage failure never confirms a successful save. Limits: 50 text guides and approximately 1 MB per browser. Browser storage can be cleared or evicted.
 
-Offline access needs a browser supporting service workers on HTTPS or localhost. Opening a phone against a laptop's plain HTTP LAN address does not provide this capability. Real iPhone Safari acceptance testing remains outstanding.
+Offline access needs a browser supporting service workers on HTTPS or localhost. Opening a phone against a laptop's plain HTTP LAN address does not provide this capability. Sprint 4 records user-reported iPhone Safari offline success; detailed remaining device checks are carried into Sprint 5.
 
 ### Sprint 4 — staging and pilot readiness
 
-Current implementation stage and acceptance work: [Sprint 4 plan](docs/sprint-4.md). Provider-neutral HTTPS deployment requirements: [staging runbook](docs/staging.md).
+Sprint 4 is closed; see its [acceptance and follow-up record](docs/sprint-4.md) and [recovery drill evidence](docs/recovery-drill.md). Provider-neutral HTTPS deployment requirements: [staging runbook](docs/staging.md).
 
 On Windows, `npm run preview` now supplies host and port directly, without forwarding flags through nested npm commands. Use `npm run preview:lan` for same-Wi-Fi iPhone layout checks; offline acceptance still requires HTTPS.
 
 Free hosting setup: [Render + Neon instructions](docs/render-neon.md). The blueprint deploys one Docker-based Free web service; enter Neon credentials privately in Render. Merge the reviewed configuration before using New → Blueprint.
+
+### Sprint 5 — useful pre-departure journey
+
+The [Sprint 5 proposal](docs/sprint-5.md) covers expanded reviewed English/Nepali guidance, remaining device checks and 2–3 structured usability sessions. Its first proposed implementation slice prepares the travel-documents guide pair for separate human reviews using the existing publication and offline journey. The planning PR does not publish content or deploy an application change; merge and deployment require user review.
