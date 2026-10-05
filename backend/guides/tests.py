@@ -113,6 +113,50 @@ class GuideTests(TestCase):
         self.assertFalse(Guide.objects.exclude(status='draft').exists())
         self.assertEqual(self.client.get('/api/guides/').json(), [])
 
+    def test_travel_drafts_need_independent_review_before_publication(self):
+        call_command('seed_drafts', stdout=StringIO())
+        for language in ('en', 'ne'):
+            with self.subTest(language=language):
+                guide = Guide.objects.get(slug='travel-documents', language=language)
+                self.assertEqual(guide.status, 'draft')
+                self.assertIsNone(guide.reviewed_by_id)
+                self.assertIsNone(guide.verified_on)
+                self.assertIsNone(guide.next_review_on)
+                self.assertEqual(guide.checklist_ids, ['passport', 'visa', 'offer', 'document-copies'])
+                self.assertEqual(len(guide.sources), 3)
+                self.assertEqual(self.client.get(f'/api/guides/?lang={language}').json(), [])
+                self.assertEqual(self.client.get(f'/api/guides/travel-documents/?lang={language}').status_code, 404)
+                guide.status = 'published'
+                with self.assertRaises(ValidationError):
+                    guide.save()
+
+        english = Guide.objects.get(slug='travel-documents', language='en')
+        english.status = 'published'
+        english.reviewed_by = self.reviewer
+        english.verified_on = self.today
+        english.next_review_on = self.today + timedelta(days=30)
+        english.save()
+        self.assertEqual(self.client.get('/api/guides/travel-documents/?lang=en').status_code, 200)
+        self.assertEqual(self.client.get('/api/guides/?lang=ne').json(), [])
+        self.assertEqual(self.client.get('/api/guides/travel-documents/?lang=ne').status_code, 404)
+
+    def test_seed_preserves_full_existing_draft_and_published_records(self):
+        # Cover each language as the published one; compare every stored field,
+        # including sources, reviewer, dates and updated_at, after two reruns.
+        for published_language, draft_language in [('en', 'ne'), ('ne', 'en')]:
+            with self.subTest(published_language=published_language):
+                Guide.objects.all().delete()
+                self.published(language=published_language, title='Existing reviewed title',
+                               body='Existing reviewed wording.', verified_on=self.today-timedelta(days=10))
+                self.guide(language=draft_language, title='Editor work in progress',
+                           body='Keep this unpublished edit.', checklist_ids=['offer'])
+                before = list(Guide.objects.order_by('language').values())
+                call_command('seed_drafts', stdout=StringIO())
+                call_command('seed_drafts', stdout=StringIO())
+                after = list(Guide.objects.filter(slug='travel-documents').order_by('language').values())
+                self.assertEqual(after, before)
+                self.assertEqual(Guide.objects.filter(slug='travel-documents').count(), 2)
+
     def test_admin_requires_login(self):
         self.assertEqual(self.client.get('/admin/guides/guide/').status_code, 302)
 
