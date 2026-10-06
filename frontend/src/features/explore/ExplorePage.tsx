@@ -13,9 +13,9 @@ export function ExplorePage() {
     <h1>A new country.<br/>A world of possibilities.</h1>
     <p className="intro">Start with your travel preparation. Discover more of life in New Zealand as new guides become available.</p>
 
-    <Link className="explore-search" to="/guides">
+    <Link className="explore-search" to="/search">
       <Icon name="search"/>
-      <span><strong>Search pre-departure guides</strong><span>Find published guidance in English or Nepali.</span></span>
+      <span><strong>Search Sajilo NZ</strong><span>Find guides, checklists and topics in one place.</span></span>
       <Icon name="arrow"/>
     </Link>
     <p className="explore-saved"><Link to="/saved">Open saved guides</Link> <span>Keep reading saved copies when you are offline.</span></p>

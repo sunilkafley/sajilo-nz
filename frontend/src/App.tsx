@@ -8,6 +8,7 @@ import { OfflineStatus } from './OfflineStatus';
 import { GuidePage } from './features/guides/GuidePage';
 import { ExplorePage } from './features/explore/ExplorePage';
 import { HomePage } from './features/home/HomePage';
+import { SiteSearch, SearchPage } from './features/search/SiteSearch';
 import { ArrivalPage } from './features/arrival/ArrivalPage';
 import { arrivalTasks } from './features/arrival/tasks';
 import { summarise } from './features/checklist/domain';
@@ -29,6 +30,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
     const firstweekGuides = (location.pathname.startsWith('/guides') || location.pathname === '/saved') && new URLSearchParams(location.search).get('stage') === 'firstweek';
     document.title = `${location.pathname === '/firstweek' ? 'First-week checklist' : location.pathname === '/' ? 'Home' : location.pathname === '/cities/christchurch' ? 'Christchurch' : location.pathname.startsWith('/cities/') ? 'City unavailable' : location.pathname === '/explore' ? 'Explore' : location.pathname === '/predeparture' ? 'Pre-departure checklist' : (location.pathname.startsWith('/guides') || location.pathname === '/saved') ? 'Pre-departure guides' : location.pathname === '/sources' ? 'Official sources' : 'Your journey'} · Sajilo NZ`;
     if (firstweekGuides) document.title = 'First-week guides · Sajilo NZ';
+    if (location.pathname === '/search') document.title = 'Search · Sajilo NZ';
     const task = new URLSearchParams(location.search).get('task');
     if (task && ((location.pathname === '/predeparture' && tasks.some(item => item.id === task)) || (location.pathname === '/firstweek' && arrivalTasks.some(item => item.id === task)))) {
       document.getElementById(task)?.focus();
@@ -49,7 +51,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
       <div className="sidebar-note"><PrototypeIcon name="shield"/><strong> A little help, a long way.</strong><p>Trusted sources. Clear next steps.<br/>One journey at a time.</p><a href={emergencyResource.url}>Emergency Help (NZ Police) →</a></div>
     </aside>
     <header className="topbar">
-      <Link className="top-search" to={`/guides?lang=${language}`}><PrototypeIcon name="search"/><span>Search pre-departure guides</span></Link>
+      <SiteSearch/>
       <div className="top-actions"><label className="toolbar-language">Guides<select aria-label="Toolbar guide language" value={language} onChange={event => {
         const params = new URLSearchParams(location.search); params.set('lang', event.target.value);
         const guidePage = location.pathname.startsWith('/guides') || location.pathname.startsWith('/cities/') || location.pathname === '/saved';
@@ -57,10 +59,11 @@ export function App({ repository }: { repository: ProgressRepository }) {
       }}><option value="en">EN</option><option value="ne">नेपाली</option></select></label><a className="help-shortcut" href={emergencyResource.url} aria-label="Emergency help and support (NZ Police, online)"><PrototypeIcon name="heart"/><span>Help</span></a></div>
     </header>
     <div className="workspace">
-      <main id="main" tabIndex={-1} ref={main}>
+      <main id="main" className={location.pathname.startsWith('/guides/') ? 'reading-main' : undefined} tabIndex={-1} ref={main}>
         {warning && <div role="alert" className="notice warning"><p>{warning}</p>{!initial.blocked && <button onClick={() => setWarning(retrySave(repository, progress))}>Try saving again</button>}</div>}
         <OfflineStatus quiet={location.pathname === '/'}/>
         <Routes>
+          <Route path="/search" element={<SearchPage/>}/>
           <Route path="/explore" element={<ExplorePage/>}/>
           <Route path="/cities/:cityId" element={<GuidePage/>}/>
           <Route path="/saved" element={<GuidePage savedOnly/>}/>

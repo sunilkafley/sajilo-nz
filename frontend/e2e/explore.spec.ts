@@ -16,7 +16,7 @@ test('Explore is keyboard accessible and every available destination works', asy
   await page.screenshot({path: testInfo.outputPath('explore.png'), fullPage:true});
 
   const destinations = [
-    ['Search pre-departure guides', 'Prepare with confidence'],
+    ['Search Sajilo NZ', 'Search results'],
     ['Open saved guides', 'Saved guides'],
     ['Prepare to travel', 'Your pre-departure checklist'],
     ['Immigration', 'Check the official guidance'],
@@ -27,9 +27,10 @@ test('Explore is keyboard accessible and every available destination works', asy
     await expect(page.getByRole('heading', {name:heading, exact:true})).toBeVisible();
     await navigateSidebar(page,'Explore');
   }
-  await page.getByRole('main').getByRole('link', {name:'Search pre-departure guides'}).click();
-  await page.getByRole('searchbox').fill('Test travel documents');
-  await page.getByRole('link', {name:'Test travel documents', exact:true}).click();
+  await page.getByRole('main').getByRole('link', {name:'Search Sajilo NZ'}).click();
+  const input=page.getByRole('combobox',{name:'Search Sajilo NZ guides, checklists and topics'});
+  await input.fill('Test travel documents');await input.press('Enter');
+  await page.locator('.search-results').getByRole('link', {name:/Test travel documents/}).click();
   await expect(page.getByText('This guide exists only in an isolated test database.')).toBeVisible();
 });
 
