@@ -17,7 +17,7 @@ it('offers implemented destinations without making planned topics or cities inte
   expect(document.title).toBe('Explore · Sajilo NZ');
   expect(main).toHaveFocus();
   expect(screen.getByRole('link', {name:'Explore'})).toHaveAttribute('aria-current', 'page');
-  expect(within(main).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/guides', '/saved', '/guides?topic=documents', '/guides?topic=packing', '/guides?topic=money', '/guides?topic=travel-checks', '/predeparture', '/sources', '/firstweek', '/cities/christchurch']);
+  expect(within(main).getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/search', '/saved', '/guides?topic=documents', '/guides?topic=packing', '/guides?topic=money', '/guides?topic=travel-checks', '/predeparture', '/sources', '/firstweek', '/cities/christchurch']);
   const plannedCategory = screen.getByRole('article', {name:'Study & courses'});
   expect(plannedCategory).toHaveTextContent('Planned');
   expect(within(plannedCategory).queryByRole('link')).not.toBeInTheDocument();

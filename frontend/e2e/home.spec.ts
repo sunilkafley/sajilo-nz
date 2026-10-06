@@ -28,8 +28,9 @@ test('Home matches prototype composition and connects next steps, city and guide
   await page.getByRole('link',{name:'Explore Christchurch'}).click();
   await expect(page.getByRole('heading',{name:'Christchurch',exact:true})).toBeVisible();
   await navigateSidebar(page,'Home');
-  await page.getByRole('link',{name:'Search pre-departure guides'}).click();
-  await expect(page.getByRole('searchbox')).toBeVisible();
+  await page.getByRole('combobox',{name:'Search Sajilo NZ guides, checklists and topics'}).fill('Passport');
+  await page.getByRole('combobox',{name:'Search Sajilo NZ guides, checklists and topics'}).press('Enter');
+  await expect(page.getByRole('heading',{name:'Search results'})).toBeVisible();
 });
 
 test('Home completion, budget and Journey navigation work offline',async({page,context})=>{
