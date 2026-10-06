@@ -15,7 +15,7 @@ export function HomePage({ progress }: { progress: Progress }) {
   const { preview, error } = useSavedPreview();
   return <div className="home-page">
     <Link className="home-search" to="/guides"><Icon name="search"/>Search pre-departure guides<Icon name="arrow"/></Link>
-    <header className="home-welcome"><div><p className="eyebrow">YOUR NEXT CHAPTER</p><h1>Namaste, welcome home <span aria-hidden="true">👋</span></h1><p>A little closer to your New Zealand dream. Let’s take the next step.</p></div><Link className="home-city-pill" to="/cities/christchurch"><Icon name="pin"/>Christchurch<Icon name="arrow"/></Link></header>
+    <header className="home-welcome"><div><p className="eyebrow">YOUR NEXT CHAPTER</p><h1>Namaste, welcome home <span aria-hidden="true">👋</span></h1><p>For Nepalese students, workers, partners, families and newcomers navigating life in New Zealand. Let’s take the next step.</p></div><Link className="home-city-pill" to="/cities/christchurch"><Icon name="pin"/>Christchurch<Icon name="arrow"/></Link></header>
     <div className="home-grid">
       <div className="home-stack">
         <section className="home-hero" aria-labelledby="home-journey">

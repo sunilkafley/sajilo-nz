@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { Link, Route, Routes, useLocation } from 'react-router-dom';
+import { SajiloLogo } from './components/SajiloLogo';
+import { MainNavigation } from './components/MainNavigation';
 import { OfflineStatus } from './OfflineStatus';
 import { GuidePage } from './features/guides/GuidePage';
 import { ExplorePage } from './features/explore/ExplorePage';
@@ -32,22 +34,13 @@ export function App({ repository }: { repository: ProgressRepository }) {
   }
   return <>
     <a className="skip" href="#main" onClick={event => { event.preventDefault(); main.current?.focus(); }}>Skip to content</a>
+    <header className="topbar"><Link className="brand-link" to="/" aria-label="Sajilo NZ home"><SajiloLogo language={new URLSearchParams(location.search).get('lang') === 'ne' ? 'ne' : 'en'}/></Link><span className="badge">My journey</span></header>
     <aside className="sidebar">
-      <Link className="brand" to="/">sajilo<span> nz</span></Link>
-      <p className="tagline">Your student journey</p>
-      <nav aria-label="Main navigation">
-        <NavLink to="/" end>Home</NavLink>
-        <NavLink to="/explore">Explore</NavLink>
-        <NavLink to="/predeparture">Pre-departure checklist</NavLink>
-        <NavLink to="/firstweek">First-week checklist</NavLink>
-        <NavLink to="/guides">Pre-departure guides</NavLink>
-        <NavLink to="/saved">Saved guides</NavLink>
-        <NavLink to="/sources">Official sources</NavLink>
-      </nav>
+      <p className="navigation-heading">Navigate Sajilo NZ</p>
+      <MainNavigation/>
       <div className="sidebar-note"><strong>A little help, a long way.</strong><p>Prepare at your own pace. One step at a time.</p></div>
     </aside>
     <div className="workspace">
-      <header className="topbar"><span>NEPAL <span aria-hidden="true"> / </span> NEW ZEALAND</span><span className="badge">My student space</span></header>
       <main id="main" tabIndex={-1} ref={main}>
         {warning && <div role="alert" className="notice warning"><p>{warning}</p>{!initial.blocked && <button onClick={() => setWarning(retrySave(repository, progress))}>Try saving again</button>}</div>}
         <OfflineStatus/>
