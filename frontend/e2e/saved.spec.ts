@@ -1,8 +1,9 @@
+import { navigateSidebar } from './navigation';
 import { test, expect } from '@playwright/test';
 const key = 'sajilo-nz.saved-guides.v1';
 test('search and save persist, refresh offline, complete task offline and remove saved copy', async ({page, context}) => {
   await page.goto('/#/guides');
-  await expect(page.getByText('App ready for offline use.',{exact:false})).toBeVisible();
+  await expect(page.locator('.offline-status')).toHaveAttribute('data-offline-ready','true');
   await page.getByRole('searchbox').fill('not-a-match');
   await expect(page.getByRole('heading',{name:'No matching guides'})).toBeVisible();
   await page.getByRole('button',{name:'Clear search'}).click();
@@ -18,7 +19,7 @@ test('search and save persist, refresh offline, complete task offline and remove
   await page.getByRole('link',{name:'Passport',exact:true}).click();
   await page.getByRole('checkbox',{name:'Passport',exact:true}).check();
   await page.reload(); await expect(page.getByRole('checkbox',{name:'Passport',exact:true})).toBeChecked();
-  await page.getByRole('link',{name:'Saved guides',exact:true}).click();
+  await navigateSidebar(page, 'Saved resources');
   await page.getByRole('link',{name:'Test travel documents'}).click();
   await page.getByRole('button',{name:'Remove saved guide'}).click();
   await page.reload();
@@ -32,7 +33,7 @@ test('reconnect removes withdrawn content while retaining a removable bookmark',
   await page.route('**/api/guides/**', route => route.fulfill({json:[]}));
   await context.setOffline(true); await context.setOffline(false);
   await expect(page.getByRole('heading',{name:'Guide unavailable in this language'})).toBeVisible();
-  await page.getByRole('link',{name:'Saved guides',exact:true}).click();
+  await navigateSidebar(page, 'Saved resources');
   await expect(page.getByText('This guide is no longer available.',{exact:false})).toBeVisible();
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)!).items[0].guide,key)).toBeNull();
   await page.getByRole('button',{name:'Remove unavailable guide'}).click();
@@ -54,7 +55,7 @@ test('storage failures show no false save confirmation and language never falls 
 test('Nepali offline copy keeps its review dates and progress independently of English', async ({page, context}) => {
   test.setTimeout(60_000); // Several deliberate offline request timeouts on both viewports.
   await page.goto('/#/guides/test-bilingual-documents');
-  await expect(page.getByText('App ready for offline use.', {exact:false})).toBeVisible();
+  await expect(page.locator('.offline-status')).toHaveAttribute('data-offline-ready','true');
   await page.getByRole('button', {name:'Save guide', exact:true}).click();
   await expect(page.getByRole('button', {name:'Remove saved guide'})).toBeVisible();
   await page.getByLabel('Guide language / भाषा').selectOption('ne');
@@ -80,7 +81,7 @@ test('Nepali offline copy keeps its review dates and progress independently of E
   await page.reload();
   await expect(page.getByRole('checkbox', {name:'Passport', exact:true})).toBeChecked();
 
-  await page.getByRole('link', {name:'Saved guides', exact:true}).click();
+  await navigateSidebar(page, 'Saved resources');
   await page.getByLabel('Guide language / भाषा').selectOption('ne');
   await page.getByRole('link', {name:'परीक्षण यात्रा कागजात', exact:true}).click();
   await page.getByRole('button', {name:'Remove saved guide'}).click();

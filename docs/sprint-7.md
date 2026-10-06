@@ -1,6 +1,6 @@
 # Sprint 7 — arrival essentials
 
-Started 5 October 2026 (New Zealand), after the user confirmed PR #12 complete. GitHub confirmed it merged at `4c3f2f83951b3f871232fa6cbc69965478ffe7f0`. Status: **7A merged in PR #13 at `8c52f61`; Home discovery merged in PR #14 at `01ace79`; 7B implemented for review; Sprint 7 remains open.** Both arrival-language reviews and 7C/7D remain pending.
+Started 5 October 2026 (New Zealand), after the user confirmed PR #12 complete. GitHub confirmed it merged at `4c3f2f83951b3f871232fa6cbc69965478ffe7f0`. Status: **7A merged in PR #13 at `8c52f61`; Home discovery merged in PR #14 at `01ace79`; 7B merged in PR #15 at `b773f89`; Sprint 7 remains open.** Both arrival-language reviews and 7C/7D remain pending. A separate user-requested [branding/navigation increment](branding-navigation.md) follows 7B without implementing 7C or closing human gates.
 
 Base: merged PR #12 (`4c3f2f8`). Branch: `codex/sprint-7a-first-week`. Staging remains recorded at `f0bf8b3`; no deployment, publication or staging seed is part of this increment.
 

@@ -1,6 +1,6 @@
 # Sajilo NZ
 
-A student companion for the journey from Nepal to New Zealand. This development version includes a React checklist with browser-local progress and a Django API for reviewed English/Nepali guides. The original prototype is preserved in `prototype/`.
+A companion for Nepalese people navigating their New Zealand journey, including students, workers, partners, families and newcomers. This development version includes React checklists with browser-local progress and a Django API for reviewed English/Nepali guides. The original prototype is preserved in `prototype/`.
 
 ## Run locally
 Use Node.js 22.12+ and npm. From the repository root:
@@ -28,6 +28,7 @@ Browser tests also require the Python environment; see the Sprint 2 setup below.
 - `frontend/src/features/checklist/`: stable task IDs, domain rules, storage repository and use cases.
 - `frontend/src/features/arrival/`: separate first-week planning catalogue and browser-local progress, reusing checklist rules.
 - `frontend/src/features/home/`: prototype-style Home layout, derived progress/next steps and read-only saved-bookmark preview.
+- `frontend/src/components/`: reusable approved full-logo image and existing-route main navigation. The logo is a byte-identical local asset, not a generated/redrawn version.
 - `frontend/src/features/explore/`: Explore landing page, scoped styles and available/planned destination catalogue.
 - `frontend/src/features/cities/`: curated Christchurch guide membership and city preparation layout, reusing the existing guide publication/saved flow.
 - `frontend/src/App.tsx`: accessible navigation and React screens; storage mutations go through use cases.
@@ -190,3 +191,9 @@ From the first-week checklist, open **Browse first-week guides** or **Saved firs
 Guide stages use separate task IDs, API opt-in (`stage=firstweek`) and saved-copy records. Existing API requests still return pre-departure only; their saved storage is unchanged. First-week guide links focus the first-week checklist, and reading/saving retains selected stage/language with the normal offline and withdrawal warnings. Saved lists switch between journeys explicitly; Home's preview currently covers pre-departure only. Limits are 50 guides/approximately 1 MB **per journey** on this browser. No sync or new account is added.
 
 Run the normal `migrate` step to record the new choice-only migration before local seeding. See [Sprint 7 compatibility assessment](docs/sprint-7.md) before any release/rollback. Local migration tests are not deployed rollback evidence; content/translation reviews and remaining human checks are still pending.
+
+### Approved branding and navigation
+
+The supplied Sajilo NZ logo appears unchanged on a white header, preserving both embedded taglines and all details. No duplicate visible tagline is added. Home supports Nepalese students, workers, partners, families and newcomers; genuinely student-specific guidance remains labelled accordingly. The existing seven routes/active states are reused in one icon-labelled navigation, with an always-visible phone grid and keyboard focus.
+
+English/Nepali guide switching is preserved; full surrounding-interface translation remains pending. The logo's alt text uses the supplied approved tagline for the selected guide language. Small-phone tagline readability needs a separate approved compact asset, not cropping this logo. See [branding verification and limitations](docs/branding-navigation.md).
