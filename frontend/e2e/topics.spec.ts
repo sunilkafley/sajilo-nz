@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('Explore topic retains Nepali context through saved offline reading', async ({ page, context }) => {
   await page.goto('/#/explore');
-  await expect(page.getByText('App ready for offline use.', {exact:false})).toBeVisible();
+  await expect(page.locator('.offline-status')).toHaveAttribute('data-offline-ready','true');
   await page.getByRole('link', {name:'Documents Browse guides'}).click();
   await expect(page.getByLabel('Guide topic')).toHaveValue('documents');
   await page.getByLabel('Guide language / भाषा').selectOption('ne');

@@ -1,11 +1,12 @@
+import { navigateSidebar } from './navigation';
 import { test, expect } from '@playwright/test';
 const key='sajilo-nz:firstweek:v1';
 test('Home and Explore open an independent first-week checklist with offline persistence',async({page,context},testInfo)=>{
   await page.goto('/#/predeparture');
   await page.getByRole('checkbox',{name:'Passport',exact:true}).check();
-  await page.getByRole('link',{name:'Home',exact:true}).click();
-  await expect(page.getByText('App ready for offline use.',{exact:false})).toBeVisible();
-  await page.getByRole('link',{name:'Open first-week planner'}).click();
+  await navigateSidebar(page, 'Home');
+  await expect(page.locator('.offline-status')).toHaveAttribute('data-offline-ready','true');
+  await navigateSidebar(page,'First-week checklist');
   await expect(page).toHaveTitle('First-week checklist · Sajilo NZ');
   await expect(page.getByRole('main')).toBeFocused();
   await expect(page.getByRole('heading',{name:'0 of 6 first-week steps completed'})).toBeVisible();
@@ -14,11 +15,11 @@ test('Home and Explore open an independent first-week checklist with offline per
   const checkbox=page.getByRole('checkbox',{name:'Review your first-week budget',exact:true});
   await checkbox.focus();await page.keyboard.press('Space');
   await context.setOffline(true);await page.reload();await expect(checkbox).toBeChecked();
-  await page.getByRole('link',{name:'Pre-departure checklist',exact:true}).click();
+  await navigateSidebar(page, 'Pre-departure checklist');
   await expect(page.getByRole('checkbox',{name:'Passport',exact:true})).toBeChecked();
-  await page.getByRole('link',{name:'Home',exact:true}).click();
+  await navigateSidebar(page, 'Home');
   await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow','1');
-  await page.getByRole('link',{name:'Explore',exact:true}).click();
+  await navigateSidebar(page,'Explore');
   await page.getByRole('link',{name:'Arrive & settle',exact:true}).click();
   await expect(checkbox).toBeChecked();await checkbox.uncheck();await page.reload();await expect(checkbox).not.toBeChecked();
 });

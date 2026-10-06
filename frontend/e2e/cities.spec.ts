@@ -3,7 +3,7 @@ const key='sajilo-nz.saved-guides.v1';
 
 test('Christchurch from Explore to reviewed guide, offline reading and persistent checklist', async ({page,context},testInfo) => {
   await page.goto('/#/explore');
-  await expect(page.getByText('App ready for offline use.',{exact:false})).toBeVisible();
+  await expect(page.locator('.offline-status')).toHaveAttribute('data-offline-ready','true');
   await page.getByRole('link',{name:'Christchurch',exact:true}).click();
   await expect(page).toHaveTitle('Christchurch · Sajilo NZ');
   await expect(page.getByRole('main')).toBeFocused();

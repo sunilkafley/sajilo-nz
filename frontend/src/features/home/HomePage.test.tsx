@@ -42,7 +42,7 @@ it('renders prototype sections, honest planned tools and real zero progress with
   expect(screen.getByText('0 saved bookmarks · 0 saved copies on this browser')).toBeInTheDocument();
   const tools=screen.getByRole('region',{name:'A few handy tools'});
   expect(within(tools).getAllByRole('article')).toHaveLength(4);
-  expect(within(tools).queryByRole('link')).not.toBeInTheDocument();
+  expect(within(tools).getByRole('link',{name:'Open first-month budget step'})).toHaveAttribute('href','/predeparture?task=budget');
   expect(within(tools).queryByRole('button')).not.toBeInTheDocument();
   expect(screen.queryByText(/post-study work visa options/)).not.toBeInTheDocument();
   expect(screen.queryByText(/Dashain Celebration/)).not.toBeInTheDocument();
@@ -60,27 +60,21 @@ it('next step focuses the real checklist and Home updates after completion and r
   view.unmount(); mount();
   expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow','1');
 });
-it('places six discovery cards between hero and next steps with honest working destinations',()=>{
-  mount();
-  const section=screen.getByRole('region',{name:'Start exploring'});
-  expect(within(section).getAllByRole('article')).toHaveLength(6);
-  const cards=within(section).getAllByRole('article');
-  expect(cards.map(card=>within(card).getByRole('heading').textContent)).toEqual(['Study & Courses','Work & Careers','Residence Pathways','Skills Roadmap','Life in New Zealand','Preparing to Arrive']);
-  for(const index of [0,1,3]) { expect(within(cards[index]).getByText('Planned')).toBeInTheDocument(); expect(within(cards[index]).queryByRole('link')).toBeNull(); }
-  expect(within(section).getByRole('link',{name:'First-week planning'})).toHaveAttribute('href','/firstweek');
-  expect(within(section).getByRole('link',{name:'Immigration Advisers Authority (online)'})).toHaveAttribute('href','https://www.iaa.govt.nz/for-migrants/');
-  expect(within(section).getByRole('link',{name:'Immigration New Zealand (online)'})).toHaveAttribute('href','https://www.immigration.govt.nz/');
-  const hero=screen.getByRole('region',{name:'Your pre-departure adventure'});
-  expect(hero.nextElementSibling).toBe(section);
-  expect(section.nextElementSibling).toBe(screen.getByRole('region',{name:'Your next steps'}));
-});
-it('prominent budget links to its real task while emergency help is an online official resource',async()=>{
+it('places working next steps directly after the hero, followed by compact tools',async()=>{
   const user=userEvent.setup();mount();
-  const section=screen.getByRole('region',{name:'Budget and emergency help'});
-  expect(within(section).getByText(/Budget calculator: Planned/)).toBeInTheDocument();
-  expect(within(section).getByRole('link',{name:'NZ Police emergency information (online)'})).toHaveAttribute('href','https://www.police.govt.nz/contact-us/111-police-emergency');
-  expect(within(section).getByText(/internet required/)).toBeInTheDocument();
-  await user.click(within(section).getByRole('link',{name:'Open first-month budget step'}));
+  const hero=screen.getByRole('region',{name:'Your pre-departure adventure'});
+  const next=screen.getByRole('region',{name:'Your next steps'});
+  expect(hero.nextElementSibling).toBe(next);
+  expect(next.nextElementSibling).toBe(screen.getByRole('region',{name:'A few handy tools'}));
+  await user.click(within(next).getByRole('checkbox',{name:'Passport'}));
+  expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow','1');
+  expect(within(next).getAllByRole('checkbox')[0]).toHaveFocus();
+  expect(JSON.parse(localStorage.getItem(STORAGE_KEY)! ).completed).toContain('passport');
+});
+it('keeps the budget task and official emergency resource accessible',async()=>{
+  const user=userEvent.setup();mount();
+  expect(screen.getByRole('link',{name:'NZ Police emergency information (online)'})).toHaveAttribute('href','https://www.police.govt.nz/contact-us/111-police-emergency');
+  await user.click(screen.getByRole('link',{name:'Open first-month budget step'}));
   expect(screen.getByRole('checkbox',{name:'First-month budget'})).toHaveFocus();
 });
 it('all-complete state does not invent a next stage or assert eligibility',()=>{

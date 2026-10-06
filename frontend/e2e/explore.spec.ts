@@ -1,13 +1,15 @@
+import { navigateSidebar, openNavigation } from './navigation';
 import { test, expect } from '@playwright/test';
 
 test('Explore is keyboard accessible and every available destination works', async ({page}, testInfo) => {
   await page.goto('/');
+  await openNavigation(page);
   const explore = page.getByRole('link', {name:'Explore', exact:true});
   await explore.focus();
   await page.keyboard.press('Enter');
   await expect(page).toHaveTitle('Explore · Sajilo NZ');
   await expect(page.getByRole('main')).toBeFocused();
-  await expect(explore).toHaveAttribute('aria-current', 'page');
+  await expect(page.getByRole('link', {name:'Explore', exact:true, includeHidden:true})).toHaveAttribute('aria-current', 'page');
   await expect(page.getByRole('heading', {name:'A new country. A world of possibilities.'})).toBeVisible();
   await expect(page.getByRole('article', {name:'Study & courses'})).toContainText('Planned');
   await expect(page.getByRole('region', {name:'Find your city'}).getByRole('link')).toHaveCount(1);
@@ -23,9 +25,9 @@ test('Explore is keyboard accessible and every available destination works', asy
   for (const [label, heading] of destinations) {
     await page.getByRole('main').getByRole('link', {name:label}).click();
     await expect(page.getByRole('heading', {name:heading, exact:true})).toBeVisible();
-    await explore.click();
+    await navigateSidebar(page,'Explore');
   }
-  await page.getByRole('link', {name:'Search pre-departure guides'}).click();
+  await page.getByRole('main').getByRole('link', {name:'Search pre-departure guides'}).click();
   await page.getByRole('searchbox').fill('Test travel documents');
   await page.getByRole('link', {name:'Test travel documents', exact:true}).click();
   await expect(page.getByText('This guide exists only in an isolated test database.')).toBeVisible();
@@ -33,15 +35,15 @@ test('Explore is keyboard accessible and every available destination works', asy
 
 test('Explore reopens offline and leads to saved guidance and persistent checklist progress', async ({page, context}) => {
   await page.goto('/#/guides/test-documents');
-  await expect(page.getByText('App ready for offline use.', {exact:false})).toBeVisible();
+  await expect(page.locator('.offline-status')).toHaveAttribute('data-offline-ready','true');
   await page.getByRole('button', {name:'Save guide', exact:true}).click();
-  await page.getByRole('link', {name:'Explore', exact:true}).click();
+  await navigateSidebar(page,'Explore');
   await context.setOffline(true);
   await page.reload();
   await expect(page.getByRole('heading', {name:'A new country. A world of possibilities.'})).toBeVisible();
   await page.getByRole('link', {name:'Prepare to travel', exact:true}).click();
   await page.getByRole('checkbox', {name:'Passport', exact:true}).check();
-  await page.getByRole('link', {name:'Explore', exact:true}).click();
+  await navigateSidebar(page,'Explore');
   await page.reload();
   await page.getByRole('link', {name:'Open saved guides', exact:true}).click();
   await page.getByRole('link', {name:'Test travel documents', exact:true}).click();

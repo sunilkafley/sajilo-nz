@@ -1,9 +1,10 @@
+import { navigateSidebar } from './navigation';
 import { test, expect } from '@playwright/test';
 test('first-week reviewed guide retains language, isolated saved copies and task progress offline',async({page,context},testInfo)=>{
   await page.goto('/#/guides/test-documents');
   await page.getByRole('button',{name:'Save guide',exact:true}).click();
   const oldRecord=await page.evaluate(()=>localStorage.getItem('sajilo-nz.saved-guides.v1'));
-  await page.getByRole('link',{name:'First-week checklist',exact:true}).click();
+  await navigateSidebar(page, 'First-week checklist');
   await page.getByRole('link',{name:'Browse first-week guides',exact:true}).click();
   await expect(page.getByRole('heading',{name:'Settle in, one step at a time'})).toBeVisible();
   await expect(page.getByRole('link',{name:'Test travel documents',exact:true})).toHaveCount(0);
@@ -15,7 +16,7 @@ test('first-week reviewed guide retains language, isolated saved copies and task
   const date=await page.locator('article.guide-body time').first().getAttribute('datetime');
   await page.getByRole('button',{name:'Save guide',exact:true}).click();
   expect(await page.evaluate(()=>localStorage.getItem('sajilo-nz.saved-guides.v1'))).toBe(oldRecord);
-  await expect(page.getByText('App ready for offline use.',{exact:false})).toBeVisible();
+  await expect(page.locator('.offline-status')).toHaveAttribute('data-offline-ready','true');
   await page.screenshot({path:testInfo.outputPath('firstweek-guide.png'),fullPage:true});
   await context.setOffline(true);await page.reload();
   await expect(page.getByText('Showing saved copies only.',{exact:false})).toBeVisible();

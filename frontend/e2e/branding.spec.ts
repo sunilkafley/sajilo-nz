@@ -1,3 +1,4 @@
+import { openNavigation } from './navigation';
 import { test, expect } from '@playwright/test';
 test('approved logo stays complete and undistorted with keyboard navigation and bilingual guides',async({page,context},testInfo)=>{
   await page.goto('/');
@@ -12,7 +13,10 @@ test('approved logo stays complete and undistorted with keyboard navigation and 
     await page.screenshot({path:testInfo.outputPath(`branding-${width}.png`),fullPage:true});
   }
   const nav=page.getByRole('navigation',{name:'Main navigation'});
-  await expect(nav.getByRole('link')).toHaveCount(7);
+  await openNavigation(page);
+  await expect(nav.locator('.nav-unavailable')).toHaveCount(2);
+  await nav.locator('.journey-menu summary').focus();await page.keyboard.press('Enter');
+  await expect(nav.getByRole('link',{name:'First-week checklist',exact:true})).toBeVisible();
   await nav.getByRole('link',{name:'Explore',exact:true}).focus();await page.keyboard.press('Enter');
   await expect(nav.getByRole('link',{name:'Explore',exact:true})).toHaveAttribute('aria-current','page');
   await expect(page.getByRole('main')).toBeFocused();

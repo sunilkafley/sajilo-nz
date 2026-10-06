@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-export function OfflineStatus() {
+export function OfflineStatus({ quiet = false }: { quiet?: boolean }) {
   const [online, setOnline] = useState(navigator.onLine);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -14,8 +14,8 @@ export function OfflineStatus() {
     }
     return () => { active = false; window.removeEventListener('online', connection); window.removeEventListener('offline', connection); if ('serviceWorker' in navigator) navigator.serviceWorker.removeEventListener('controllerchange', controlled); };
   }, []);
-  return <div className="offline-status" role="status">
+  return <div className="offline-status" role="status" data-offline-ready={ready}>
     {!online && <p className="notice warning">You are offline. Your checklist and previously saved guides are available on this browser.</p>}
-    <p>{ready ? 'App ready for offline use. Save guides before disconnecting.' : failed ? 'Offline setup failed. Reconnect and refresh to try again.' : 'Offline access becomes available after the production app finishes loading in a supported browser.'}</p>
+    {(!quiet || failed) && <p>{ready ? 'App ready for offline use. Save guides before disconnecting.' : failed ? 'Offline setup failed. Reconnect and refresh to try again.' : 'Offline access becomes available after the production app finishes loading in a supported browser.'}</p>}
   </div>;
 }
