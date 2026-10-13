@@ -9,6 +9,9 @@ The [public landing refactor](docs/public-landing-refactor.md) replaces the side
 The approved logo is unchanged. The temporary generated landscape in `frontend/src/assets/journey-landscape.png` can be replaced with the owner's future photograph; provenance, screenshots, checks and limitations are recorded in the linked document. Historical sprint descriptions below describe earlier layouts, not the current public Home. No deployment or content approval is implied.
 
 ## Run locally
+
+The [Journey checklist UX increment](docs/journey-checklist-ux.md) keeps both existing stage routes and storage keys, with immediately visible tasks, contextual published-guide links, confirmed per-checklist reset and browser Print / Save as PDF. Reset failures preserve existing selections; unreadable saved records remain protected.
+
 Use Node.js 22.12+ and npm. From the repository root:
 
 ```sh

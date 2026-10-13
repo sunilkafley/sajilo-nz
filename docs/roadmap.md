@@ -2,6 +2,8 @@
 
 ## Public landing refactor — current priority
 
+PR 1 merged in PR #18 at `faef380`. [PR 2 — Journey checklist UX](journey-checklist-ux.md) adds checklist-first stage details, safe reset confirmation, contextual published guides and browser printing for review. PR 3 Explore/resource discovery remains next; no automatic continuation or release is implied.
+
 After PR #17 merged, the newly approved responsive public landing design supersedes the earlier Home dashboard presentation. [PR 1 plan and evidence](public-landing-refactor.md) covers the public homepage/navigation and preserves the existing dashboard under Journey. Subsequent increments are Journey detail UX, Explore/resource discovery, community/local services, then final quality/release preparation. Sprint 5–7's editorial, real-device, usability and recovery gates below remain open; this redesign does not close them.
 
 Updated 6 October 2026 (New Zealand), following PR #13's merge and the user's Home discovery layout request. Sprints describe delivery increments; no calendar deadlines or unperformed acceptance outcomes are implied.

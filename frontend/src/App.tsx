@@ -13,9 +13,10 @@ import { SearchPage } from './features/search/SiteSearch';
 import { ArrivalPage } from './features/arrival/ArrivalPage';
 import { arrivalTasks } from './features/arrival/tasks';
 import { summarise } from './features/checklist/domain';
+import { JourneyChecklist } from './features/checklist/JourneyChecklist';
 import { groupNames, sources, tasks } from './features/checklist/tasks';
 import type { ProgressRepository } from './features/checklist/repository';
-import { retrySave, updateTask } from './features/checklist/useCases';
+import { resetChecklist, retrySave, updateTask } from './features/checklist/useCases';
 export function App({ repository }: { repository: ProgressRepository }) {
   const [initial] = useState(() => repository.load());
   const [progress, setProgress] = useState(initial.progress);
@@ -42,6 +43,10 @@ export function App({ repository }: { repository: ProgressRepository }) {
     const result = updateTask(repository, progress, id, checked, initial.blocked);
     setProgress(result.progress); setWarning(result.warning);
   }
+  function reset() {
+    const result=resetChecklist(repository,progress,initial.blocked);
+    setProgress(result.progress);setWarning(result.warning);return result.reset;
+  }
   return <>
     <a className="skip" href="#main" onClick={event => { event.preventDefault(); main.current?.focus(); }}>Skip to content</a>
     <AppHeader/>
@@ -62,13 +67,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
           <Route path="/community" element={<CommunityPage/>}/>
           <Route path="/about" element={<AboutPage/>}/>
           <Route path="/firstweek" element={<ArrivalPage/>}/>
-          <Route path="/predeparture" element={<>
-            <p className="eyebrow">JOURNEY / BEFORE YOU FLY</p><h1>Your pre-departure checklist</h1><p className="intro">Pack your essentials, prepare your documents and feel ready.</p>
-            <section className="progress-card" aria-label="Checklist progress"><div><h2 aria-live="polite">{summary.completed} of {summary.total} completed</h2><span>{summary.percent}%</span></div><progress aria-label="Tasks completed" value={summary.completed} max={summary.total}/></section>
-            <p><Link to="/guides">Read pre-departure guides</Link></p>
-            <div className="groups">{groupNames.map(group => <section className="card" key={group}><h2>{group}</h2>{tasks.filter(task => task.group === group).map(task => <div className={`task ${progress.completed.includes(task.id) ? 'done' : ''}`} key={task.id}><input id={task.id} type="checkbox" checked={progress.completed.includes(task.id)} onChange={event => change(task.id, event.target.checked)}/><label htmlFor={task.id}>{task.label}</label></div>)}</section>)}</div>
-            <div className="notice"><strong>Use this as a planning checklist.</strong><p>Last verified: not yet reviewed. Check the current official guidance for your circumstances.</p><Link to="/sources">View official sources</Link></div>
-          </>}/>
+          <Route path="/predeparture" element={<JourneyChecklist stage="predeparture" tasks={tasks} groups={groupNames} progress={progress} summary={summary} onChange={change} onReset={reset} blocked={initial.blocked}/>}/>
           <Route path="/sources" element={<>
             <p className="eyebrow">TRUSTED STARTING POINTS</p><h1>Check the official guidance</h1><p className="intro">Use these official websites to check travel and entry information. This checklist does not determine eligibility.</p>
             <div className="card"><h2>Before you travel</h2><ul className="sources">{sources.map(source => <li key={source.url}><a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}<span>Opens in a new tab</span></a></li>)}</ul><p>Last verified: not yet reviewed.</p></div><Link className="button" to="/predeparture">Back to my checklist</Link>
