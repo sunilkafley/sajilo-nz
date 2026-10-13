@@ -51,4 +51,18 @@ with TemporaryDirectory(prefix='sajilo-e2e-') as directory:
             verified_on=timezone.localdate()-timedelta(days=4), next_review_on=timezone.localdate()+timedelta(days=26))
     Guide.objects.create(slug='test-firstweek-draft', language='ne', stage='firstweek', title='Unreviewed arrival translation',
         summary='Synthetic draft.', body='Do not expose.', sources=[], status='draft')
+    # Editorial fixtures and login exist only in this disposable browser-test DB.
+    from editorial.models import Article, SourceDomain
+    editor = get_user_model().objects.create_user('editorial-test-admin', password='isolated-editorial-test-only',
+        is_staff=True, is_superuser=True)
+    domain = SourceDomain.objects.create(hostname='official.example.org', kind='official', approved=True,
+        review_note='Synthetic test approval, not editorial evidence.', approved_by=editor, approved_on=timezone.localdate())
+    Article.objects.create(slug='editorial-draft', language='en', topic='study', title='Synthetic draft article',
+        summary='Private test content — never production guidance.', body='Draft body for staff preview.',
+        sections=[{'heading':'Synthetic section', 'body':'Staff-only section text.'}],
+        source=domain, source_url='https://official.example.org/test')
+    Article.objects.create(slug='editorial-public', language='en', topic='study', title='Synthetic published article',
+        summary='Isolated browser fixture only.', body='Not real guidance.', source=domain,
+        source_url='https://official.example.org/test', status='published', reviewed_by=editor,
+        verified_on=timezone.localdate(), next_review_on=timezone.localdate()+timedelta(days=30))
     call_command('runserver', '127.0.0.1:8000', use_reloader=False)

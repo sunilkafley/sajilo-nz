@@ -44,7 +44,7 @@ jobs:
       - run: python backend/manage.py makemigrations --check --dry-run
       - run: python -m unittest discover -s backend -p "test_staging_policy.py"
       - run: python scripts/check_staging.py
-      - run: python backend/manage.py test guides
+      - run: python backend/manage.py test guides editorial
       - run: npm ci
       - run: npm run check
       - run: npm test

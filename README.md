@@ -8,6 +8,12 @@ The [public landing refactor](docs/public-landing-refactor.md) replaces the side
 
 The approved logo is unchanged. The temporary generated landscape in `frontend/src/assets/journey-landscape.png` can be replaced with the owner's future photograph; provenance, screenshots, checks and limitations are recorded in the linked document. Historical sprint descriptions below describe earlier layouts, not the current public Home. No deployment or content approval is implied.
 
+## Explore editorial foundation — Slice A
+
+The [editorial foundation](docs/editorial-foundation.md) adds Django-admin articles, courses, directory entries and an exact-host source approval registry. After the normal local `migrate` step, these appear under **Editorial** in `/admin/`. No content or source domains are seeded. Saved-record previews require staff model permissions and never publish or cache drafts. Existing guide APIs, guest journeys and saved progress are unchanged; visitor topic layouts follow in Slice B. Run backend checks with `python backend/manage.py test guides editorial`.
+
+The [engineering-first sprint plan](docs/explore-refactor-sprint.md) records the weekend target, full topic coverage and separate owner publication/release gates. Do not apply the new migration to staging without the documented backup, compatibility checks and approval.
+
 ## Run locally
 
 The [Journey checklist UX increment](docs/journey-checklist-ux.md) keeps both existing stage routes and storage keys, with immediately visible tasks, contextual published-guide links, confirmed per-checklist reset and browser Print / Save as PDF. Reset failures preserve existing selections; unreadable saved records remain protected.

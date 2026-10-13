@@ -1,5 +1,11 @@
 # Delivery roadmap
 
+## Explore refactoring sprint — current agreed scope
+
+[Slice A — editorial foundation](editorial-foundation.md) is implemented for review: additive Django article/course/directory models, source approval, private admin preview and public eligibility tests. It does not populate topics, change the public layout or authorize deployment. Slice B topic presentation is next after this checkpoint.
+
+On 13 October 2026, Sunil confirmed all prototype Explore sections belong in one engineering-first sprint, targeting owner-approved release readiness over 17–18 October. See the [sprint plan](explore-refactor-sprint.md) for topic coverage, Django-admin editorial management, acceptance criteria and release gates. Content population/review follows engineering topic by topic; this does not waive publication or translation review. PR #19 is merged. The historical sequence below is superseded where this plan expands Explore and community into the same sprint. No weekend deployment or completed engineering is implied.
+
 ## Public landing refactor — current priority
 
 PR 1 merged in PR #18 at `faef380`. [PR 2 — Journey checklist UX](journey-checklist-ux.md) adds checklist-first stage details, safe reset confirmation, contextual published guides and browser printing for review. PR 3 Explore/resource discovery remains next; no automatic continuation or release is implied.
