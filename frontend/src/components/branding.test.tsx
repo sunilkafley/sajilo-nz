@@ -17,11 +17,11 @@ it('uses the unchanged approved image and both approved accessible taglines',()=
 it('keeps one reusable navigation with original routes and active states; audience is not student-only',()=>{
   localStorage.clear();render(<MemoryRouter><App repository={createLocalRepository(()=>localStorage)}/></MemoryRouter>);
   const nav=screen.getByRole('navigation',{name:'Main navigation'});
-  expect(within(nav).getAllByRole('link')).toHaveLength(8);
+  expect(within(nav).getAllByRole('link')).toHaveLength(5);
   for(const item of navigationItems) expect(within(nav).getByRole('link',{name:item.label})).toHaveAttribute('href',item.to);
   expect(within(nav).getByRole('link',{name:'Home'})).toHaveAttribute('aria-current','page');
   expect(screen.getByRole('img')).toBeInTheDocument();
   expect(screen.queryByText('Your student journey')).toBeNull();expect(screen.queryByText('My student space')).toBeNull();
-  expect(screen.getByText(/For Nepalese students, workers, partners, families and newcomers/)).toBeInTheDocument();
-  expect(screen.queryByText('Your New Zealand journey companion')).toBeNull();
+  expect(screen.getByRole('heading',{name:'Your New Zealand journey companion'})).toBeInTheDocument();
+  expect(screen.getByRole('link',{name:'About Sajilo NZ'})).toBeInTheDocument();
 });

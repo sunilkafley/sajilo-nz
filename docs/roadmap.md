@@ -1,5 +1,9 @@
 # Delivery roadmap
 
+## Public landing refactor — current priority
+
+After PR #17 merged, the newly approved responsive public landing design supersedes the earlier Home dashboard presentation. [PR 1 plan and evidence](public-landing-refactor.md) covers the public homepage/navigation and preserves the existing dashboard under Journey. Subsequent increments are Journey detail UX, Explore/resource discovery, community/local services, then final quality/release preparation. Sprint 5–7's editorial, real-device, usability and recovery gates below remain open; this redesign does not close them.
+
 Updated 6 October 2026 (New Zealand), following PR #13's merge and the user's Home discovery layout request. Sprints describe delivery increments; no calendar deadlines or unperformed acceptance outcomes are implied.
 
 | Increment | Outcome | Status and next step |
