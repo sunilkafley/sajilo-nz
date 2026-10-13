@@ -1,7 +1,8 @@
 import type { Language } from '../guides/api';
 export interface Article {
   slug:string; language:Language; topic:string; title:string; summary:string; body:string;
-  sections:{heading:string;body:string}[]; source_url:string; source_hostname:string; source_kind:'official';
+  sections:{heading:string;body:string}[]; source_url:string; source_hostname:string|null; source_kind:'official'|null;
+  article_type?:'guidance'|'general';
   verified_on:string; next_review_on:string; review_overdue:boolean;
 }
 export interface ArticlePage { results:Article[]; count:number; hasNext:boolean }
@@ -11,11 +12,13 @@ const date=(v:unknown)=>typeof v==='string' && /^\d{4}-\d{2}-\d{2}$/.test(v) && 
 export function parseArticle(value:unknown, topic:string, language:Language):Article {
   if(!value || typeof value!=='object')throw invalid();
   const a=value as Record<string,unknown>;
-  if(!['slug','title','summary','source_url','source_hostname'].every(k=>typeof a[k]==='string' && !!a[k]) ||
+  if(!['slug','title','summary'].every(k=>typeof a[k]==='string' && !!a[k]) ||
     !/^[\w-]+$/.test(a.slug as string) || a.topic!==topic || a.language!==language || typeof a.body!=='string' ||
-    a.source_kind!=='official' || !date(a.verified_on) || !date(a.next_review_on) || (a.next_review_on as string)<=(a.verified_on as string) || typeof a.review_overdue!=='boolean' ||
+    ![undefined,'guidance','general'].includes(a.article_type as string|undefined) || !date(a.verified_on) || !date(a.next_review_on) || (a.next_review_on as string)<=(a.verified_on as string) || typeof a.review_overdue!=='boolean' ||
     !Array.isArray(a.sections) || a.sections.some(s=>!s || typeof s.heading!=='string' || typeof s.body!=='string'))throw invalid();
-  try {
+  const sourceFree=a.article_type==='general' && a.source_url==='' && a.source_kind===null && a.source_hostname===null;
+  if(!sourceFree)try {
+    if(a.source_kind!=='official' || typeof a.source_url!=='string' || typeof a.source_hostname!=='string' || !a.source_hostname)throw invalid();
     const url=new URL(a.source_url as string);
     if(url.protocol!=='https:' || url.hostname!==a.source_hostname || url.username || url.password || url.port || /[\s\\]/.test(a.source_url as string))throw invalid();
   } catch {throw invalid();}

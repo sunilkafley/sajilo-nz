@@ -7,7 +7,7 @@
 - Never commit secrets or personal user data.
 - Do not present example courses, community entries or events as verified/live data.
 - Never generate a verification date merely because code was built or deployed.
-- Content publication needs an official source and a recorded human review; translations require review too.
+- Guidance publication needs an official source and a recorded human review; translations require review too. Explicitly classified General information articles (original introductions, welcome pages and site instructions) may omit external attribution, but still require human review. Do not classify factual advice as general to bypass sources. Course, directory and existing guide rules remain unchanged.
 - Do not provide personalised immigration eligibility decisions.
 - Keep guest access to public guidance; do not add accounts without a concrete feature need.
 - Do not deploy or change the existing prototype as part of this migration repository.

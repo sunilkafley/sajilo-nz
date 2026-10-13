@@ -24,9 +24,12 @@ PUBLIC_FIELDS = ['slug', 'language', 'topic', 'stage', 'title', 'summary', 'body
 
 
 class ArticleSerializer(EditorialSerializer):
+    source_kind = serializers.CharField(source='source.kind', default=None, allow_null=True)
+    source_hostname = serializers.CharField(source='source.hostname', default=None, allow_null=True)
+
     class Meta:
         model = Article
-        fields = [*PUBLIC_FIELDS, 'sections']
+        fields = [*PUBLIC_FIELDS, 'sections', 'article_type']
 
 
 class CourseSerializer(EditorialSerializer):

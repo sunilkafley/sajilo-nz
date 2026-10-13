@@ -1,6 +1,39 @@
 import { expect, test } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
 
+test('simple general article draft and publication needs review but no source', async ({page,request},testInfo)=>{
+  await page.goto('http://127.0.0.1:8000/admin/editorial/article/add/');
+  await page.getByLabel('Username:').fill('editorial-test-admin');
+  await page.getByLabel('Password:',{exact:true}).fill('isolated-editorial-test-only');
+  await page.getByRole('button',{name:'Log in'}).click();
+  const title=`Synthetic welcome ${testInfo.project.name}`;
+  await page.getByLabel('Title:',{exact:true}).fill(title);
+  await page.getByLabel('Topic:',{exact:true}).selectOption('community');
+  await page.getByLabel('Article type:',{exact:true}).selectOption('general');
+  await page.getByLabel('Summary:',{exact:true}).fill('Isolated browser test, not production content.');
+  await page.getByLabel('Content:',{exact:true}).fill('Synthetic original introduction.');
+  await expect(page.getByLabel('Source URL:',{exact:true})).not.toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
+  await page.screenshot({path:fileURLToPath(new URL(`../../docs/screenshots/article-admin/form-${testInfo.project.name}.png`,import.meta.url)),fullPage:true});
+  await page.getByRole('button',{name:'Save and continue editing'}).click();
+  await expect(page.getByText('was added successfully',{exact:false})).toBeVisible();
+  await page.getByLabel('Status:',{exact:true}).selectOption('published');
+  await page.getByRole('button',{name:'Save and continue editing'}).click();
+  await expect(page.getByText('Publication requires an actual human reviewer, review date and next review date.',{exact:true})).toBeVisible();
+  // Explicit synthetic review only inside the temporary test database.
+  await page.getByLabel('Reviewed by:',{exact:true}).selectOption({label:'editorial-test-admin'});
+  await page.getByLabel('Reviewed on:',{exact:true}).fill('2026-01-01');
+  await page.getByLabel('Next review on:',{exact:true}).fill('2026-02-01');
+  await page.getByRole('button',{name:'Save and continue editing'}).click();
+  const slug=`synthetic-welcome-${testInfo.project.name}`;
+  const result=await (await request.get(`/api/explore/articles/${slug}/`)).json();
+  expect(result.article_type).toBe('general');expect(result.source_kind).toBeNull();
+  await page.goto(`/#/explore/community/${slug}`);
+  await expect(page.getByRole('heading',{name:title})).toBeVisible();
+  await expect(page.getByText(/not official guidance/)).toBeVisible();
+  await expect(page.getByRole('link',{name:/Official source:/})).toHaveCount(0);
+});
+
 test('editorial API never reveals drafts or missing translations', async ({ request }) => {
   const response = await request.get('/api/explore/articles/?topic=study');
   expect(response.ok()).toBeTruthy();
