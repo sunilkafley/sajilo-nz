@@ -2,6 +2,12 @@
 
 A companion for Nepalese people navigating their New Zealand journey, including students, workers, partners, families and newcomers. This development version includes React checklists with browser-local progress and a Django API for reviewed English/Nepali guides. The original prototype is preserved in `prototype/`.
 
+## Current public landing increment
+
+The [public landing refactor](docs/public-landing-refactor.md) replaces the sidebar Home dashboard with a responsive public homepage, horizontal desktop navigation and four-item mobile bottom navigation. Existing progress/next steps/bookmarks are retained at `/#/journey`; checklist and guide URLs still work. Header search opens the existing site-wide search page. Topic cards select contextual Explore sections and clearly distinguish available links from planned resources. Nepali selection preserves route/query context with an explicit English-interface fallback where reviewed translations are missing.
+
+The approved logo is unchanged. The temporary generated landscape in `frontend/src/assets/journey-landscape.png` can be replaced with the owner's future photograph; provenance, screenshots, checks and limitations are recorded in the linked document. Historical sprint descriptions below describe earlier layouts, not the current public Home. No deployment or content approval is implied.
+
 ## Run locally
 Use Node.js 22.12+ and npm. From the repository root:
 

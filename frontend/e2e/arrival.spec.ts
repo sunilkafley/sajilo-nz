@@ -4,7 +4,7 @@ const key='sajilo-nz:firstweek:v1';
 test('Home and Explore open an independent first-week checklist with offline persistence',async({page,context},testInfo)=>{
   await page.goto('/#/predeparture');
   await page.getByRole('checkbox',{name:'Passport',exact:true}).check();
-  await navigateSidebar(page, 'Home');
+  await navigateSidebar(page, 'Journey');
   await expect(page.locator('.offline-status')).toHaveAttribute('data-offline-ready','true');
   await navigateSidebar(page,'First-week checklist');
   await expect(page).toHaveTitle('First-week checklist · Sajilo NZ');
@@ -17,7 +17,7 @@ test('Home and Explore open an independent first-week checklist with offline per
   await context.setOffline(true);await page.reload();await expect(checkbox).toBeChecked();
   await navigateSidebar(page, 'Pre-departure checklist');
   await expect(page.getByRole('checkbox',{name:'Passport',exact:true})).toBeChecked();
-  await navigateSidebar(page, 'Home');
+  await navigateSidebar(page, 'Journey');
   await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow','1');
   await navigateSidebar(page,'Explore');
   await page.getByRole('link',{name:'Arrive & settle',exact:true}).click();

@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import { landingTopics } from '../home/landingTopics';
 import { categories, cities, iconPaths, introductionTopics } from './catalog';
 import './explore.css';
 import { topics } from '../guides/topics';
@@ -8,10 +9,16 @@ function Icon({ name }: { name: keyof typeof iconPaths }) {
 }
 
 export function ExplorePage() {
+  const [params] = useSearchParams();
+  const selected = landingTopics.find(topic=>topic.id===params.get('category'));
   return <div className="explore-page">
     <p className="eyebrow">EXPLORE</p>
     <h1>A new country.<br/>A world of possibilities.</h1>
     <p className="intro">Start with your travel preparation. Discover more of life in New Zealand as new guides become available.</p>
+    {selected && <section className="card selected-topic" aria-label={selected.title}><h2>{selected.title}</h2><p>{selected.description}</p>
+      {selected.id==='immigration' ? <Link to="/sources">View official travel and immigration sources</Link> : selected.id==='money' ? <Link to={'/guides?topic=money'+(params.get('lang')==='ne'?'&lang=ne':'')}>Browse published travel money guides</Link> : <p>Coming soon. Reviewed resources for this topic are not available yet.</p>}
+      <p><Link to={params.get('lang')==='ne'?'/explore?lang=ne':'/explore'}>Browse all Explore sections</Link></p>
+    </section>}
 
     <Link className="explore-search" to="/search">
       <Icon name="search"/>

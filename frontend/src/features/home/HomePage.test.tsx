@@ -10,7 +10,7 @@ import type { Guide } from '../guides/api';
 import { homeJourney, savedPreview } from './domain';
 
 const guide: Guide = {slug:'documents',language:'en',stage:'predeparture',title:'Test saved English',summary:'Synthetic summary',body:'Do not expose cached body on Home.',sources:[{title:'INZ',url:'https://www.immigration.govt.nz/'}],checklist_ids:['passport'],verified_on:'2026-01-01',next_review_on:'2026-02-01',review_overdue:true};
-const mount=()=>render(<MemoryRouter><App repository={createLocalRepository(()=>localStorage)}/></MemoryRouter>);
+const mount=()=>render(<MemoryRouter initialEntries={['/journey']}><App repository={createLocalRepository(()=>localStorage)}/></MemoryRouter>);
 beforeEach(()=>localStorage.clear());
 afterEach(()=>{ vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
@@ -33,10 +33,10 @@ it('renders prototype sections, honest planned tools and real zero progress with
   const fetch=vi.fn(); vi.stubGlobal('fetch',fetch);
   const write=vi.spyOn(Storage.prototype,'setItem');
   mount();
-  expect(document.title).toBe('Home · Sajilo NZ');
+  expect(document.title).toBe('Journey · Sajilo NZ');
   expect(screen.getByRole('main')).toHaveFocus();
-  expect(screen.getByRole('link',{name:'Home'})).toHaveAttribute('aria-current','page');
-  expect(screen.getByRole('heading',{name:'Namaste, welcome home'})).toBeInTheDocument();
+  expect(screen.getByRole('link',{name:'Journey'})).toHaveAttribute('aria-current','page');
+  expect(screen.getByRole('heading',{name:'Your journey'})).toBeInTheDocument();
   expect(screen.getByRole('progressbar',{name:'Planning tasks completed'})).toHaveAttribute('aria-valuenow','0');
   expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuemax','27');
   expect(screen.getByText('0 saved bookmarks · 0 saved copies on this browser')).toBeInTheDocument();
@@ -53,7 +53,7 @@ it('next step focuses the real checklist and Home updates after completion and r
   await user.click(screen.getByRole('link',{name:'Passport'}));
   const checkbox=screen.getByRole('checkbox',{name:'Passport'});
   expect(checkbox).toHaveFocus(); await user.click(checkbox);
-  await user.click(screen.getByRole('link',{name:'Home'}));
+  await user.click(screen.getByRole('link',{name:'Journey'}));
   expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow','1');
   expect(screen.queryByRole('link',{name:'Passport'})).not.toBeInTheDocument();
   expect(screen.getByRole('link',{name:'Academic documents'})).toBeInTheDocument();
@@ -112,7 +112,7 @@ it('preserves failed-write checklist state in memory while retaining the warning
   await user.click(screen.getByRole('link',{name:'Passport'}));
   vi.spyOn(Storage.prototype,'setItem').mockImplementation(()=>{throw new Error('quota');});
   await user.click(screen.getByRole('checkbox',{name:'Passport'}));
-  await user.click(screen.getByRole('link',{name:'Home'}));
+  await user.click(screen.getByRole('link',{name:'Journey'}));
   expect(screen.getByRole('alert')).toHaveTextContent('Could not save');
   expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow','1');
   expect(localStorage.getItem(STORAGE_KEY)).toBeNull();

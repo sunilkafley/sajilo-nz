@@ -13,7 +13,9 @@ export interface SearchResult extends SearchEntry { excerpt: string }
 const entry = (title: string, type: string, to: string, text: string, status = ''): SearchEntry =>
   ({title, type, to, text, status, language:'en'});
 export const localEntries: SearchEntry[] = [
-  entry('Home', 'Page', '/', 'Namaste, welcome home. Your New Zealand journey companion. Your next steps.'),
+  entry('Home', 'Page', '/', 'Your New Zealand journey companion. Explore key topics. Get to know Aotearoa.'),
+  entry('Journey', 'Page', '/journey', 'Choose your stage. Before you leave. Arrival. Your next steps and browser-saved progress.'),
+  entry('About Sajilo NZ', 'Page', '/about', 'For Nepalese students, workers, partners, families and newcomers. Privacy and browser storage.'),
   entry('Explore', 'Page', '/explore', 'A new country. A world of possibilities. Explore available topics, categories and city preparation.'),
   entry('Pre-departure guides', 'Page', '/guides', 'Prepare with confidence. Read reviewed guidance, check the official sources and take your next step.'),
   entry('First-week guides', 'Page', '/guides?stage=firstweek', 'Settle in, one step at a time. Published first-week guidance.'),

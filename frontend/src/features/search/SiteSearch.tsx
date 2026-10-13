@@ -5,7 +5,6 @@ import { useSearch } from './useSearch';
 import type { SearchResult } from './domain';
 import './search.css';
 
-const resultsUrl = (query:string) => `/search?q=${encodeURIComponent(query.trim())}`;
 function ResultText({result}:{result:SearchResult}) {
   return <><strong lang={result.language}>{result.title}</strong><span className="search-meta">{result.type} · {result.language==='ne'?'नेपाली':'English'}{result.status && ` · ${result.status}`}</span><span className="search-excerpt" lang={result.language}>{result.excerpt}</span></>;
 }
@@ -19,6 +18,7 @@ function SearchStatus({state}:{state:ReturnType<typeof useSearch>}) {
 }
 export function SiteSearch() {
   const location = useLocation(), navigate = useNavigate();
+  const resultsUrl = (query:string) => `/search?q=${encodeURIComponent(query.trim())}${new URLSearchParams(location.search).get('lang')==='ne'?'&lang=ne':''}`;
   const [query,setQuery] = useState('');
   const [open,setOpen] = useState(false);
   const [active,setActive] = useState(-1);
@@ -68,6 +68,7 @@ export function SearchPage() {
   const query = params.get('q') ?? '';
   const state = useSearch(query);
   return <section className="search-page"><p className="eyebrow">EXPLORE / SEARCH</p><h1>Search results</h1>
+    <SiteSearch/>
     {query.trim() && <p>Results for “{query}”</p>}
     <SearchStatus state={state}/>
     {!state.loading && !!state.results.length && <><p>{state.results.length} results</p><ul className="search-results">{state.results.map(result=><li key={result.to}>

@@ -1,13 +1,14 @@
 import type { Page } from '@playwright/test';
-export async function openNavigation(page: Page) {
-  const menu = page.getByRole('button', { name: 'Menu', exact: true });
-  if (await menu.isVisible() && await menu.getAttribute('aria-expanded') === 'false') await menu.click();
-}
+// Public navigation is always visible: header on desktop, bottom bar on mobile.
+export async function openNavigation(_page: Page) {}
 export async function navigateSidebar(page: Page, name: string) {
-  await openNavigation(page);
   const nav = page.getByRole('navigation', { name: 'Main navigation' });
-  if (name === 'First-week checklist' || name === 'Pre-departure checklist') {
-    if (!await nav.locator('.journey-menu').getAttribute('open').then(value => value !== null)) await nav.locator('.journey-menu summary').click();
+  if(name==='First-week checklist' || name==='Pre-departure checklist') {
+    await nav.getByRole('link',{name:'Journey',exact:true}).click();
+    await page.getByRole('region',{name:'Journey stages'}).getByRole('link',{name:name==='First-week checklist'?/Arrival \/ First week/:/Before you leave/}).click();
+  } else if(['Saved resources','Pre-departure guides','Official sources'].includes(name)) {
+    await page.locator('footer').getByRole('link',{name:name==='Pre-departure guides'?'Guides':name,exact:true}).click();
+  } else {
+    await nav.getByRole('link',{name,exact:true}).click();
   }
-  await nav.getByRole('link', { name, exact: true }).click();
 }
