@@ -1,0 +1,22 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'editorial/preview.css' %}">{% endblock %}
+{% block content %}
+<p><strong>Staff-only saved-record preview — not public.</strong> This is an editorial preview, not the final website layout.</p>
+<p><a href="{{ change_url }}">Return to record</a></p>
+<article class="editorial-preview" lang="{{ record.language }}">
+  <h1>{{ record.title }}</h1>
+  <p>{{ record.get_language_display }} · {{ record.get_topic_display }} · {{ record.get_status_display }}</p>
+  {% if record.is_sample %}<p><strong>Sample — cannot be published.</strong></p>{% endif %}
+  <p>{{ record.summary }}</p>
+  {{ record.body|linebreaks }}
+  {% for section in sections %}<section><h2>{{ section.heading }}</h2>{{ section.body|linebreaks }}</section>{% endfor %}
+  <dl>{% for label, value in details %}<dt>{{ label|capfirst }}</dt><dd>{{ value|default_if_none:"Not supplied" }}</dd>{% endfor %}</dl>
+  <h2>Source and review</h2>
+  <p>{{ record.source|default_if_none:"No source selected" }}</p>
+  {# Display URLs as text: preview must remain safe even for a corrupt legacy/imported record. #}
+  <p>{{ record.source_url }}</p>
+  <p>Recorded review date: {{ record.verified_on|default_if_none:"Not reviewed" }}<br>Next review: {{ record.next_review_on|default_if_none:"Not recorded" }}</p>
+  <p>Review fields alone do not confirm public eligibility. Publication also requires all validation and source-approval checks.</p>
+</article>
+{% endblock %}
