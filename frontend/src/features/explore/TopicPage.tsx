@@ -5,9 +5,11 @@ import { introductionPages, topicConfig, withLanguage } from './topicConfig';
 import './explore.css';
 
 function Attribution({article}:{article:Article}) {
-  return <div className="article-attribution" lang="en"><a href={article.source_url} rel="noopener noreferrer">Official source: {article.source_hostname} (online)</a>
+  return <div className="article-attribution" lang="en">
+    {article.article_type==='general' && <p>General information · Sajilo NZ editorial content, not official guidance.</p>}
+    {article.source_url && <a href={article.source_url} rel="noopener noreferrer">Official source: {article.source_hostname} (online)</a>}
     <p>Reviewed <time dateTime={article.verified_on}>{article.verified_on}</time> · Next review <time dateTime={article.next_review_on}>{article.next_review_on}</time></p>
-    {article.review_overdue && <p className="notice warning">Review overdue. Check the current official source before acting.</p>}</div>;
+    {article.review_overdue && <p className="notice warning">{article.source_url?'Review overdue. Check the current official source before acting.':'Editorial review overdue. This information may need updating.'}</p>}</div>;
 }
 function ArticleBody({article}:{article:Article}) {
   return <><p className="article-text">{article.body}</p>{article.sections.map((section,index)=><section key={index}><h3>{section.heading}</h3><p className="article-text">{section.body}</p></section>)}</>;

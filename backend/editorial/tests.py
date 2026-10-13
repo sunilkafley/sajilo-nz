@@ -271,8 +271,91 @@ class EditorialTests(TestCase):
         self.assertEqual(response['count'], 25)
         self.assertIsNotNone(response['next'])
 
+    def test_general_information_requires_review_but_not_external_source(self):
+        obj = self.published(article_type='general', source=None, source_url='')
+        result = self.client.get(f'/api/explore/articles/{obj.slug}/').json()
+        self.assertEqual(result['article_type'], 'general')
+        self.assertIsNone(result['source_kind'])
+        self.assertIsNone(result['source_hostname'])
+        for changes in [dict(reviewed_by=None), dict(verified_on=None), dict(next_review_on=None), dict(is_sample=True)]:
+            with self.subTest(changes=changes), self.assertRaises(ValidationError):
+                self.published(slug='invalid', article_type='general', source=None, source_url='', **changes)
+        self.assertEqual(self.client.get('/api/explore/articles/?lang=ne').json()['count'], 0)
+        obj.status = 'draft'
+        obj.save()
+        self.assertEqual(self.client.get(f'/api/explore/articles/{obj.slug}/').status_code, 404)
+
+    def test_general_optional_sources_are_not_a_bypass(self):
+        for changes in [dict(source_url=''), dict(source=None), dict(source_url='javascript:bad')]:
+            with self.subTest(changes=changes), self.assertRaises(ValidationError):
+                self.published(article_type='general', **changes)
+        obj = self.published(article_type='general')
+        self.domains['official'].approved = False
+        self.domains['official'].save()
+        self.assertEqual(self.client.get('/api/explore/articles/').json()['count'], 0)
+        Article.objects.filter(pk=obj.pk).update(source=None)
+        self.assertEqual(self.client.get('/api/explore/articles/').json()['count'], 0)
+
+    def test_type_change_requires_new_review_and_default_stays_guidance(self):
+        obj = self.published()
+        self.assertEqual(obj.article_type, 'guidance')
+        obj.article_type = 'general'
+        obj.source = None
+        obj.source_url = ''
+        with self.assertRaises(ValidationError): obj.save()
+        obj.status = 'draft'
+        obj.save()
+        self.assertIsNone(obj.verified_on)
+        obj.status = 'published'
+        with self.assertRaises(ValidationError): obj.save()
+
+    def test_general_defensive_public_gate_and_search(self):
+        obj = self.published(article_type='general', source=None, source_url='')
+        self.assertEqual(self.client.get('/api/explore/articles/?q=Synthetic').json()['count'], 1)
+        for changes in [dict(article_type='unknown'), dict(article_type='guidance'), dict(reviewed_by=None),
+                        dict(is_sample=True), dict(verified_on=self.today+timedelta(days=1))]:
+            Article.objects.filter(pk=obj.pk).update(**changes)
+            self.assertEqual(self.client.get('/api/explore/articles/').json()['count'], 0)
+            Article.objects.filter(pk=obj.pk).update(**{key:getattr(obj,key) for key in changes})
+
+    def test_simple_admin_draft_generates_slug_and_never_review_dates(self):
+        self.client.force_login(self.editor)
+        response = self.client.get('/admin/editorial/article/add/')
+        self.assertContains(response, 'Write your article')
+        self.assertContains(response, 'Optional sections')
+        response = self.client.post('/admin/editorial/article/add/', dict(title='Welcome here', topic='community',
+            language='en', article_type='general', summary='Synthetic introduction', body='Synthetic content',
+            status='draft', sections='[]', tags='[]', _save='Save'))
+        self.assertEqual(response.status_code, 302)
+        obj = Article.objects.get(slug='welcome-here')
+        self.assertIsNone(obj.verified_on)
+        self.assertIsNone(obj.source_id)
+        data = self.admin_data(obj)
+        data.update(status='published', reviewed_by=self.editor.pk, verified_on=str(self.today),
+                    next_review_on=str(self.today+timedelta(days=30)))
+        self.assertEqual(self.client.post(f'/admin/editorial/article/{obj.pk}/change/', data).status_code, 302)
+        self.assertEqual(self.client.get('/api/explore/articles/').json()['count'], 1)
+
 
 class EditorialMigrationTests(TransactionTestCase):
+    def test_article_type_migration_preserves_existing_records_as_guidance(self):
+        from django.db import connection
+        from django.db.migrations.executor import MigrationExecutor
+        try:
+            executor = MigrationExecutor(connection)
+            executor.migrate([('editorial', '0001_initial')])
+            old_apps = executor.loader.project_state([('editorial', '0001_initial')]).apps
+            legacy = old_apps.get_model('editorial', 'Article').objects.create(slug='legacy', language='en',
+                topic='community', title='Preserved title', summary='Preserved summary', body='Preserved body')
+            MigrationExecutor(connection).migrate([('editorial', '0002_article_article_type')])
+            current = Article.objects.get(pk=legacy.pk)
+            self.assertEqual(current.article_type, 'guidance')
+            self.assertEqual(current.title, 'Preserved title')
+            self.assertEqual(current.body, 'Preserved body')
+            self.assertEqual(current.status, 'draft')
+        finally:
+            MigrationExecutor(connection).migrate([('editorial', '0002_article_article_type')])
+
     def test_additive_migration_preserves_existing_guides(self):
         from django.db import connection
         from django.db.migrations.executor import MigrationExecutor
@@ -284,10 +367,10 @@ class EditorialMigrationTests(TransactionTestCase):
             # Editorial tables are empty in this isolated test, never an editorial database.
             MigrationExecutor(connection).migrate([('editorial', None)])
             self.assertEqual(list(Guide.objects.values()), before)
-            MigrationExecutor(connection).migrate([('editorial', '0001_initial')])
+            MigrationExecutor(connection).migrate([('editorial', '0002_article_article_type')])
             self.assertEqual(list(Guide.objects.values()), before)
             self.assertEqual(Article.objects.count(), 0)
             self.assertEqual(Course.objects.count(), 0)
             self.assertEqual(DirectoryEntry.objects.count(), 0)
         finally:
-            MigrationExecutor(connection).migrate([('editorial', '0001_initial')])
+            MigrationExecutor(connection).migrate([('editorial', '0002_article_article_type')])

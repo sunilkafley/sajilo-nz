@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
@@ -7,6 +8,7 @@ from django.utils.html import format_html
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_safe
+from django.utils.text import slugify
 
 from .models import Article, Course, DirectoryEntry, SourceDomain
 
@@ -73,9 +75,45 @@ class EditorialAdmin(admin.ModelAdmin):
         return response
 
 
+class ArticleForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = '__all__'
+        labels = {'body': 'Content', 'verified_on': 'Reviewed on', 'slug': 'URL name (slug)'}
+        help_texts = {'slug': 'Generated from an English title if blank. For Nepali, enter a short Latin-letter URL name; use the same name for corresponding translations.'}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['slug'].required = False
+
+    def clean(self):
+        data = super().clean()
+        if not data.get('slug'):
+            data['slug'] = slugify(data.get('title', ''))[:50].strip('-')
+            if not data['slug']:
+                self.add_error('slug', 'Enter a Latin-letter URL name under Optional organisation and URL.')
+        return data
+
+
 @admin.register(Article)
 class ArticleAdmin(EditorialAdmin):
+    form = ArticleForm
     content_fields = ['sections']
+    list_filter = ['article_type', *EditorialAdmin.list_filter]
+
+    def get_fieldsets(self, request, obj=None):
+        return [
+            ('Write your article', {'fields': ['title', 'topic', 'language', 'article_type', 'summary', 'body'],
+                'description': 'Start here and save as Draft. Content is plain text; separate paragraphs with blank lines. General information is not a shortcut for unsourced factual advice.'}),
+            ('Source attribution', {'classes': ['collapse'], 'fields': ['source', 'source_url'],
+                'description': 'Required for Sourced guidance. Optional for General information; if supplied, both fields and an approved official source are required.'}),
+            ('Optional sections', {'classes': ['collapse'], 'fields': ['sections'],
+                'description': 'You can leave this empty and write everything in Content. Structured sections are optional.'}),
+            ('Optional organisation and URL', {'classes': ['collapse'], 'fields': ['slug', 'stage', 'tags']}),
+            ('Review and publication', {'fields': ['status', 'is_sample', 'reviewed_by', 'verified_on', 'next_review_on'],
+                'description': '1. Save a draft. 2. Preview and review the content, article type and this language. 3. Enter the actual reviewer and dates, then publish. Editing published content or its type requires a draft save and a new review. No dates are filled automatically.'}),
+            ('Saved-record preview', {'fields': ['preview_link', 'updated_at']}),
+        ]
 
 
 @admin.register(Course)

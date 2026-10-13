@@ -87,13 +87,24 @@ class SourceDomain(models.Model):
 
 
 class EditorialQuerySet(models.QuerySet):
-    def public(self):
+    def reviewed(self):
         today = timezone.localdate()
         return self.filter(status='published', is_sample=False, reviewed_by__is_active=True,
             reviewed_by__is_staff=True, verified_on__lte=today,
-            next_review_on__gt=models.F('verified_on'), source__approved=True,
+            next_review_on__gt=models.F('verified_on'))
+
+    def public(self):
+        today = timezone.localdate()
+        return self.reviewed().filter(source__approved=True,
             source__approved_by__is_active=True, source__approved_by__is_staff=True,
             source__approved_on__lte=today).exclude(source_url='').exclude(source__review_note='')
+
+
+class ArticleQuerySet(EditorialQuerySet):
+    def public(self):
+        sourced = super().public().filter(source__kind='official')
+        general = self.reviewed().filter(article_type='general', source__isnull=True, source_url='')
+        return (sourced | general).filter(article_type__in=['guidance', 'general'])
 
 
 class EditorialRecord(models.Model):
@@ -135,6 +146,9 @@ class EditorialRecord(models.Model):
     def allowed_source_kinds(self):
         return {'official'}
 
+    def requires_source(self):
+        return True
+
     def clean(self):
         super().clean()
         errors = {}
@@ -164,9 +178,9 @@ class EditorialRecord(models.Model):
                 errors['status'] = 'Publication requires an actual human reviewer, review date and next review date.'
             elif not self.reviewed_by.is_active or not self.reviewed_by.is_staff:
                 errors['reviewed_by'] = 'Choose an active staff reviewer.'
-            if not self.source_id or not self.source_url:
+            if (self.requires_source() or self.source_id or self.source_url) and (not self.source_id or not self.source_url):
                 errors['source'] = 'Publication requires a source and source URL.'
-            else:
+            elif self.source_id:
                 try:
                     self.source.full_clean()
                     if not self.source.approved:
@@ -189,8 +203,15 @@ class EditorialRecord(models.Model):
 
 
 class Article(EditorialRecord):
+    article_type = models.CharField(max_length=10, default='guidance', choices=[
+        ('guidance', 'Sourced guidance'), ('general', 'General information')],
+        help_text='Use General information only for original introductions, welcome pages or site instructions. Factual advice about visas, rights, health, housing or money must use Sourced guidance. Human review is required for both types and each translation.')
+    objects = ArticleQuerySet.as_manager()
     sections = models.JSONField(default=list, blank=True, validators=[validate_sections],
         help_text='Optional sections: [{"heading": "Section title", "body": "Plain text"}]. No HTML.')
+
+    def requires_source(self):
+        return self.article_type != 'general'
 
     def clean(self):
         super().clean()

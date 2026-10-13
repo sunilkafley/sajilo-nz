@@ -16,6 +16,8 @@ The [engineering-first sprint plan](docs/explore-refactor-sprint.md) records the
 
 ## Explore topic pages — Slice B
 
+[Article admin usability](docs/article-admin-usability.md) simplifies editing and distinguishes sourced guidance from reviewed general editorial information. General introductions/site instructions may omit external sources; guidance keeps its source requirements. This is a separate migration/review increment, not automatically deployed.
+
 [Slice B implementation and evidence](docs/explore-topic-pages.md) connects twelve information topics, six Aotearoa introductions and city navigation to the public Article API. Homepage cards open topic pages; legacy category URLs still work. Django admin manages article bodies, sections, sources and separately reviewed translations. No production content is seeded. Topics without published content show an honest unavailable state. Existing guides, offline copies and checklist storage are unchanged; course tools, directories and new article search/offline support are later slices.
 
 ## Run locally

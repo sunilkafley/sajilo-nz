@@ -12,6 +12,20 @@ const response=(results:Article[],next:string|null=null)=>({ok:true,json:async()
 const mount=(route='/explore/study')=>render(<MemoryRouter initialEntries={[route]}><Routes><Route path="/explore/:topicId" element={<TopicPage/>}/><Route path="/explore/:topicId/:slug" element={<TopicPage/>}/></Routes></MemoryRouter>);
 afterEach(()=>{vi.unstubAllGlobals();localStorage.clear();});
 
+it('renders reviewed general information without claiming an official source',async()=>{
+  const general:Article={...article,article_type:'general',source_url:'',source_kind:null,source_hostname:null};
+  expect(parseArticle(general,'study','en')).toEqual(general);
+  for(const changes of [{article_type:'guidance'},{article_type:'unknown'},{article_type:undefined},{source_url:'javascript:bad'},{verified_on:null}]) {
+    expect(()=>parseArticle({...general,...changes},'study','en')).toThrow();
+  }
+  vi.stubGlobal('fetch',vi.fn().mockResolvedValue({ok:true,json:async()=>general}));
+  mount('/explore/study/test-study');
+  await screen.findByRole('heading',{name:article.title});
+  expect(screen.getByText(/Sajilo NZ editorial content, not official guidance/)).toBeInTheDocument();
+  expect(screen.queryByRole('link',{name:/Official source/})).toBeNull();
+  expect(screen.getByText(/Editorial review overdue/)).toBeInTheDocument();
+});
+
 it('validates language, topic, source URL and review metadata before rendering',()=>{
   expect(parseArticle(article,'study','en')).toEqual(article);
   for(const changes of [{language:'ne'},{topic:'housing'},{source_url:'javascript:alert(1)'},{source_url:'https://official.example.org.evil.org/'},{source_kind:'commercial'},{verified_on:'bad'},{next_review_on:'2025-01-01'},{sections:[{heading:1,body:'test'}]}]) {
