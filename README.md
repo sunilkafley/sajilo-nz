@@ -28,6 +28,7 @@ Browser tests also require the Python environment; see the Sprint 2 setup below.
 - `frontend/src/features/checklist/`: stable task IDs, domain rules, storage repository and use cases.
 - `frontend/src/features/arrival/`: separate first-week planning catalogue and browser-local progress, reusing checklist rules.
 - `frontend/src/features/home/`: prototype-style Home layout, derived progress/next steps and read-only saved-bookmark preview.
+- `frontend/src/features/search/`: shared site-wide ranking and debounced search over public guides in both stages/languages and available local catalogues. See [search/layout evidence](docs/site-search-layout.md).
 - `frontend/src/components/`: reusable approved full-logo image and existing-route main navigation. The logo is a byte-identical local asset, not a generated/redrawn version.
 - `frontend/src/features/explore/`: Explore landing page, scoped styles and available/planned destination catalogue.
 - `frontend/src/features/cities/`: curated Christchurch guide membership and city preparation layout, reusing the existing guide publication/saved flow.

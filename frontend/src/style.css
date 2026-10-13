@@ -55,3 +55,7 @@ footer{padding:20px 42px 32px;color:#66756e;font-size:11px}.skip{position:fixed;
 main{padding:25px 20px 40px}h1{font-size:28px}.groups{grid-template-columns:1fr;gap:18px}.card{padding:20px}.notice{padding:20px}footer{padding:20px}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+/* Centre within the workspace, never across the sidebar. */
+.workspace main{width:100%;max-width:1440px;margin-inline:auto;padding:34px clamp(24px,2.1vw,40px) 50px}
+.workspace main.reading-main{max-width:960px}
+@media(max-width:700px){.workspace main{padding:25px 24px 40px}}

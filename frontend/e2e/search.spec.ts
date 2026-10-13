@@ -1,0 +1,61 @@
+import { test, expect } from '@playwright/test';
+const searchLabel='Search Sajilo NZ guides, checklists and topics';
+
+test('site search finds real catalogues, keyboard task links and all-stage bilingual public guides',async({page})=>{
+  await page.goto('/');
+  const input=page.getByRole('combobox',{name:searchLabel});
+  await input.focus();
+  await expect(page.getByText('Enter a search term to find guides, checklists and topics.')).toBeVisible();
+  await input.fill('Plan a local journey');
+  await expect(page.getByRole('option').first()).toContainText('Plan a local journey');
+  await input.press('ArrowDown');await input.press('Enter');
+  const task=page.getByRole('checkbox',{name:'Plan a local journey',exact:true});
+  await expect(task).toBeFocused();await task.check();await page.reload();await expect(task).toBeChecked();
+  await input.fill('Christchurch');await input.press('Enter');
+  await expect(page).toHaveURL(/search\?q=Christchurch/);
+  await expect(page.locator('.search-results').getByRole('link',{name:/Christchurch City/})).toBeVisible();
+  await input.fill('Documents');await expect(page.getByRole('option').first()).toContainText('Documents');
+  await input.press('Escape');await expect(input).toHaveAttribute('aria-expanded','false');
+  await input.fill('पहिलो हप्ताको');await input.press('Enter');
+  await expect(page.locator('.search-results')).toContainText('परीक्षण पहिलो हप्ताको यात्रा');
+  await expect(page.locator('.search-results')).toContainText('नेपाली');
+  await page.locator('.search-results a').first().click();
+  await expect(page.locator('article.guide-body')).toHaveAttribute('lang','ne');
+  await expect(page).toHaveURL(/stage=firstweek/);
+  await input.fill('first-week content');await input.press('Enter');
+  await expect(page.locator('.search-results')).toContainText('Test first-week travel');
+  await input.fill('Unreviewed arrival translation');await input.press('Enter');
+  await expect(page.getByText('No results found. Try another word.')).toBeVisible();
+  await input.fill('Course finder');await input.press('Enter');
+  await expect(page.getByText('No results found. Try another word.')).toBeVisible();
+});
+
+test('debounces, ignores stale responses, shows loading and recovers from partial errors',async({page})=>{
+  let release:()=>void=()=>{};
+  const gate=new Promise<void>(resolve=>{release=resolve;});
+  let requests=0;
+  await page.route('**/api/guides/**',async route=>{
+    requests++;
+    if(requests<=4) await gate;
+    await route.fulfill({json:[]});
+  });
+  await page.goto('/');
+  const input=page.getByRole('combobox',{name:searchLabel});
+  await input.fill('Passport');
+  await expect(page.getByText('Searching Sajilo NZ…')).toBeVisible();
+  await expect.poll(()=>requests).toBe(4);
+  await input.fill('Plan a local journey');
+  await expect(page.getByRole('option').first()).toContainText('Plan a local journey');
+  release();
+  await expect(page.getByRole('option').first()).toContainText('Plan a local journey');
+  await input.press('Escape');
+  await page.unroute('**/api/guides/**');
+  await page.route('**/api/guides/**',route=>route.fulfill({status:503,body:'Unavailable'}));
+  await input.fill('Passport');
+  await expect(page.getByText('Some guides could not be searched.',{exact:false})).toBeVisible();
+  await expect(page.getByRole('option').first()).toContainText('Passport');
+  await page.unroute('**/api/guides/**');
+  await page.getByRole('button',{name:'Try again',exact:true}).click();
+  await expect(page.getByText('Some guides could not be searched.',{exact:false})).toHaveCount(0);
+  await expect(page.getByRole('option').first()).toContainText('Passport');
+});
