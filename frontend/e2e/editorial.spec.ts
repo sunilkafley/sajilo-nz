@@ -8,7 +8,7 @@ test('editorial API never reveals drafts or missing translations', async ({ requ
   expect((await response.json()).results.map((row: { slug: string }) => row.slug)).toEqual(['editorial-public']);
   expect((await request.get('/api/explore/articles/editorial-draft/')).status()).toBe(404);
   expect((await (await request.get('/api/explore/articles/?q=Private')).json()).count).toBe(0);
-  expect((await (await request.get('/api/explore/articles/?lang=ne')).json()).count).toBe(0);
+  expect((await request.get('/api/explore/articles/editorial-public/?lang=ne')).status()).toBe(404);
 });
 
 test('admin saved-draft preview is private, readable and non-cacheable', async ({ page }, testInfo) => {

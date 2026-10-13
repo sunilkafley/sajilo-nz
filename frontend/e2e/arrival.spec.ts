@@ -21,6 +21,7 @@ test('Home and Explore open an independent first-week checklist with offline per
   await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow','1');
   await navigateSidebar(page,'Explore');
   await page.getByRole('link',{name:'Arrive & settle',exact:true}).click();
+  await page.getByRole('link',{name:'Open first-week checklist',exact:true}).click();
   await expect(checkbox).toBeChecked();await checkbox.uncheck();await page.reload();await expect(checkbox).not.toBeChecked();
 });
 test('first-week corrupt data is preserved; deep links focus only valid first-week tasks',async({page})=>{

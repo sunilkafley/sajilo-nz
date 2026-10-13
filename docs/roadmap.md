@@ -2,7 +2,7 @@
 
 ## Explore refactoring sprint — current agreed scope
 
-[Slice A — editorial foundation](editorial-foundation.md) is implemented for review: additive Django article/course/directory models, source approval, private admin preview and public eligibility tests. It does not populate topics, change the public layout or authorize deployment. Slice B topic presentation is next after this checkpoint.
+[Slice A — editorial foundation](editorial-foundation.md) merged in PR #20. [Slice B — Explore topic pages](explore-topic-pages.md) connects twelve topic routes, Aotearoa introductions and city navigation to eligible public articles, with honest empty states and preserved journeys. Slice B is implemented for review; C–F remain pending. Neither increment populates reviewed content or authorizes deployment.
 
 On 13 October 2026, Sunil confirmed all prototype Explore sections belong in one engineering-first sprint, targeting owner-approved release readiness over 17–18 October. See the [sprint plan](explore-refactor-sprint.md) for topic coverage, Django-admin editorial management, acceptance criteria and release gates. Content population/review follows engineering topic by topic; this does not waive publication or translation review. PR #19 is merged. The historical sequence below is superseded where this plan expands Explore and community into the same sprint. No weekend deployment or completed engineering is implied.
 

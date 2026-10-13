@@ -5,24 +5,27 @@ type Category = {
   title: string;
   description: string;
   icon: IconName;
-} & ({ status: 'available'; to: '/predeparture' | '/sources' | '/firstweek'; action: string } | { status: 'planned' });
+};
 
-export const categories: Category[] = [
-  { id: 'predeparture', title: 'Prepare to travel', description: 'Keep track of documents, packing, money and your next steps.', icon: 'plane', status: 'available', to: '/predeparture', action: 'Open checklist' },
-  { id: 'immigration', title: 'Immigration', description: 'Find official source links to check current guidance for your circumstances.', icon: 'shield', status: 'available', to: '/sources', action: 'View official sources' },
-  { id: 'study', title: 'Study & courses', description: 'Course and campus discovery.', icon: 'cap', status: 'planned' },
-  { id: 'arrival', title: 'Arrive & settle', description: 'Keep first-week planning steps separate from your travel preparation.', icon: 'journey', status: 'available', to: '/firstweek', action: 'Open first-week checklist' },
-  { id: 'housing', title: 'Housing & flatting', description: 'Finding a place and understanding your responsibilities.', icon: 'home', status: 'planned' },
-  { id: 'money', title: 'Money & budgeting', description: 'Tools for planning everyday and unexpected costs.', icon: 'wallet', status: 'planned' },
-  { id: 'work', title: 'Work & careers', description: 'Resources for your job search and career preparation.', icon: 'briefcase', status: 'planned' },
-  { id: 'community', title: 'Community', description: 'Places to find familiar faces and new connections.', icon: 'users', status: 'planned' },
-  { id: 'nepal', title: 'Nepal services', description: 'Passport, document and official-contact resources.', icon: 'globe', status: 'planned' },
-  { id: 'transport', title: 'Travel & transport', description: 'Getting around your new home.', icon: 'car', status: 'planned' },
-  { id: 'support', title: 'Student support', description: 'Study, wellbeing and everyday support resources.', icon: 'heart', status: 'planned' },
-  { id: 'education', title: 'Education system', description: 'An introduction to qualifications and levels.', icon: 'cap', status: 'planned' },
+const categoryDefinitions: Category[] = [
+  { id: 'study', title: 'Study & courses', description: 'Study, course and campus information.', icon: 'cap' },
+  { id: 'immigration', title: 'Immigration', description: 'Official information and sources for your next questions.', icon: 'shield' },
+  { id: 'predeparture', title: 'Prepare to travel', description: 'Documents, packing, money and preparation information.', icon: 'plane' },
+  { id: 'arrival', title: 'Arrive & settle', description: 'Information for your first weeks in New Zealand.', icon: 'journey' },
+  { id: 'housing', title: 'Housing & flatting', description: 'Accommodation, renting and flatting information.', icon: 'home' },
+  { id: 'money', title: 'Money & budgeting', description: 'Banking, budgeting and everyday living costs.', icon: 'wallet' },
+  { id: 'work', title: 'Work & careers', description: 'Resources for your job search and career preparation.', icon: 'briefcase' },
+  { id: 'community', title: 'Community', description: 'Familiar faces and new connections.', icon: 'users' },
+  { id: 'nepal', title: 'Nepal services', description: 'Passport, document and official-contact information.', icon: 'globe' },
+  { id: 'transport', title: 'Travel & transport', description: 'Getting around your new home.', icon: 'car' },
+  { id: 'support', title: 'Student support', description: 'Study, wellbeing and everyday support resources.', icon: 'heart' },
+  { id: 'education', title: 'Education system', description: 'An introduction to qualifications and learning.', icon: 'cap' },
 ];
 
-export const introductionTopics = ['About New Zealand', 'Culture & Māori culture', 'Weather & climate', 'Healthcare', 'Laws & everyday rules', 'Student life'];
+// A working topic page is not a claim that editorial content has been published.
+export const categories = categoryDefinitions.map(category => ({...category,
+  status: 'available' as const, to: `/explore/${category.id}`, action: 'Explore topic'}));
+
 export const cities = ['Auckland', 'Christchurch', 'Wellington', 'Hamilton', 'Dunedin'];
 
 // Reuse the prototype's line icons without changing the preserved prototype.

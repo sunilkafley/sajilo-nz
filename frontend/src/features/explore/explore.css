@@ -1,4 +1,26 @@
 .explore-page { overflow-wrap: anywhere; }
+.topic-page { overflow-wrap: anywhere; }
+.topic-breadcrumb { margin-bottom: 24px; font-size: .875rem; }
+.topic-breadcrumb a, .explore-topics a, .explore-cities a, .aotearoa-topics a { display: inline-flex; align-items: center; min-height: 44px; }
+.topic-layout { display: grid; grid-template-columns: minmax(0,1fr) 300px; gap: 24px; align-items: start; }
+.topic-content { min-width: 0; }
+.topic-related { padding: 24px; }
+.topic-related ul { padding-left: 20px; }
+.topic-related li { margin-bottom: 12px; }
+.topic-related a { display: inline-block; padding-block: 6px; }
+.topic-related p, .topic-language { font-size: .875rem; }
+.topic-articles { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.topic-articles .card { margin: 0; }
+.topic-accordions summary { cursor: pointer; padding: 4px 0; font-weight: 700; min-height: 44px; }
+.topic-accordions details[open] summary { margin-bottom: 16px; }
+.article-text { white-space: pre-wrap; }
+.article-attribution { font-size: .8125rem; border-top: 1px solid var(--line); padding-top: 16px; margin-top: 20px; }
+.article-attribution p { margin: 8px 0 0; }
+.topic-reading .topic-content { max-width: 76ch; }
+.topic-pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 24px; }
+.topic-pagination button:disabled { opacity: .5; cursor: default; }
+@media(max-width:1100px) { .topic-articles { grid-template-columns: 1fr; } }
+@media(max-width:900px) { .topic-layout { grid-template-columns: 1fr; } .topic-related { margin-top: 12px; } }
 .explore-icon { width: 24px; height: 24px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .explore-search { display: flex; align-items: center; gap: 18px; padding: 22px 24px; border: 1px solid #b6cbbd; border-radius: 14px; background: #e9f1eb; text-decoration: none; }
 .explore-search > span { flex: 1; }

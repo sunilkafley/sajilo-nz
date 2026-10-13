@@ -65,4 +65,17 @@ with TemporaryDirectory(prefix='sajilo-e2e-') as directory:
         summary='Isolated browser fixture only.', body='Not real guidance.', source=domain,
         source_url='https://official.example.org/test', status='published', reviewed_by=editor,
         verified_on=timezone.localdate(), next_review_on=timezone.localdate()+timedelta(days=30))
+    # Topic-page fixtures: synthetic, disposable and never seeded by deployment.
+    for topic, slug, language, title in [
+        ('housing', 'test-housing', 'en', 'Synthetic housing information'),
+        ('nepal', 'test-nepal', 'en', 'Synthetic document information'),
+        ('study', 'editorial-nepali', 'ne', 'परीक्षण अध्ययन जानकारी'),
+        ('aotearoa', 'about-new-zealand', 'en', 'Synthetic New Zealand introduction'),
+        ('cities', 'auckland', 'en', 'Synthetic Auckland introduction'),
+    ]:
+        Article.objects.create(slug=slug, language=language, topic=topic, title=title,
+            summary='Isolated topic browser fixture, not real guidance.', body='Synthetic article body only.',
+            sections=[{'heading':'Synthetic section', 'body':'Synthetic section details, not advice.'}],
+            source=domain, source_url='https://official.example.org/test', status='published', reviewed_by=editor,
+            verified_on=timezone.localdate()-timedelta(days=4), next_review_on=timezone.localdate()+timedelta(days=26))
     call_command('runserver', '127.0.0.1:8000', use_reloader=False)

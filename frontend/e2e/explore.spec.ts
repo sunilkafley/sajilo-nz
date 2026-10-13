@@ -11,15 +11,15 @@ test('Explore is keyboard accessible and every available destination works', asy
   await expect(page.getByRole('main')).toBeFocused();
   await expect(page.getByRole('link', {name:'Explore', exact:true, includeHidden:true})).toHaveAttribute('aria-current', 'page');
   await expect(page.getByRole('heading', {name:'A new country. A world of possibilities.'})).toBeVisible();
-  await expect(page.getByRole('article', {name:'Study & courses'})).toContainText('Planned');
-  await expect(page.getByRole('region', {name:'Find your city'}).getByRole('link')).toHaveCount(1);
+  await expect(page.getByRole('link', {name:'Study & courses',exact:true})).toHaveAttribute('href','#/explore/study');
+  await expect(page.getByRole('region', {name:'Find your city'}).getByRole('link')).toHaveCount(6);
   await page.screenshot({path: testInfo.outputPath('explore.png'), fullPage:true});
 
   const destinations = [
     ['Search Sajilo NZ', 'Search results'],
     ['Open saved guides', 'Saved guides'],
-    ['Prepare to travel', 'Your pre-departure checklist'],
-    ['Immigration', 'Check the official guidance'],
+    ['Prepare to travel', 'Make room for your next chapter.'],
+    ['Immigration', 'Clear information. Trusted sources.'],
     ['Christchurch', 'Christchurch'],
   ];
   for (const [label, heading] of destinations) {
@@ -43,6 +43,7 @@ test('Explore reopens offline and leads to saved guidance and persistent checkli
   await page.reload();
   await expect(page.getByRole('heading', {name:'A new country. A world of possibilities.'})).toBeVisible();
   await page.getByRole('link', {name:'Prepare to travel', exact:true}).click();
+  await page.getByRole('link', {name:'Open pre-departure checklist', exact:true}).click();
   await page.getByRole('checkbox', {name:'Passport', exact:true}).check();
   await navigateSidebar(page,'Explore');
   await page.reload();

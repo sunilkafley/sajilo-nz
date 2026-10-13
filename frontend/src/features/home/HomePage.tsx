@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from 'react-router-dom';
 import { PrototypeIcon } from '../../components/PrototypeIcon';
 import { interfaceText } from '../../components/interfaceLanguage';
-import { introductionTopics } from '../explore/catalog';
+import { introductionPages, withLanguage } from '../explore/topicConfig';
 import { landingTopics } from './landingTopics';
 
 export function HomePage() {
@@ -17,12 +17,12 @@ export function HomePage() {
     </section>
     <section className="landing-section" aria-labelledby="landing-topics">
       <div className="landing-section-head"><div><h2 id="landing-topics">Explore key topics</h2><p>Find the information you need for your New Zealand journey.</p></div><Link to={'/explore'+(lang ? '?lang=ne' : '')}>View all topics <PrototypeIcon name="arrow"/></Link></div>
-      <div className="landing-topics">{landingTopics.map(topic=><Link key={topic.id} className={'landing-topic topic-'+topic.id} to={'/explore?category='+topic.id+lang} aria-labelledby={'landing-'+topic.id}>
-        <span className="topic-icon"><PrototypeIcon name={topic.icon}/></span><div><h3 id={'landing-'+topic.id}>{topic.title}</h3><p>{topic.description}</p><small>{topic.status}</small></div><span className="topic-arrow"><PrototypeIcon name="arrow"/></span>
+      <div className="landing-topics">{landingTopics.map(topic=><Link key={topic.id} className={'landing-topic topic-'+topic.id} to={withLanguage('/explore/'+topic.id,lang?'ne':'en')} aria-labelledby={'landing-'+topic.id}>
+        <span className="topic-icon"><PrototypeIcon name={topic.icon}/></span><div><h3 id={'landing-'+topic.id}>{topic.title}</h3><p>{topic.description}</p><small>Explore topic</small></div><span className="topic-arrow"><PrototypeIcon name="arrow"/></span>
       </Link>)}</div>
     </section>
-    <section className="landing-section aotearoa-section" aria-labelledby="landing-aotearoa"><h2 id="landing-aotearoa">Get to know Aotearoa</h2><p>Useful information about life in New Zealand. These introductions are coming soon.</p>
-      <ul className="aotearoa-topics">{introductionTopics.map(topic=><li key={topic}><PrototypeIcon name="book"/><span>{topic}</span><small>Coming soon</small></li>)}</ul>
+    <section className="landing-section aotearoa-section" aria-labelledby="landing-aotearoa"><h2 id="landing-aotearoa">Get to know Aotearoa</h2><p>Useful information about life in New Zealand. Read introductions as they become available.</p>
+      <ul className="aotearoa-topics">{introductionPages.map(topic=><li key={topic.slug}><PrototypeIcon name="book"/><Link to={withLanguage('/explore/aotearoa/'+topic.slug,lang?'ne':'en')}>{topic.title}</Link></li>)}</ul>
     </section>
   </div>;
 }
