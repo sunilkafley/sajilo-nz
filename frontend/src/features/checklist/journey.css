@@ -1,0 +1,26 @@
+.journey-detail>.intro{margin-bottom:20px}
+.journey-detail-grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;align-items:start}
+.journey-checklist-main{min-width:0}.journey-checklist-main .groups{grid-template-columns:1fr;gap:20px}
+.journey-storage{font-size:13px;margin:8px 0 0}
+.journey-task-copy{flex:1;min-width:0}.journey-task-copy label{display:block}
+.task-guide{display:block;font-size:13px;padding:4px 0 10px;overflow-wrap:anywhere}
+.journey-support .card{padding:22px}.journey-support h2{font-size:20px}.journey-support p{font-size:14px}
+.related-guides{list-style:none;padding:0;margin:0 0 20px}.related-guides li{padding:12px 0;border-bottom:1px solid var(--line)}.related-guides small{display:block;font-size:12px;color:#51636b;margin-top:6px}
+.journey-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}.reset-checklist{background:#fff;color:#7c3434;border:1px solid #ba8f8f}
+.journey-actions button:disabled{opacity:.6;cursor:not-allowed}.journey-print-help{font-size:13px}
+.journey-complete{padding:16px;background:var(--mint);border-radius:12px}
+.journey-action-status:empty{display:none}
+@media(max-width:1000px){.journey-detail-grid{grid-template-columns:1fr}.journey-support{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.journey-support .card{margin:0}}
+@media(max-width:600px){.journey-support{grid-template-columns:1fr}.journey-detail .progress-card{padding:16px;margin-bottom:16px}.journey-detail>.intro{font-size:14px}.journey-detail .task{min-height:56px}.journey-detail .card{padding:18px}.journey-detail h1{font-size:26px}}
+@media print {
+  @page{margin:15mm}
+  body{background:#fff!important;color:#000!important;font-size:11pt}
+  .app-header,.app-footer,.skip,.offline-status,.language-fallback,.journey-actions,.journey-action-status,.journey-print-help,.journey-support{display:none!important}
+  .workspace{margin:0!important;padding:0!important}.workspace main{max-width:none!important;padding:0!important}
+  .journey-detail-grid,.journey-checklist-main .groups{display:block}
+  .journey-detail .card,.journey-detail .progress-card,.journey-disclaimer{background:#fff!important;border:1px solid #999;border-radius:0;padding:10pt;margin:0 0 12pt}
+  .journey-detail h1{font-size:20pt}.journey-detail h2{font-size:14pt;break-after:avoid}
+  .journey-detail .task{break-inside:avoid;min-height:30pt}.journey-detail input{appearance:auto!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .journey-detail p,.journey-detail label,.journey-detail a{color:#000!important}
+  .journey-detail a{text-decoration:none}.journey-detail .task-guide{font-size:9pt}
+}
