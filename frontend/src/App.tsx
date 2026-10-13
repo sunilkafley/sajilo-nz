@@ -8,6 +8,8 @@ import { emergencyResource } from './features/home/discovery';
 import { OfflineStatus } from './OfflineStatus';
 import { GuidePage } from './features/guides/GuidePage';
 import { ExplorePage } from './features/explore/ExplorePage';
+import { TopicPage } from './features/explore/TopicPage';
+import { topicConfig } from './features/explore/topicConfig';
 import { HomePage } from './features/home/HomePage';
 import { SearchPage } from './features/search/SiteSearch';
 import { ArrivalPage } from './features/arrival/ArrivalPage';
@@ -31,6 +33,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
     if (firstweekGuides) document.title = 'First-week guides · Sajilo NZ';
     if (['/journey','/community','/about'].includes(location.pathname)) document.title = `${location.pathname.slice(1).replace(/^./, value=>value.toUpperCase())} · Sajilo NZ`;
     if (location.pathname === '/search') document.title = 'Search · Sajilo NZ';
+    if (location.pathname.startsWith('/explore/')) document.title = `${topicConfig[location.pathname.split('/')[2]]?.title || 'Topic unavailable'} · Sajilo NZ`;
     const task = new URLSearchParams(location.search).get('task');
     if (task && ((location.pathname === '/predeparture' && tasks.some(item => item.id === task)) || (location.pathname === '/firstweek' && arrivalTasks.some(item => item.id === task)))) {
       document.getElementById(task)?.focus();
@@ -58,6 +61,8 @@ export function App({ repository }: { repository: ProgressRepository }) {
         <Routes>
           <Route path="/search" element={<SearchPage/>}/>
           <Route path="/explore" element={<ExplorePage/>}/>
+          <Route path="/explore/:topicId" element={<TopicPage/>}/>
+          <Route path="/explore/:topicId/:slug" element={<TopicPage/>}/>
           <Route path="/cities/:cityId" element={<GuidePage/>}/>
           <Route path="/saved" element={<GuidePage savedOnly/>}/>
           <Route path="/guides" element={<GuidePage/>}/>

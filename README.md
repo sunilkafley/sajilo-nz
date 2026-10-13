@@ -14,6 +14,10 @@ The [editorial foundation](docs/editorial-foundation.md) adds Django-admin artic
 
 The [engineering-first sprint plan](docs/explore-refactor-sprint.md) records the weekend target, full topic coverage and separate owner publication/release gates. Do not apply the new migration to staging without the documented backup, compatibility checks and approval.
 
+## Explore topic pages — Slice B
+
+[Slice B implementation and evidence](docs/explore-topic-pages.md) connects twelve information topics, six Aotearoa introductions and city navigation to the public Article API. Homepage cards open topic pages; legacy category URLs still work. Django admin manages article bodies, sections, sources and separately reviewed translations. No production content is seeded. Topics without published content show an honest unavailable state. Existing guides, offline copies and checklist storage are unchanged; course tools, directories and new article search/offline support are later slices.
+
 ## Run locally
 
 The [Journey checklist UX increment](docs/journey-checklist-ux.md) keeps both existing stage routes and storage keys, with immediately visible tasks, contextual published-guide links, confirmed per-checklist reset and browser Print / Save as PDF. Reset failures preserve existing selections; unreadable saved records remain protected.
