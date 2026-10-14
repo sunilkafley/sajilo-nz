@@ -1,5 +1,9 @@
 .explore-page { overflow-wrap: anywhere; }
 .topic-page { overflow-wrap: anywhere; }
+.topic-search { display:flex; flex-wrap:wrap; align-items:end; gap:12px; margin:24px 0; }
+.topic-search label { flex:1 1 260px; }
+.topic-search input { display:block; width:100%; margin-top:8px; padding:12px; border:1px solid var(--line); border-radius:10px; font:inherit; }
+.topic-search p { flex-basis:100%; font-size:.875rem; }
 .topic-breadcrumb { margin-bottom: 24px; font-size: .875rem; }
 .topic-breadcrumb a, .explore-topics a, .explore-cities a, .aotearoa-topics a { display: inline-flex; align-items: center; min-height: 44px; }
 .topic-layout { display: grid; grid-template-columns: minmax(0,1fr) 300px; gap: 24px; align-items: start; }

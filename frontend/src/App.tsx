@@ -10,6 +10,7 @@ import { GuidePage } from './features/guides/GuidePage';
 import { ExplorePage } from './features/explore/ExplorePage';
 import { TopicPage } from './features/explore/TopicPage';
 import { CoursesPage } from './features/courses/CoursesPage';
+import { BudgetPage } from './features/budget/BudgetPage';
 import { topicConfig } from './features/explore/topicConfig';
 import { HomePage } from './features/home/HomePage';
 import { SearchPage } from './features/search/SiteSearch';
@@ -60,6 +61,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
         <OfflineStatus quiet={location.pathname === '/'}/>
         {language === 'ne' && <p className="language-fallback" lang="en">{interfaceText(language,'fallback').text}</p>}
         <Routes>
+          <Route path="/explore/money/budget" element={<BudgetPage/>}/>
           <Route path="/search" element={<SearchPage/>}/>
           <Route path="/explore" element={<ExplorePage/>}/>
           <Route path="/explore/study/courses" element={<CoursesPage/>}/>

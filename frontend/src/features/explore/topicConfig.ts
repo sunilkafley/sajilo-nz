@@ -1,6 +1,15 @@
 import type { Language } from '../guides/api';
 
 type Related = { title: string; to: string };
+// Navigation only; guidance stays in separately reviewed Article records.
+export const practicalResources: Record<string,Related[]> = {
+  housing:[{title:'Calculate your own budget',to:'/explore/money/budget'}],
+  nepal:[{title:'Travel document guides',to:'/guides?topic=documents'}],
+  transport:[{title:'Local travel planning in Journey',to:'/firstweek?task=arrival-transport'}],
+  support:[{title:'Housing support information',to:'/explore/housing'},{title:'Work and employment information',to:'/explore/work'}],
+  work:[{title:'Money and budgeting',to:'/explore/money'},{title:'Study and qualifications',to:'/explore/education'}],
+  immigration:[{title:'Work and careers',to:'/explore/work'},{title:'Study and courses',to:'/explore/study'},{title:'Nepal document services',to:'/explore/nepal'}],
+};
 export type TopicConfig = { title: string; heading: string; intro: string; section: string; layout?: 'accordion'; related: Related[] };
 export const topicConfig: Record<string, TopicConfig> = {
   study: {title:'Study & courses', heading:'Your future starts with a good fit.', intro:'Explore published study guidance and find your next direction.', section:'Study guidance', related:[{title:'Understand the education system',to:'/explore/education'},{title:'Student support',to:'/explore/support'},{title:'Prepare for your journey',to:'/predeparture'}]},

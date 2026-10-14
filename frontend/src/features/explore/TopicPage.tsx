@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { fetchArticles, type Article, type ArticlePage } from './articles';
-import { introductionPages, topicConfig, withLanguage } from './topicConfig';
+import { introductionPages, practicalResources, topicConfig, withLanguage } from './topicConfig';
 import './explore.css';
 
 function Attribution({article}:{article:Article}) {
@@ -20,18 +20,22 @@ export function TopicPage() {
   const config=Object.hasOwn(topicConfig,topicId)?topicConfig[topicId]:undefined;
   const [params,setParams]=useSearchParams();
   const language=params.get('lang')==='ne'?'ne':'en';
+  const searchable=['housing','nepal','transport','support','work','immigration','money'].includes(topicId) && !slug;
+  const search=searchable?(params.get('q') || ''):'';
+  const [query,setQuery]=useState(search);
+  useEffect(()=>setQuery(search),[search,topicId]);
   const parsed=Number(params.get('page') || 1);
   const page=Number.isSafeInteger(parsed)&&parsed>0?parsed:1;
   const [attempt,setAttempt]=useState(0);
-  const key=JSON.stringify([topicId,slug,language,page,attempt]);
+  const key=JSON.stringify([topicId,slug,language,page,search,attempt]);
   const [state,setState]=useState<State>({key:''});
   useEffect(()=>{
     if(!config)return;
     const controller=new AbortController();let active=true;
-    fetchArticles(topicId,language,page,controller.signal,slug).then(data=>{if(active)setState({key,data});})
+    fetchArticles(topicId,language,page,controller.signal,slug,search).then(data=>{if(active)setState({key,data});})
       .catch(()=>{if(active)setState({key,error:'Information is unavailable right now. Check your connection and try again.'});});
     return ()=>{active=false;controller.abort();};
-  },[topicId,slug,language,page,attempt,key,config]);
+  },[topicId,slug,language,page,search,attempt,key,config]);
   const current=state.key===key?state:undefined;
   const data=current?.data;
   const article=slug?data?.results[0]:undefined;
@@ -46,20 +50,26 @@ export function TopicPage() {
     <p className="eyebrow">{config.title}</p><h1 lang={article?language:undefined}>{title}</h1>
     <p className="intro" lang={article?language:undefined}>{article?.summary || config.intro}</p>
     {!slug && (topicId==='study' || topicId==='education') && <p><Link className="button" to={link('/explore/study/courses')}>Find courses and compare options</Link></p>}
+    {!slug && topicId==='money' && <p><Link className="button" to={link('/explore/money/budget')}>Open budget calculator</Link></p>}
+    {searchable && <form className="topic-search" role="search" aria-label="Search this topic" onSubmit={event=>{event.preventDefault();const next=new URLSearchParams(params);next.delete('page');if(query.trim())next.set('q',query.trim());else next.delete('q');setParams(next);}}>
+      <label htmlFor="topic-query">Search {config.title.toLowerCase()}<input id="topic-query" type="search" maxLength={200} value={query} onChange={event=>setQuery(event.target.value)}/></label><button>Search topic</button>
+      {search && <button type="button" onClick={()=>{const next=new URLSearchParams(params);next.delete('q');next.delete('page');setParams(next);}}>Clear search</button>}
+      <p>Search published titles, summaries and article text. Availability depends on the selected language.</p>
+    </form>}
     <div className={'topic-layout'+(slug?' topic-reading':'')}>
       <section aria-label={slug?'Article':config.section} className="topic-content">
         {!slug && <h2>{config.section}</h2>}
         <p className="topic-language">Content language: {language==='ne'?'नेपाली':'English'}</p>
         {!current && <p role="status">Loading published information…</p>}
         {current?.error && <div role="alert" className="card"><p>{current.error} These articles are not saved for offline reading.</p><button onClick={()=>setAttempt(n=>n+1)}>Try again</button>{page>1 && <p><Link to={link('/explore/'+topicId)}>Return to the first page</Link></p>}<p><Link to={link('/saved')}>Open previously saved guides</Link></p></div>}
-        {data && !data.results.length && <div className="card"><h2>{slug?'This article is not available':'No published articles yet'}</h2><p>{slug?'It may not be published in this language, or it may have been withdrawn.':'There are no published articles for this topic in the selected language yet.'}</p>{language==='ne' && <Link to={withLanguage('/explore/'+topicId+(slug?'/'+slug:''),'en')}>Check English availability</Link>}</div>}
+        {data && !data.results.length && <div className="card"><h2>{slug?'This article is not available':search?'No matching published articles':'No published articles yet'}</h2><p>{slug?'It may not be published in this language, or it may have been withdrawn.':search?'Try another phrase or clear the search.':'There are no published articles for this topic in the selected language yet.'}</p>{language==='ne' && <Link to={withLanguage('/explore/'+topicId+(slug?'/'+slug:'')+(search?'?q='+encodeURIComponent(search):''),'en')}>Check English availability</Link>}</div>}
         {article && <article className="card" lang={language}><ArticleBody article={article}/><Attribution article={article}/></article>}
         {!slug && data && <div className={config.layout==='accordion'?'topic-accordions':'topic-articles'}>{data.results.map(item=>config.layout==='accordion'
           ? <details className="card" key={item.slug} lang={language}><summary>{item.title}</summary><div><p>{item.summary}</p><ArticleBody article={item}/><Attribution article={item}/><Link to={link(`/explore/${topicId}/${item.slug}`)}>Read full article: {item.title}</Link></div></details>
           : <article className="card" key={item.slug} lang={language}><p className="eyebrow">{language==='ne'?'नेपाली':'English'} · Article</p><h3><Link to={link(`/explore/${topicId}/${item.slug}`)}>{item.title}</Link></h3><p>{item.summary}</p><Attribution article={item}/></article>)}</div>}
         {!slug && data && (page>1 || data.hasNext) && <nav className="topic-pagination" aria-label="Article pages"><button disabled={page<=1} onClick={()=>changePage(page-1)}>Previous page</button><span>Page {page} · {data.count} articles</span><button disabled={!data.hasNext} onClick={()=>changePage(page+1)}>Next page</button></nav>}
       </section>
-      <aside className="topic-related card" aria-label="Related resources"><h2>Useful next places</h2><ul>{config.related.map(item=><li key={item.to}><Link to={link(item.to)}>{item.title}</Link></li>)}</ul><p>Planning tasks and saved progress stay in Journey.</p><Link to={link('/journey')}>Open Journey</Link></aside>
+      <aside className="topic-related card" aria-label="Related resources"><h2>Useful next places</h2><ul>{[...config.related,...(practicalResources[topicId] || [])].map(item=><li key={item.to}><Link to={link(item.to)}>{item.title}</Link></li>)}</ul><p>Planning tasks and saved progress stay in Journey.</p><Link to={link('/journey')}>Open Journey</Link></aside>
     </div>
   </div>;
 }
