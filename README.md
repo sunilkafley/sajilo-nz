@@ -28,6 +28,10 @@ Study and Education topics now link to a course finder with six filters, details
 
 Housing, Nepal services, transport, support, work, immigration and money pages now offer topic-specific published article search. Money links to a [budget calculator](docs/practical-living-work.md) using visitor-entered NZD amounts and weekly/monthly conversion. Budget figures are session-only and clear on navigation/reload; no financial details are saved or transmitted. Existing editorial review, language fallback, offline guides and checklist storage are unchanged.
 
+## Community and places — Slice E
+
+Community now opens a [published directory](docs/community-directory.md) of organisations, businesses and events, with location/type/category filters, text search and detail pages. Christchurch is the first pilot shortcut; other cities come from published records. Django admin manages all listings and review metadata. No sample content is seeded, and empty/unavailable language states remain explicit. Listings require an online connection; existing saved guides and checklist progress are unchanged.
+
 ## Run locally
 
 The [Journey checklist UX increment](docs/journey-checklist-ux.md) keeps both existing stage routes and storage keys, with immediately visible tasks, contextual published-guide links, confirmed per-checklist reset and browser Print / Save as PDF. Reset failures preserve existing selections; unreadable saved records remain protected.

@@ -33,11 +33,13 @@ it('retains route and filter context when choosing Nepali, with explicit English
   expect(screen.getByRole('link',{name:'Journey'})).toHaveAttribute('href','/journey?lang=ne');
   expect(interfaceText('ne','tagline').language).toBe('ne');expect(interfaceText('ne','fallback').language).toBe('en');
 });
-it('Community offers real existing starting points without fictional listings or checklists',()=>{
+it('Community offers real existing starting points without fictional listings or checklists',async()=>{
+  const fetch=vi.spyOn(globalThis,'fetch').mockResolvedValue({ok:true,json:async()=>({results:[],count:0,next:null,facets:{city:[],kind:[],category:[]}})} as Response);
   mount('/community');
-  expect(screen.getByText(/No community, event or business listings/)).toBeInTheDocument();
-  expect(screen.getByRole('link',{name:'Explore Christchurch preparation'})).toHaveAttribute('href','/cities/christchurch');
+  expect(await screen.findByText('No published listings match')).toBeInTheDocument();
+  expect(screen.getByRole('link',{name:'Christchurch preparation'})).toHaveAttribute('href','/cities/christchurch');
   expect(screen.queryByRole('checkbox')).toBeNull();
+  fetch.mockRestore();
 });
 it('exposes Journey as current to assistive technology on checklist detail routes',()=>{
   mount('/predeparture');

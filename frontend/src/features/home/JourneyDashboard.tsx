@@ -55,7 +55,7 @@ export function JourneyDashboard({ progress, onTaskChange }: { progress: Progres
       <aside className="home-stack" aria-label="More to explore">
         <section className="card home-good-to-know"><p className="eyebrow">GOOD TO KNOW</p><h2>Guidance you can check</h2><p>Find published guidance in English or Nepali, with official sources and recorded review dates.</p><Link className="home-text-link" to="/guides">Browse guides<Icon name="arrow"/></Link><p className="home-small">Check the guide’s review information before taking your next step.</p><Link className="home-source-link" to="/sources"><Icon name="shield"/>View official sources</Link></section>
         <section className="card"><h2>Your future neighbourhood</h2><div className="home-city-graphic" aria-hidden="true"><strong>CHC</strong><span>Christchurch</span></div><h3>Start with Christchurch</h3><p>Explore the city preparation page and its published guides.</p><Link className="home-text-link" to="/cities/christchurch">Explore Christchurch<Icon name="arrow"/></Link></section>
-        <section className="card"><h2>A little closer to home</h2><span className="home-planned">Coming soon</span><p>Community and event discovery is on its way.</p></section>
+        <section className="card"><h2>A little closer to home</h2><p>Explore published community organisations, events and local services.</p><Link to="/community">Browse community directory</Link></section>
         <section className="card home-emergency"><h2>Emergency Help</h2><p>Official emergency information from NZ Police.</p><a className="home-text-link" href={emergencyResource.url}>{emergencyResource.label}<Icon name="arrow"/></a><p className="home-small">External website — internet required.</p></section>
       </aside>
     </div>
