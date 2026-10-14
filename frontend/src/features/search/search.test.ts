@@ -17,7 +17,7 @@ it('uses available city, topic, source and tool records, not planned hubs',()=>{
   expect(searchEntries(localEntries,'Documents')[0].to).toBe('/guides?topic=documents');
   expect(searchEntries(localEntries,'Immigration New Zealand')[0].to).toBe('https://www.immigration.govt.nz/');
   expect(searchEntries(localEntries,'Budget checklist')[0].type).toBe('Tool');
-  expect(searchEntries(localEntries,'Course finder')).toEqual([]);
+  expect(searchEntries(localEntries,'Course finder')[0].to).toBe('/explore/study/courses');
   expect(searchEntries(localEntries,'Skills roadmap')).toEqual([]);
   expect(searchEntries(localEntries,'Profile')).toEqual([]);
   expect(searchEntries(localEntries,'   ')).toEqual([]);

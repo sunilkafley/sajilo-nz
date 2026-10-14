@@ -57,6 +57,8 @@ Any schema-changing deployment requires a private backup, isolated restore/migra
 
 ## Status
 
+- Current: Slice E merged in PR #25; [Slice F integration and release readiness](release-readiness.md) implemented for review on `codex/search-release-readiness`. Earlier pending engineering statuses below are historical. Final release acceptance remains gated by CI, owner review, editorial content, devices, usability and operations evidence.
+
 - Planning: recorded. [Slice A editorial foundation](editorial-foundation.md) merged in PR #20; [Slice B topic pages](explore-topic-pages.md) merged in PR #21. Article admin usability merged in PR #22, per owner confirmation. [Slice C study/course discovery](study-course-discovery.md) is implemented for review on `codex/study-course-discovery`; D–F remain pending.
 - Slices C and D merged in PRs #23/#24 per owner confirmation. [Slice E community and places](community-directory.md) is implemented for review on `codex/community-directory`; F remains pending. This supersedes the earlier C–D status above.
 - Editorial content/translation review: deferred until engineering, as requested; publication remains gated.

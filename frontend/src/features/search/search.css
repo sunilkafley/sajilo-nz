@@ -1,4 +1,5 @@
 .site-search{position:relative;flex:1;min-width:0;max-width:620px}
+.search-filters{display:flex;gap:16px;flex-wrap:wrap;margin:20px 0}.search-filters label{flex:1 1 180px;min-width:0}.search-filters select{display:block;width:100%;min-height:44px;margin-top:6px;padding:10px;border:1px solid var(--line);border-radius:10px;font:inherit;background:white;color:inherit}
 .search-input-row{display:flex;align-items:center;gap:10px;color:#66756e}
 .search-input-row input{width:100%;min-width:0;border:0;background:transparent;color:#213b34;padding:10px 2px;font-size:14px}
 .search-input-row .search-submit{background:transparent;color:var(--green);padding:8px;min-width:40px}

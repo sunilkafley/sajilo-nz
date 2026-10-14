@@ -16,8 +16,8 @@ test('Home matches prototype composition and connects next steps, city and guide
     await page.screenshot({path:testInfo.outputPath(`home-${width}.png`),fullPage:true});
   }
   const tools=page.getByRole('region',{name:'A few handy tools'});
-  await expect(tools.getByRole('link')).toHaveCount(1);
-  await expect(tools.getByText('Coming soon',{exact:true})).toHaveCount(3);
+  await expect(tools.getByRole('link')).toHaveCount(3);
+  await expect(tools.getByText('Coming soon',{exact:true})).toHaveCount(2);
   await page.getByRole('link',{name:'Passport',exact:true}).focus(); await page.keyboard.press('Enter');
   await expect(page.getByRole('checkbox',{name:'Passport',exact:true})).toBeFocused();
   await page.getByRole('checkbox',{name:'Passport',exact:true}).check();

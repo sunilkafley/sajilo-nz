@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-do
 import { PrototypeIcon } from '../../components/PrototypeIcon';
 import { useSearch } from './useSearch';
 import type { SearchResult } from './domain';
+import { topicConfig } from '../explore/topicConfig';
 import './search.css';
 
 function ResultText({result}:{result:SearchResult}) {
@@ -11,14 +12,18 @@ function ResultText({result}:{result:SearchResult}) {
 function SearchStatus({state}:{state:ReturnType<typeof useSearch>}) {
   return <div role="status" className="search-status">
     {!state.query ? 'Enter a search term to find guides, checklists and topics.' : state.loading ? 'Searching Sajilo NZ…' : <>
-      {state.partial && <p>Some guides could not be searched. Results may be incomplete. <button type="button" onClick={state.retry}>Try again</button></p>}
+      {state.partial && <p>Some resources could not be searched or exceeded the catalogue limit. Results may be incomplete. <button type="button" onClick={state.retry}>Try again</button></p>}
       {!state.results.length && (state.partial ? 'No matches in the available results.' : 'No results found. Try another word.')}
     </>}
   </div>;
 }
 export function SiteSearch() {
   const location = useLocation(), navigate = useNavigate();
-  const resultsUrl = (query:string) => `/search?q=${encodeURIComponent(query.trim())}${new URLSearchParams(location.search).get('lang')==='ne'?'&lang=ne':''}`;
+  const resultsUrl = (query:string) => {
+    const params=new URLSearchParams(location.pathname==='/search'?location.search:'');params.set('q',query.trim());
+    if(new URLSearchParams(location.search).get('lang')==='ne')params.set('lang','ne');
+    return '/search?'+params;
+  };
   const [query,setQuery] = useState('');
   const [open,setOpen] = useState(false);
   const [active,setActive] = useState(-1);
@@ -64,14 +69,19 @@ export function SiteSearch() {
   </form>;
 }
 export function SearchPage() {
-  const [params] = useSearchParams();
+  const [params,setParams] = useSearchParams();
   const query = params.get('q') ?? '';
   const state = useSearch(query);
+  const results=state.results.filter(result=>(!params.get('type') || result.type===params.get('type')) && (!params.get('topic') || result.topic===params.get('topic')) && (!params.get('stage') || result.stage===params.get('stage')));
+  const filters=[['type','Resource type'],['topic','Topic'],['stage','Journey stage']] as const;
+  const stageLabels:Record<string,string>={predeparture:'Before you leave',firstweek:'Arrival / First week',settling:'Settling in',daily:'Work / Study / Daily life'};
   return <section className="search-page"><p className="eyebrow">EXPLORE / SEARCH</p><h1>Search results</h1>
     <SiteSearch/>
     {query.trim() && <p>Results for “{query}”</p>}
     <SearchStatus state={state}/>
-    {!state.loading && !!state.results.length && <><p>{state.results.length} results</p><ul className="search-results">{state.results.map(result=><li key={result.to}>
+    <div className="search-filters">{filters.map(([key,label])=><label key={key}>{label}<select value={params.get(key)||''} onChange={event=>{const next=new URLSearchParams(params);if(event.target.value)next.set(key,event.target.value);else next.delete(key);setParams(next);}}><option value="">All</option>{[...new Set([...state.results.map(result=>result[key] || ''),params.get(key)||''])].filter(Boolean).sort().map(value=><option key={value} value={value}>{key==='topic'?topicConfig[value]?.title || value:key==='stage'?stageLabels[value] || value:value}</option>)}</select></label>)}</div>
+    {!state.loading && !!state.results.length && !results.length && <p role="status">No results match these filters. Choose All to broaden the search.</p>}
+    {!state.loading && !!results.length && <><p>{results.length} results</p><ul className="search-results">{results.map(result=><li key={result.to}>
       {result.to.startsWith('https://') ? <a href={result.to}><ResultText result={result}/></a> : <Link to={result.to}><ResultText result={result}/></Link>}
     </li>)}</ul></>}
   </section>;

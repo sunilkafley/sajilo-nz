@@ -35,7 +35,7 @@ test('public landing matches responsive hierarchy and preserves readable guides'
   await expect(page.getByRole('navigation').getByRole('link',{name:'Journey',exact:true})).toHaveAttribute('aria-current','page');
   await page.getByRole('link',{name:'Search Sajilo NZ',exact:true}).click();
   await page.getByRole('combobox',{name:'Search Sajilo NZ guides, checklists and topics'}).fill('budget');
-  await expect(page.getByRole('listbox',{name:'Search suggestions'}).getByRole('option').first()).toContainText('Budget checklist');
+  await expect(page.getByRole('listbox',{name:'Search suggestions'}).getByRole('option').first()).toContainText('Budget calculator');
   await page.screenshot({path:'../docs/screenshots/public-landing/search-mobile.png'});
   await page.goto('/#/explore?category=money&lang=en');
   await page.getByLabel('Language / भाषा',{exact:true}).selectOption('ne');
