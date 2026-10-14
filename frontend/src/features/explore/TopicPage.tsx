@@ -45,6 +45,7 @@ export function TopicPage() {
     <nav className="topic-breadcrumb" aria-label="Breadcrumb"><Link to={link('/explore')}>Explore</Link><span aria-hidden="true"> / </span>{slug?<Link to={link('/explore/'+topicId)}>{config.title}</Link>:<span>{config.title}</span>}</nav>
     <p className="eyebrow">{config.title}</p><h1 lang={article?language:undefined}>{title}</h1>
     <p className="intro" lang={article?language:undefined}>{article?.summary || config.intro}</p>
+    {!slug && (topicId==='study' || topicId==='education') && <p><Link className="button" to={link('/explore/study/courses')}>Find courses and compare options</Link></p>}
     <div className={'topic-layout'+(slug?' topic-reading':'')}>
       <section aria-label={slug?'Article':config.section} className="topic-content">
         {!slug && <h2>{config.section}</h2>}

@@ -90,6 +90,43 @@ class ArticleDetail(PublicEditorial, generics.RetrieveAPIView):
 class CourseList(PublicEditorial, generics.ListAPIView):
     serializer_class = CourseSerializer
 
+    filter_fields = ['city', 'qualification_level', 'subject', 'provider', 'duration', 'intake']
+
+    def get_queryset(self):
+        # Reuse all public eligibility/language checks before discovery filters.
+        queryset = super().get_queryset()
+        query = self.request.query_params.get('q', '').strip()
+        if query:
+            # The shared search does not include provider or subject; rebuild only
+            # the search predicate, never the publication boundary.
+            queryset = Course.objects.public().select_related('source').filter(
+                language=self.request.query_params.get('lang', 'en'))
+            for key in ['topic', 'stage']:
+                if key in self.request.query_params:
+                    queryset = queryset.filter(**{key:self.request.query_params[key]})
+            queryset = queryset.filter(Q(title__icontains=query) | Q(summary__icontains=query) |
+                Q(body__icontains=query) | Q(provider__icontains=query) | Q(subject__icontains=query))
+        for key in self.filter_fields:
+            value = self.request.query_params.get(key, '')
+            if not value:
+                continue
+            if len(value) > 200:
+                raise ValidationError({key: 'Filter value is too long.'})
+            if key == 'qualification_level':
+                if value not in [str(level) for level in range(1, 11)]:
+                    raise ValidationError({key: 'Choose a level from 1 to 10.'})
+                value = int(value)
+            queryset = queryset.filter(**{key:value})
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        public = Course.objects.public().filter(language=request.query_params.get('lang', 'en'))
+        # Facets never reveal drafts, other languages or disabled-source records.
+        response.data['facets'] = {key: list(public.exclude(**{key:None} if key == 'qualification_level' else {key:''})
+            .order_by(key).values_list(key, flat=True).distinct()) for key in self.filter_fields}
+        return response
+
 
 class CourseDetail(PublicEditorial, generics.RetrieveAPIView):
     serializer_class = CourseSerializer

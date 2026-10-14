@@ -52,7 +52,7 @@ with TemporaryDirectory(prefix='sajilo-e2e-') as directory:
     Guide.objects.create(slug='test-firstweek-draft', language='ne', stage='firstweek', title='Unreviewed arrival translation',
         summary='Synthetic draft.', body='Do not expose.', sources=[], status='draft')
     # Editorial fixtures and login exist only in this disposable browser-test DB.
-    from editorial.models import Article, SourceDomain
+    from editorial.models import Article, Course, SourceDomain
     editor = get_user_model().objects.create_user('editorial-test-admin', password='isolated-editorial-test-only',
         is_staff=True, is_superuser=True)
     domain = SourceDomain.objects.create(hostname='official.example.org', kind='official', approved=True,
@@ -78,4 +78,19 @@ with TemporaryDirectory(prefix='sajilo-e2e-') as directory:
             sections=[{'heading':'Synthetic section', 'body':'Synthetic section details, not advice.'}],
             source=domain, source_url='https://official.example.org/test', status='published', reviewed_by=editor,
             verified_on=timezone.localdate()-timedelta(days=4), next_review_on=timezone.localdate()+timedelta(days=26))
+    # Course fixtures are synthetic and live only in this temporary database.
+    for index in range(4):
+        Course.objects.create(slug=f'test-course-{index}', language='en', topic='study',
+            title=f'Synthetic course {index}', summary='Isolated test programme, not a real course.',
+            body='Synthetic qualification information for testing only.', provider=f'Test institution {index}',
+            city='Christchurch' if index<2 else 'Auckland', subject='Computing' if index<2 else 'Design',
+            qualification_level=7, duration='3 years', intake='February', source=domain,
+            source_url='https://official.example.org/test', status='published', reviewed_by=editor,
+            verified_on=timezone.localdate(), next_review_on=timezone.localdate()+timedelta(days=30))
+    Course.objects.create(slug='test-course-0', language='ne', topic='study', title='परीक्षण पाठ्यक्रम',
+        summary='परीक्षणका लागि मात्र।', body='Synthetic translation fixture only.', provider='Test institution 0',
+        city='Christchurch', subject='Computing', source=domain, source_url='https://official.example.org/test',
+        status='published', reviewed_by=editor, verified_on=timezone.localdate(), next_review_on=timezone.localdate()+timedelta(days=30))
+    Course.objects.create(slug='secret-course', language='en', topic='study', title='Private synthetic course',
+        summary='Never show this draft.', provider='Private institution', city='Private city', subject='Private subject')
     call_command('runserver', '127.0.0.1:8000', use_reloader=False)

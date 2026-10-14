@@ -9,6 +9,7 @@ import { OfflineStatus } from './OfflineStatus';
 import { GuidePage } from './features/guides/GuidePage';
 import { ExplorePage } from './features/explore/ExplorePage';
 import { TopicPage } from './features/explore/TopicPage';
+import { CoursesPage } from './features/courses/CoursesPage';
 import { topicConfig } from './features/explore/topicConfig';
 import { HomePage } from './features/home/HomePage';
 import { SearchPage } from './features/search/SiteSearch';
@@ -61,6 +62,10 @@ export function App({ repository }: { repository: ProgressRepository }) {
         <Routes>
           <Route path="/search" element={<SearchPage/>}/>
           <Route path="/explore" element={<ExplorePage/>}/>
+          <Route path="/explore/study/courses" element={<CoursesPage/>}/>
+          <Route path="/explore/study/courses/shortlist" element={<CoursesPage mode="shortlist"/>}/>
+          <Route path="/explore/study/courses/compare" element={<CoursesPage mode="compare"/>}/>
+          <Route path="/explore/study/courses/:courseSlug" element={<CoursesPage/>}/>
           <Route path="/explore/:topicId" element={<TopicPage/>}/>
           <Route path="/explore/:topicId/:slug" element={<TopicPage/>}/>
           <Route path="/cities/:cityId" element={<GuidePage/>}/>
