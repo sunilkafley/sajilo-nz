@@ -5,13 +5,16 @@ import { categories } from '../explore/catalog';
 import { christchurch } from '../cities/catalog';
 import { emergencyResource } from '../home/discovery';
 import { fetchGuides, type Guide, type Language, type GuideStage } from '../guides/api';
+import { loadEditorial, type Resource } from './editorial';
 
 export interface SearchEntry {
   title: string; type: string; language: Language; to: string; text: string; status: string;
+  topic?:string; stage?:string;
 }
 export interface SearchResult extends SearchEntry { excerpt: string }
 const entry = (title: string, type: string, to: string, text: string, status = ''): SearchEntry =>
-  ({title, type, to, text, status, language:'en'});
+  ({title, type, to, text, status, language:'en',topic:to.startsWith('/explore/')?to.split('/')[2].split('?')[0]:undefined,
+    stage:to.startsWith('/firstweek')?'firstweek':to.startsWith('/predeparture')?'predeparture':undefined});
 export const localEntries: SearchEntry[] = [
   entry('Home', 'Page', '/', 'Your New Zealand journey companion. Explore key topics. Get to know Aotearoa.'),
   entry('Journey', 'Page', '/journey', 'Choose your stage. Before you leave. Arrival. Your next steps and browser-saved progress.'),
@@ -32,9 +35,12 @@ export const localEntries: SearchEntry[] = [
   entry('Saved resources', 'Page', '/saved', 'Saved pre-departure guides and offline copies on this browser.'),
   entry('Saved first-week guides', 'Page', '/saved?stage=firstweek', 'Saved first-week guidance on this browser.'),
   entry('Budget checklist', 'Tool', '/predeparture?task=budget', 'First-month budget planning task.', 'Planning · unreviewed'),
+  entry('Budget calculator', 'Tool', '/explore/money/budget', 'Calculate your own weekly and monthly NZD expenses. Figures are not saved.'),
+  entry('Course finder', 'Tool', '/explore/study/courses', 'Browse published courses, shortlist and compare options.'),
+  entry('Community directory', 'Page', '/community', 'Published organisations, local businesses and events. Filter by location and category.'),
 ];
 export function guideEntry(guide: Guide): SearchEntry {
-  return {title:guide.title, type:'Guide', language:guide.language,
+  return {title:guide.title, type:'Guide', language:guide.language,stage:guide.stage,
     to:`/guides/${guide.slug}?lang=${guide.language}&stage=${guide.stage}`,
     text:[guide.summary, guide.body, ...guide.sources.map(source=>source.title)].join(' '),
     status:`Reviewed ${guide.verified_on}${guide.review_overdue ? ' · review overdue' : ''}`};
@@ -67,9 +73,12 @@ export function searchEntries(entries: SearchEntry[], input: string): SearchResu
 export async function loadSearchEntries(signal: AbortSignal) {
   const languages: Language[] = ['en','ne'];
   const stages: GuideStage[] = ['predeparture','firstweek'];
-  const responses = await Promise.allSettled(stages.flatMap(stage => languages.map(language => fetchGuides(language, signal, stage))));
+  const [responses,editorial] = await Promise.all([
+    Promise.allSettled(stages.flatMap(stage => languages.map(language => fetchGuides(language, signal, stage)))),
+    Promise.all((['articles','courses','directory'] as Resource[]).flatMap(resource=>languages.map(language=>loadEditorial(resource,language,signal)))),
+  ]);
   return {
-    entries:[...localEntries, ...responses.flatMap(result => result.status === 'fulfilled' ? result.value.map(guideEntry) : [])],
-    partial:responses.some(result=>result.status === 'rejected'),
+    entries:[...localEntries, ...responses.flatMap(result => result.status === 'fulfilled' ? result.value.map(guideEntry) : []),...editorial.flatMap(result=>result.entries)],
+    partial:responses.some(result=>result.status === 'rejected') || editorial.some(result=>result.partial),
   };
 }

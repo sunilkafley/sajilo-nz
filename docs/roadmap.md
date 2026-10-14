@@ -2,6 +2,8 @@
 
 ## Explore refactoring sprint — current agreed scope
 
+PR #25 (Slice E) is merged. [Slice F — integration and release readiness](release-readiness.md) is implemented for review: unified public-resource discovery, filters, working tool links and the admin/release handover. This supersedes the earlier pending statuses below. Content/translation review, owner acceptance, real-device/usability checks and release approval remain open; no deployment is included.
+
 Slices C/D merged in PRs #23/#24. [Slice E — community and places](community-directory.md) is implemented for review: published organisation/event/business directory, filters and details. F remains pending. This updates the earlier review statuses below; no release/content acceptance is implied.
 
 [Slice A — editorial foundation](editorial-foundation.md) and [Slice B — Explore topic pages](explore-topic-pages.md) merged in PRs #20/#21. Article admin usability merged in PR #22. [Slice C — study/course discovery](study-course-discovery.md) is implemented for review: published course filters/details, local shortlist and comparison. D–F remain pending. These increments do not populate reviewed content or authorize deployment.

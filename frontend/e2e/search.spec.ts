@@ -29,7 +29,7 @@ test('site search finds real catalogues, keyboard task links and all-stage bilin
   await input.fill('Unreviewed arrival translation');await input.press('Enter');
   await expect(page.getByText('No results found. Try another word.')).toBeVisible();
   await input.fill('Course finder');await input.press('Enter');
-  await expect(page.getByText('No results found. Try another word.')).toBeVisible();
+  await expect(page.locator('.search-results').getByRole('link',{name:/Course finder/})).toHaveAttribute('href','#/explore/study/courses');
 });
 
 test('debounces, ignores stale responses, shows loading and recovers from partial errors',async({page})=>{
@@ -54,10 +54,10 @@ test('debounces, ignores stale responses, shows loading and recovers from partia
   await page.unroute('**/api/guides/**');
   await page.route('**/api/guides/**',route=>route.fulfill({status:503,body:'Unavailable'}));
   await input.fill('Passport');
-  await expect(page.getByText('Some guides could not be searched.',{exact:false})).toBeVisible();
+  await expect(page.getByText('Some resources could not be searched',{exact:false})).toBeVisible();
   await expect(page.getByRole('listbox',{name:'Search suggestions'}).getByRole('option').first()).toContainText('Passport');
   await page.unroute('**/api/guides/**');
   await page.getByRole('button',{name:'Try again',exact:true}).click();
-  await expect(page.getByText('Some guides could not be searched.',{exact:false})).toHaveCount(0);
+  await expect(page.getByText('Some resources could not be searched',{exact:false})).toHaveCount(0);
   await expect(page.getByRole('listbox',{name:'Search suggestions'}).getByRole('option').first()).toContainText('Passport');
 });

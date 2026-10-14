@@ -32,6 +32,10 @@ Housing, Nepal services, transport, support, work, immigration and money pages n
 
 Community now opens a [published directory](docs/community-directory.md) of organisations, businesses and events, with location/type/category filters, text search and detail pages. Christchurch is the first pilot shortcut; other cities come from published records. Django admin manages all listings and review metadata. No sample content is seeded, and empty/unavailable language states remain explicit. Listings require an online connection; existing saved guides and checklist progress are unchanged.
 
+## Search and release readiness — Slice F
+
+Header search now includes published articles, courses and directory records alongside existing guides, topics, checklist tasks and official links. Results identify language/type and recorded review status; URL-backed topic, journey-stage and type filters narrow discovery. Journey links to the implemented Course finder and Budget calculator. See [Slice F evidence, limits and owner handover](docs/release-readiness.md). Content review, real-device/usability checks and deployment approval remain separate release gates.
+
 ## Run locally
 
 The [Journey checklist UX increment](docs/journey-checklist-ux.md) keeps both existing stage routes and storage keys, with immediately visible tasks, contextual published-guide links, confirmed per-checklist reset and browser Print / Save as PDF. Reset failures preserve existing selections; unreadable saved records remain protected.
