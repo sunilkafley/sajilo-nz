@@ -2,7 +2,7 @@
 
 ## Explore refactoring sprint — current agreed scope
 
-Slice C merged in PR #23. [Slice D — practical living/work](practical-living-work.md) is now implemented for review, with topic search and a session-only budget calculator. E–F remain pending. This updates the earlier review statuses below; no release/content acceptance is implied.
+Slices C/D merged in PRs #23/#24. [Slice E — community and places](community-directory.md) is implemented for review: published organisation/event/business directory, filters and details. F remains pending. This updates the earlier review statuses below; no release/content acceptance is implied.
 
 [Slice A — editorial foundation](editorial-foundation.md) and [Slice B — Explore topic pages](explore-topic-pages.md) merged in PRs #20/#21. Article admin usability merged in PR #22. [Slice C — study/course discovery](study-course-discovery.md) is implemented for review: published course filters/details, local shortlist and comparison. D–F remain pending. These increments do not populate reviewed content or authorize deployment.
 

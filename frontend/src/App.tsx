@@ -3,7 +3,8 @@ import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import { AppHeader } from './components/AppHeader';
 import { interfaceText } from './components/interfaceLanguage';
 import { JourneyDashboard } from './features/home/JourneyDashboard';
-import { AboutPage, CommunityPage } from './features/home/InformationPages';
+import { AboutPage } from './features/home/InformationPages';
+import { DirectoryPage } from './features/community/DirectoryPage';
 import { emergencyResource } from './features/home/discovery';
 import { OfflineStatus } from './OfflineStatus';
 import { GuidePage } from './features/guides/GuidePage';
@@ -76,7 +77,8 @@ export function App({ repository }: { repository: ProgressRepository }) {
           <Route path="/guides/:slug" element={<GuidePage/>}/>
           <Route path="/" element={<HomePage/>}/>
           <Route path="/journey" element={<JourneyDashboard progress={progress} onTaskChange={change}/>}/>
-          <Route path="/community" element={<CommunityPage/>}/>
+          <Route path="/community" element={<DirectoryPage/>}/>
+          <Route path="/community/:listingSlug" element={<DirectoryPage/>}/>
           <Route path="/about" element={<AboutPage/>}/>
           <Route path="/firstweek" element={<ArrivalPage/>}/>
           <Route path="/predeparture" element={<JourneyChecklist stage="predeparture" tasks={tasks} groups={groupNames} progress={progress} summary={summary} onChange={change} onReset={reset} blocked={initial.blocked}/>}/>

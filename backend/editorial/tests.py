@@ -50,6 +50,26 @@ class EditorialTests(TestCase):
                 obj.status = 'published'
                 with self.assertRaises(ValidationError): obj.save()
 
+    def test_directory_filters_and_facets_preserve_publication_boundary(self):
+        self.published(DirectoryEntry, slug='public', city='Christchurch', category='Support')
+        self.record(DirectoryEntry, slug='private', city='Private city', category='Private category')
+        self.published(DirectoryEntry, slug='translation', language='ne', city='Nepali city')
+        route = '/api/explore/directory/'
+        data = self.client.get(route).json()
+        self.assertEqual(data['count'], 1)
+        self.assertEqual(data['facets']['city'], ['Christchurch'])
+        for params in [{'city':'Christchurch'}, {'kind':'organisation'}, {'category':'Support'}, {'q':'Synthetic'}]:
+            self.assertEqual(self.client.get(route, params).json()['count'], 1)
+        self.assertEqual(self.client.get(route, {'city':'Private city'}).json()['count'], 0)
+        self.assertEqual(self.client.get(route, {'kind':'business'}).json()['count'], 0)
+        self.assertEqual(self.client.get(route, {'kind':'invalid'}).status_code, 400)
+        self.assertEqual(self.client.get(route+'private/').status_code, 404)
+        self.assertEqual(self.client.get(route+'public/', {'lang':'ne'}).status_code, 404)
+        domain = self.domains['official']; domain.approved = False; domain.save()
+        data = self.client.get(route).json()
+        self.assertEqual(data['count'], 0)
+        self.assertEqual(data['facets']['category'], [])
+
     def test_publication_requirements_and_review_dates(self):
         for changes in [dict(reviewed_by=None), dict(verified_on=None), dict(next_review_on=None),
             dict(is_sample=True), dict(source=None, source_url=''), dict(source_url=''),

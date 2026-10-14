@@ -52,7 +52,7 @@ with TemporaryDirectory(prefix='sajilo-e2e-') as directory:
     Guide.objects.create(slug='test-firstweek-draft', language='ne', stage='firstweek', title='Unreviewed arrival translation',
         summary='Synthetic draft.', body='Do not expose.', sources=[], status='draft')
     # Editorial fixtures and login exist only in this disposable browser-test DB.
-    from editorial.models import Article, Course, SourceDomain
+    from editorial.models import Article, Course, DirectoryEntry, SourceDomain
     editor = get_user_model().objects.create_user('editorial-test-admin', password='isolated-editorial-test-only',
         is_staff=True, is_superuser=True)
     domain = SourceDomain.objects.create(hostname='official.example.org', kind='official', approved=True,
@@ -97,4 +97,17 @@ with TemporaryDirectory(prefix='sajilo-e2e-') as directory:
         status='published', reviewed_by=editor, verified_on=timezone.localdate(), next_review_on=timezone.localdate()+timedelta(days=30))
     Course.objects.create(slug='secret-course', language='en', topic='study', title='Private synthetic course',
         summary='Never show this draft.', provider='Private institution', city='Private city', subject='Private subject')
+    # Directory records exist only in this disposable database, never production.
+    commercial = SourceDomain.objects.create(hostname='commercial.example.org', kind='commercial', approved=True,
+        review_note='Synthetic test approval only.', approved_by=editor, approved_on=timezone.localdate())
+    for kind, city in [('organisation','Christchurch'), ('business','Auckland'), ('event','Christchurch')]:
+        source = commercial if kind == 'business' else domain
+        DirectoryEntry.objects.create(slug='test-'+kind, language='en', topic='community', kind=kind,
+            city=city, category='Synthetic support', title='Synthetic '+kind, summary='Isolated test listing, not a real organisation.',
+            body='Synthetic listing details only.', source=source, source_url='https://'+source.hostname+'/test',
+            starts_at=timezone.now()-timedelta(days=3) if kind=='event' else None,
+            ends_at=timezone.now()-timedelta(days=2) if kind=='event' else None,
+            status='published', reviewed_by=editor, verified_on=timezone.localdate(), next_review_on=timezone.localdate()+timedelta(days=30))
+    DirectoryEntry.objects.create(slug='private-listing', language='en', topic='community', kind='organisation',
+        city='Private city', category='Private category', title='Private listing', summary='Never public.')
     call_command('runserver', '127.0.0.1:8000', use_reloader=False)

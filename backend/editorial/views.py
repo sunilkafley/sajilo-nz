@@ -136,6 +136,24 @@ class CourseDetail(PublicEditorial, generics.RetrieveAPIView):
 class DirectoryList(PublicEditorial, generics.ListAPIView):
     serializer_class = DirectorySerializer
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        for key in ['city', 'kind', 'category']:
+            value = self.request.query_params.get(key, '')
+            if not value:
+                continue
+            if len(value) > 100 or (key == 'kind' and value not in ['organisation', 'business', 'event']):
+                raise ValidationError({key: 'Choose an available filter value.'})
+            queryset = queryset.filter(**{key: value})
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        public = DirectoryEntry.objects.public().filter(language=request.query_params.get('lang', 'en'))
+        response.data['facets'] = {key: list(public.exclude(**{key: ''}).order_by(key)
+            .values_list(key, flat=True).distinct()) for key in ['city', 'kind', 'category']}
+        return response
+
 
 class DirectoryDetail(PublicEditorial, generics.RetrieveAPIView):
     serializer_class = DirectorySerializer
