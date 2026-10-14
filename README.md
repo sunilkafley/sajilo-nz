@@ -24,6 +24,10 @@ The [engineering-first sprint plan](docs/explore-refactor-sprint.md) records the
 
 Study and Education topics now link to a course finder with six filters, details, browser-local shortlists and comparison of up to three courses. Django admin's existing Course records supply all content; only eligible published records appear. No example courses are seeded. Course content requires a connection, while existing saved-guide offline functionality and checklist progress are unchanged. See [Slice C evidence and limitations](docs/study-course-discovery.md).
 
+## Practical living and work — Slice D
+
+Housing, Nepal services, transport, support, work, immigration and money pages now offer topic-specific published article search. Money links to a [budget calculator](docs/practical-living-work.md) using visitor-entered NZD amounts and weekly/monthly conversion. Budget figures are session-only and clear on navigation/reload; no financial details are saved or transmitted. Existing editorial review, language fallback, offline guides and checklist storage are unchanged.
+
 ## Run locally
 
 The [Journey checklist UX increment](docs/journey-checklist-ux.md) keeps both existing stage routes and storage keys, with immediately visible tasks, contextual published-guide links, confirmed per-checklist reset and browser Print / Save as PDF. Reset failures preserve existing selections; unreadable saved records remain protected.

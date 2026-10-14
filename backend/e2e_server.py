@@ -69,6 +69,10 @@ with TemporaryDirectory(prefix='sajilo-e2e-') as directory:
     for topic, slug, language, title in [
         ('housing', 'test-housing', 'en', 'Synthetic housing information'),
         ('nepal', 'test-nepal', 'en', 'Synthetic document information'),
+        ('work', 'test-work', 'en', 'Synthetic career information'),
+        ('immigration', 'test-immigration', 'en', 'Synthetic immigration information'),
+        ('transport', 'test-transport', 'en', 'Synthetic transport information'),
+        ('support', 'test-support', 'en', 'Synthetic support information'),
         ('study', 'editorial-nepali', 'ne', 'परीक्षण अध्ययन जानकारी'),
         ('aotearoa', 'about-new-zealand', 'en', 'Synthetic New Zealand introduction'),
         ('cities', 'auckland', 'en', 'Synthetic Auckland introduction'),

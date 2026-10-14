@@ -1,0 +1,11 @@
+.budget-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(280px,340px); gap:24px; align-items:start; }
+.budget-page { overflow-wrap:anywhere; }
+.budget-field { margin:20px 0; }
+.budget-field label { display:block; margin-bottom:8px; }
+.budget-field input,.budget-page select { width:100%; min-height:44px; padding:10px 12px; border:1px solid var(--line); border-radius:10px; font:inherit; color:inherit; background:white; }
+.budget-field input[aria-invalid=true] { border-color:#a33; }
+.budget-page .budget-summary { background:var(--green); color:white; }
+.budget-summary h2,.budget-summary p,.budget-summary a { color:inherit; }
+.budget-summary dd { margin:4px 0 20px; font-size:1.5rem; font-weight:700; }
+.budget-summary nav a { display:inline-block; padding:8px 0; }
+@media(max-width:900px) { .budget-layout { grid-template-columns:1fr; } }

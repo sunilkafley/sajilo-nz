@@ -24,9 +24,10 @@ export function parseArticle(value:unknown, topic:string, language:Language):Art
   } catch {throw invalid();}
   return value as Article;
 }
-export async function fetchArticles(topic:string, language:Language, page:number, signal:AbortSignal, slug?:string):Promise<ArticlePage> {
+export async function fetchArticles(topic:string, language:Language, page:number, signal:AbortSignal, slug?:string, search=''):Promise<ArticlePage> {
   const query=new URLSearchParams({topic,lang:language});
   if(!slug)query.set('page',String(page));
+  if(!slug && search)query.set('q',search);
   const response=await fetch(`/api/explore/articles/${slug?encodeURIComponent(slug)+'/':''}?${query}`,{cache:'no-store',signal:AbortSignal.any([signal,AbortSignal.timeout(8000)])});
   if(response.status===404 && slug)return {results:[],count:0,hasNext:false};
   if(!response.ok)throw new ArticleError('Information is unavailable right now. Check your connection and try again.');
