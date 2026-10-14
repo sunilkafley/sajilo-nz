@@ -57,7 +57,7 @@ Any schema-changing deployment requires a private backup, isolated restore/migra
 
 ## Status
 
-- Planning: recorded. [Slice A editorial foundation](editorial-foundation.md) merged in PR #20. [Slice B topic pages](explore-topic-pages.md) implemented on `codex/explore-topic-pages` for review; C–F remain pending.
+- Planning: recorded. [Slice A editorial foundation](editorial-foundation.md) merged in PR #20; [Slice B topic pages](explore-topic-pages.md) merged in PR #21. Article admin usability merged in PR #22, per owner confirmation. [Slice C study/course discovery](study-course-discovery.md) is implemented for review on `codex/study-course-discovery`; D–F remain pending.
 - Editorial content/translation review: deferred until engineering, as requested; publication remains gated.
 - Slice A automated checks and screenshots: recorded in its evidence document. Real-device testing and owner admin acceptance remain pending; no acceptance of later slices is implied.
 - Release and deployment: not authorized or performed.

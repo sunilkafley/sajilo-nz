@@ -20,6 +20,10 @@ The [engineering-first sprint plan](docs/explore-refactor-sprint.md) records the
 
 [Slice B implementation and evidence](docs/explore-topic-pages.md) connects twelve information topics, six Aotearoa introductions and city navigation to the public Article API. Homepage cards open topic pages; legacy category URLs still work. Django admin manages article bodies, sections, sources and separately reviewed translations. No production content is seeded. Topics without published content show an honest unavailable state. Existing guides, offline copies and checklist storage are unchanged; course tools, directories and new article search/offline support are later slices.
 
+## Study and course discovery — Slice C
+
+Study and Education topics now link to a course finder with six filters, details, browser-local shortlists and comparison of up to three courses. Django admin's existing Course records supply all content; only eligible published records appear. No example courses are seeded. Course content requires a connection, while existing saved-guide offline functionality and checklist progress are unchanged. See [Slice C evidence and limitations](docs/study-course-discovery.md).
+
 ## Run locally
 
 The [Journey checklist UX increment](docs/journey-checklist-ux.md) keeps both existing stage routes and storage keys, with immediately visible tasks, contextual published-guide links, confirmed per-checklist reset and browser Print / Save as PDF. Reset failures preserve existing selections; unreadable saved records remain protected.

@@ -271,6 +271,28 @@ class EditorialTests(TestCase):
         self.assertEqual(response['count'], 25)
         self.assertIsNotNone(response['next'])
 
+    def test_course_discovery_filters_and_facets_only_use_public_language_records(self):
+        self.published(Course, city='Christchurch', provider='Synthetic college', subject='Computing',
+            qualification_level=7, duration='3 years', intake='February')
+        self.record(Course, slug='private-course', city='Private city', provider='Secret institution')
+        self.published(Course, slug='ne-course', language='ne', city='Nepali-only city')
+        for query in ['city=Christchurch', 'provider=Synthetic+college', 'subject=Computing',
+                      'qualification_level=7', 'duration=3+years', 'intake=February', 'q=college', 'q=Computing']:
+            with self.subTest(query=query):
+                result = self.client.get('/api/explore/courses/?'+query).json()
+                self.assertEqual(result['count'], 1)
+                self.assertEqual(result['facets']['city'], ['Christchurch'])
+                self.assertNotIn('Secret institution', result['facets']['provider'])
+        self.assertEqual(self.client.get('/api/explore/courses/?city=Private+city').json()['count'], 0)
+        self.assertEqual(self.client.get('/api/explore/courses/private-course/').status_code, 404)
+        self.assertEqual(self.client.get('/api/explore/courses/?qualification_level=oops').status_code, 400)
+        self.assertEqual(self.client.get('/api/explore/courses/?q=college&lang=invalid').status_code, 400)
+        self.domains['official'].approved = False
+        self.domains['official'].save()
+        result = self.client.get('/api/explore/courses/').json()
+        self.assertEqual(result['count'], 0)
+        self.assertEqual(result['facets']['city'], [])
+
     def test_general_information_requires_review_but_not_external_source(self):
         obj = self.published(article_type='general', source=None, source_url='')
         result = self.client.get(f'/api/explore/articles/{obj.slug}/').json()

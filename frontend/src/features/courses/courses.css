@@ -1,0 +1,18 @@
+.courses-page { overflow-wrap:anywhere; }
+.course-actions { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin:16px 0; }
+.course-actions a,.course-actions button { min-height:44px; display:inline-flex; align-items:center; }
+.course-filters { display:flex; flex-wrap:wrap; gap:14px; align-items:end; margin:24px 0; }
+.course-filters label { display:flex; flex-direction:column; gap:6px; flex:1 1 160px; min-width:0; }
+.course-filters .course-search { flex-basis:70%; }
+.course-filters input,.course-filters select { width:100%; min-width:0; min-height:44px; padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:white; color:inherit; font:inherit; }
+.courses-page button:disabled { opacity:.55; cursor:not-allowed; }
+.course-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+.course-grid .card { margin:0; min-width:0; }
+.course-facts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.course-facts dt { font-size:.85rem; font-weight:700; }.course-facts dd { margin:4px 0; }
+.course-reading { max-width:76ch; }
+.course-table { max-width:100%; overflow-x:auto; }
+.course-table table { border-collapse:collapse; width:100%; }
+.course-table td,.course-table th { border:1px solid var(--line); padding:16px; min-width:180px; vertical-align:top; text-align:left; }
+.course-table caption { text-align:left; padding:12px 0; }
+@media(max-width:700px) { .course-grid,.course-facts { grid-template-columns:1fr; } }
