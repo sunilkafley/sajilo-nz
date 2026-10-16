@@ -3,6 +3,7 @@ import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { fetchArticles, type Article, type ArticlePage } from './articles';
 import { introductionPages, practicalResources, topicConfig, withLanguage } from './topicConfig';
 import './explore.css';
+import { StudyDirectory } from '../study/StudyDirectory';
 
 function Attribution({article}:{article:Article}) {
   return <div className="article-attribution" lang="en">
@@ -58,6 +59,7 @@ export function TopicPage() {
     </form>}
     <div className={'topic-layout'+(slug?' topic-reading':'')}>
       <section aria-label={slug?'Article':config.section} className="topic-content">
+        {!slug && topicId==='study' && (language==='en'?<StudyDirectory/>:<p lang="en">The institution directory is currently available in English. <Link to="/explore/study">View the English directory</Link></p>)}
         {!slug && <h2>{config.section}</h2>}
         <p className="topic-language">Content language: {language==='ne'?'नेपाली':'English'}</p>
         {!current && <p role="status">Loading published information…</p>}
