@@ -36,6 +36,8 @@ test('Home matches prototype composition and connects next steps, city and guide
 
 test('Home completion, budget and Journey navigation work offline',async({page,context})=>{
   await page.goto('/#/journey');
+  // Finish the first service-worker installation before exercising reloads.
+  await expect(page.locator('.offline-status')).toHaveAttribute('data-offline-ready','true');
   await page.getByRole('checkbox',{name:'Passport',exact:true}).focus();await page.keyboard.press('Space');
   await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow','1');
   await expect(page.getByRole('checkbox').first()).toBeFocused();
