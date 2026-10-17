@@ -9,7 +9,13 @@ test('all twelve topics open their own information view without checklists',asyn
     await expect(page.getByRole('heading',{name:topicConfig[topic.id].heading,exact:true})).toBeVisible();
     await expect(page.getByText('Loading published information…')).toHaveCount(0);
     await expect(page.getByRole('alert')).toHaveCount(0);
-    await expect(page.getByRole('checkbox')).toHaveCount(0);
+    // Study has one directory filter, not a task-completion checklist.
+    if(topic.id==='study') {
+      await expect(page.getByRole('checkbox')).toHaveCount(1);
+      await expect(page.getByRole('checkbox',{name:'Show international Code signatory records only',exact:true})).toBeVisible();
+    } else {
+      await expect(page.getByRole('checkbox')).toHaveCount(0);
+    }
   }
 });
 
