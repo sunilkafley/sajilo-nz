@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { groupProviders, nzqaQualifications } from './directory';
 import { providers, snapshotDate } from './providers';
 import './study.css';
 
 const cities=[...new Set(providers.map(p=>p.city))].sort((a,b)=>a.localeCompare(b,'en-NZ'));
 const types=[...new Set(providers.map(p=>p.type))].sort();
+function CityGroup({city,count,initiallyOpen,children}:{city:string;count:number;initiallyOpen:boolean;children:ReactNode}) {
+  const [open,setOpen]=useState(initiallyOpen);
+  return <details className="card study-city" open={open} onToggle={event=>setOpen(event.currentTarget.open)}>
+    <summary>{city} <span>({count})</span></summary>
+    {open && children}
+  </details>;
+}
 const examples=[
   {name:'Bachelor of Business',level:7,provider:'AUT',area:'Business',url:'https://www.aut.ac.nz/study/study-options/business/courses/bachelor-of-business'},
   {name:'Bachelor of Nursing (Puahou Tapuhi o Aotearoa)',level:7,provider:'Ara',area:'Health',url:'https://www.ara.ac.nz/products/programme/ch4088-stru-bachelor-of-nursing-puahou-tapuhi-o-aotearoa/'},
@@ -46,14 +53,13 @@ export function StudyDirectory() {
       <p role="status">{count} provider records in {groups.length} city groups</p>
       {(query || city || type || internationalOnly) && <button type="button" onClick={()=>{setQuery('');setCity('');setType('');setInternationalOnly(false);}}>Clear filters</button>}
       {!count && <p>No institutions match these filters. Try another name or clear the filters.</p>}
-      <div className="topic-accordions">{groups.map(group=><details className="card study-city" key={group.city} open={Boolean(query || city)}>
-        <summary>{group.city} <span>({group.providers.length})</span></summary>
+      <div className="topic-accordions">{groups.map(group=><CityGroup key={group.city+Boolean(query || city)} city={group.city} count={group.providers.length} initiallyOpen={Boolean(query || city)}>
         <ul className="study-providers">{group.providers.map(p=><li key={p.id}>
           <h3>{p.name}</h3><p>{p.type} · {p.codeSignatory?'Listed in international Code signatory search':'Not listed in international Code signatory search'}</p>
           <p>{p.website?<a href={p.website} rel="noopener noreferrer">Official website<span className="sr-only">: {p.name}</span></a>:<span>Website not supplied in the NZQA record</span>} · <a href={p.nzqa} rel="noopener noreferrer">NZQA provider record<span className="sr-only">: {p.name}</span></a></p>
           <details className="study-locations"><summary>NZQA delivery locations</summary><p>{p.locations.join(' · ')}</p><p className="study-note">Names as listed by NZQA, including suburbs and any overseas sites. A location listing does not establish current course availability.</p></details>
         </li>)}</ul>
-      </details>)}</div>
+      </CityGroup>)}</div>
       <p><a href="https://www.nzqa.govt.nz/providers/index.do">Search the live NZQA provider register</a></p>
     </section>
     <section className="card" aria-labelledby="study-popular">

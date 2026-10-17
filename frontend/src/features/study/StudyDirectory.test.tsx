@@ -39,4 +39,7 @@ it('shows sourced counts, filters institutions, and preserves the exact NZQA lin
   expect(screen.getByText(/No institutions match/)).toBeVisible();
   await userEvent.click(screen.getByRole('button',{name:'Clear filters'}));
   expect(screen.getByRole('status')).toHaveTextContent(`${providers.length} provider records`);
+  expect(screen.queryByRole('heading',{name:'University of Canterbury'})).toBeNull();
+  await userEvent.click(screen.getByText('Christchurch',{selector:'summary'}));
+  expect(await screen.findByRole('heading',{name:'University of Canterbury'})).toBeVisible();
 });
