@@ -5,6 +5,7 @@ import { interfaceText } from './components/interfaceLanguage';
 import { JourneyDashboard } from './features/home/JourneyDashboard';
 import { AboutPage } from './features/home/InformationPages';
 import { DirectoryPage } from './features/community/DirectoryPage';
+import { FaqPage } from './features/faqs/FaqPage';
 import { emergencyResource } from './features/home/discovery';
 import { OfflineStatus } from './OfflineStatus';
 import { GuidePage } from './features/guides/GuidePage';
@@ -12,7 +13,8 @@ import { ExplorePage } from './features/explore/ExplorePage';
 import { TopicPage } from './features/explore/TopicPage';
 import { CoursesPage } from './features/courses/CoursesPage';
 import { BudgetPage } from './features/budget/BudgetPage';
-import { topicConfig } from './features/explore/topicConfig';
+import { pageTitle } from './routing/pageTitle';
+import { languageFromSearch } from './routing/language';
 import { HomePage } from './features/home/HomePage';
 import { SearchPage } from './features/search/SiteSearch';
 import { ArrivalPage } from './features/arrival/ArrivalPage';
@@ -28,15 +30,10 @@ export function App({ repository }: { repository: ProgressRepository }) {
   const [warning, setWarning] = useState(initial.warning);
   const summary = summarise(progress);
   const location = useLocation();
-  const language = new URLSearchParams(location.search).get('lang') === 'ne' ? 'ne' : 'en';
+  const language = languageFromSearch(location.search);
   const main = useRef<HTMLElement>(null);
   useEffect(() => {
-    const firstweekGuides = (location.pathname.startsWith('/guides') || location.pathname === '/saved') && new URLSearchParams(location.search).get('stage') === 'firstweek';
-    document.title = `${location.pathname === '/firstweek' ? 'First-week checklist' : location.pathname === '/' ? 'Home' : location.pathname === '/cities/christchurch' ? 'Christchurch' : location.pathname.startsWith('/cities/') ? 'City unavailable' : location.pathname === '/explore' ? 'Explore' : location.pathname === '/predeparture' ? 'Pre-departure checklist' : (location.pathname.startsWith('/guides') || location.pathname === '/saved') ? 'Pre-departure guides' : location.pathname === '/sources' ? 'Official sources' : 'Your journey'} · Sajilo NZ`;
-    if (firstweekGuides) document.title = 'First-week guides · Sajilo NZ';
-    if (['/journey','/community','/about'].includes(location.pathname)) document.title = `${location.pathname.slice(1).replace(/^./, value=>value.toUpperCase())} · Sajilo NZ`;
-    if (location.pathname === '/search') document.title = 'Search · Sajilo NZ';
-    if (location.pathname.startsWith('/explore/')) document.title = `${topicConfig[location.pathname.split('/')[2]]?.title || 'Topic unavailable'} · Sajilo NZ`;
+    document.title = pageTitle(location.pathname, location.search);
     const task = new URLSearchParams(location.search).get('task');
     if (task && ((location.pathname === '/predeparture' && tasks.some(item => item.id === task)) || (location.pathname === '/firstweek' && arrivalTasks.some(item => item.id === task)))) {
       document.getElementById(task)?.focus();
@@ -78,6 +75,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
           <Route path="/" element={<HomePage/>}/>
           <Route path="/journey" element={<JourneyDashboard progress={progress} onTaskChange={change}/>}/>
           <Route path="/community" element={<DirectoryPage/>}/>
+          <Route path="/faqs" element={<FaqPage/>}/>
           <Route path="/community/:listingSlug" element={<DirectoryPage/>}/>
           <Route path="/about" element={<AboutPage/>}/>
           <Route path="/firstweek" element={<ArrivalPage/>}/>
