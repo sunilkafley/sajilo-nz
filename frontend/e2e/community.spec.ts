@@ -12,7 +12,7 @@ test('directory filters, classifications, details and language preserve publicat
   await expect(page.getByText('1 published listings')).toBeVisible();
   await page.getByRole('link',{name:'Synthetic organisation',exact:true}).click();
   await expect(page.getByText('Synthetic listing details only.')).toBeVisible();
-  await page.getByLabel('Language / भाषा').selectOption('ne');
+  await page.getByRole('button',{name:'Switch to Nepali'}).click();
   await expect(page.getByRole('heading',{name:'Listing unavailable'})).toBeVisible();
   await expect(page.getByText('Synthetic listing details only.')).toHaveCount(0);
   await page.getByRole('link',{name:'Check English availability'}).click();

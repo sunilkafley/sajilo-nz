@@ -77,7 +77,7 @@ it('links matching published guides next to tasks with actual review information
 it('ignores late English responses after selecting Nepali and keeps empty translation state honest',async()=>{
   let resolve!:(guides:Guide[])=>void;
   fetchMock.mockImplementation(language=>language==='en'?new Promise(done=>{resolve=done;}):Promise.resolve([]));
-  mount();await userEvent.selectOptions(screen.getByLabelText('Language / भाषा'),'ne');
+  mount();await userEvent.click(screen.getByRole('button',{name:'Switch to Nepali'}));
   expect(await screen.findByText('No published guides are available for this stage in Nepali yet.')).toBeInTheDocument();
   await act(async()=>{resolve([guide]);});
   expect(screen.queryByText('Synthetic documents')).toBeNull();

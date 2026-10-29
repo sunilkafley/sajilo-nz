@@ -21,7 +21,7 @@ test('approved logo stays complete and undistorted with keyboard navigation and 
   await expect(page.getByRole('main')).toBeFocused();
   await page.goto('/#/guides/test-bilingual-documents?lang=en&stage=predeparture&topic=documents');
   await expect(page.locator('article.guide-body')).toHaveAttribute('lang','en');
-  await page.getByLabel('Language / भाषा',{exact:true}).selectOption('ne');
+  await page.getByRole('button',{name:'Switch to Nepali'}).click();
   await expect(page).toHaveURL(/lang=ne&stage=predeparture&topic=documents/);
   await expect(page.locator('article.guide-body')).toHaveAttribute('lang','ne');
   const nepaliLogo=page.getByRole('img',{name:'Sajilo NZ — तपाईंको न्युजिल्यान्ड सहयात्री'});
