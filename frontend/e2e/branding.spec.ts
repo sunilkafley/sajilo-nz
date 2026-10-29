@@ -26,7 +26,7 @@ test('approved logo stays complete and undistorted with keyboard navigation and 
   await expect(page.locator('article.guide-body')).toHaveAttribute('lang','ne');
   const nepaliLogo=page.getByRole('img',{name:'Sajilo NZ — तपाईंको न्युजिल्यान्ड सहयात्री'});
   await expect(nepaliLogo).toBeVisible();
-  await expect(page.getByText('App ready for offline use.',{exact:false})).toBeVisible();
+  await expect(page.locator('.offline-status')).toHaveAttribute('data-offline-ready','true');
   await page.getByRole('button',{name:'Save guide',exact:true}).click();
   await context.setOffline(true);await page.reload();
   await expect(nepaliLogo).toBeVisible();expect(await nepaliLogo.evaluate((image:HTMLImageElement)=>image.naturalWidth)).toBe(2172);

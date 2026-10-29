@@ -29,7 +29,7 @@ it('opens a dedicated housing information page without a checklist',async()=>{
 it('retains route and filter context when choosing Nepali, with explicit English interface fallback',async()=>{
   mount('/explore?category=money&topic=documents');await userEvent.click(screen.getByRole('button',{name:'Switch to Nepali'}));
   expect(screen.getByTestId('location')).toHaveTextContent('/explore/money?topic=documents&lang=ne');
-  expect(screen.getByText(/Interface shown in English/)).toHaveAttribute('lang','en');
+  expect(screen.queryByText(/Interface shown in English/)).not.toBeInTheDocument();
   expect(screen.getByRole('link',{name:'Journey'})).toHaveAttribute('href','/journey?lang=ne');
   expect(interfaceText('ne','tagline').language).toBe('ne');expect(interfaceText('ne','fallback').language).toBe('en');
   await userEvent.click(screen.getByRole('button',{name:'Switch to English'}));

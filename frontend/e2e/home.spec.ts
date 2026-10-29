@@ -57,7 +57,7 @@ test('Home completion, budget and Journey navigation work offline',async({page,c
 
 test('Home bookmarks retain language and open saved copies offline without bypassing withdrawals',async({page,context})=>{
   await page.goto('/#/guides/test-bilingual-documents?lang=ne');
-  await expect(page.getByText('App ready for offline use.',{exact:false})).toBeVisible();
+  await expect(page.locator('.offline-status')).toHaveAttribute('data-offline-ready','true');
   await page.getByRole('button',{name:'Save guide',exact:true}).click();
   await navigateSidebar(page,'Journey');
   await expect(page.getByText('1 saved bookmarks · 1 saved copies on this browser')).toBeVisible();

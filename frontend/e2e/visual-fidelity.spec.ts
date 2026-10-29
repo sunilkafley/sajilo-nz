@@ -40,7 +40,7 @@ test('public landing matches responsive hierarchy and preserves readable guides'
   await page.goto('/#/explore?category=money&lang=en');
   await page.getByRole('button',{name:'Switch to Nepali'}).click();
   await expect(page).toHaveURL(/explore\/money\?lang=ne/);
-  await expect(page.locator('.language-fallback')).toBeVisible();
+  await expect(page.locator('.language-fallback')).toHaveCount(0);
   await expect(page.getByRole('region',{name:'Money information'})).toBeVisible();
   await page.goto('/#/guides/test-documents');
   await expect(page.locator('article.guide-body')).toBeVisible();

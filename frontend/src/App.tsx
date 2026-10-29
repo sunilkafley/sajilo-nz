@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import { AppHeader } from './components/AppHeader';
-import { interfaceText } from './components/interfaceLanguage';
 import { JourneyDashboard } from './features/home/JourneyDashboard';
 import { AboutPage } from './features/home/InformationPages';
 import { DirectoryPage } from './features/community/DirectoryPage';
@@ -14,7 +13,6 @@ import { TopicPage } from './features/explore/TopicPage';
 import { CoursesPage } from './features/courses/CoursesPage';
 import { BudgetPage } from './features/budget/BudgetPage';
 import { pageTitle } from './routing/pageTitle';
-import { languageFromSearch } from './routing/language';
 import { HomePage } from './features/home/HomePage';
 import { SearchPage } from './features/search/SiteSearch';
 import { ArrivalPage } from './features/arrival/ArrivalPage';
@@ -30,7 +28,6 @@ export function App({ repository }: { repository: ProgressRepository }) {
   const [warning, setWarning] = useState(initial.warning);
   const summary = summarise(progress);
   const location = useLocation();
-  const language = languageFromSearch(location.search);
   const main = useRef<HTMLElement>(null);
   useEffect(() => {
     document.title = pageTitle(location.pathname, location.search);
@@ -56,8 +53,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
     <div className="workspace">
       <main id="main" className={location.pathname === '/' ? 'landing-main' : location.pathname.startsWith('/guides/') ? 'reading-main' : undefined} tabIndex={-1} ref={main}>
         {warning && <div role="alert" className="notice warning"><p>{warning}</p>{!initial.blocked && <button onClick={() => setWarning(retrySave(repository, progress))}>Try saving again</button>}</div>}
-        <OfflineStatus quiet={location.pathname === '/'}/>
-        {language === 'ne' && location.pathname !== '/' && <p className="language-fallback" lang="en">{interfaceText(language,'fallback').text}</p>}
+        <OfflineStatus/>
         <Routes>
           <Route path="/explore/money/budget" element={<BudgetPage/>}/>
           <Route path="/search" element={<SearchPage/>}/>
