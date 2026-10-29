@@ -1,0 +1,13 @@
+.faq-page { max-width: 900px; margin-inline: auto; overflow-wrap: anywhere; }
+.faq-groups { margin-top: 32px; }
+.faq-groups > section + section { margin-top: 32px; }
+.faq-item.card { padding: 0; margin-bottom: 12px; }
+.faq-item > summary { cursor: pointer; padding: 20px 24px; min-height: 48px; font-weight: 700; line-height: 1.5; }
+.faq-item > summary::marker { color: var(--green); }
+.faq-item[open] > summary { border-bottom: 1px solid var(--line); }
+.faq-answer { padding: 0 24px 20px; }
+.faq-answer p { line-height: 1.7; }
+.faq-answer a { display: inline-block; padding-block: 8px; }
+.faq-answer li + li { margin-top: 10px; }
+.faq-source { font-size: .875rem; border-top: 1px solid var(--line); padding-top: 8px; }
+@media (max-width: 600px) { .faq-item > summary { padding: 18px; } .faq-answer { padding-inline: 18px; } }

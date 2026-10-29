@@ -6,6 +6,7 @@ import { christchurch } from '../cities/catalog';
 import { emergencyResource } from '../home/discovery';
 import { fetchGuides, type Guide, type Language, type GuideStage } from '../guides/api';
 import { loadEditorial, type Resource } from './editorial';
+import { faqGroups } from '../faqs/content';
 
 export interface SearchEntry {
   title: string; type: string; language: Language; to: string; text: string; status: string;
@@ -17,6 +18,7 @@ const entry = (title: string, type: string, to: string, text: string, status = '
     stage:to.startsWith('/firstweek')?'firstweek':to.startsWith('/predeparture')?'predeparture':undefined});
 export const localEntries: SearchEntry[] = [
   entry('Home', 'Page', '/', 'Your New Zealand journey companion. Explore key topics. Get to know Aotearoa.'),
+  entry('FAQs', 'Page', '/faqs', faqGroups.flatMap(group=>group.questions.map(item=>`${item.question} ${item.answer} ${item.points?.join(' ') || ''}`)).join(' ')),
   entry('Journey', 'Page', '/journey', 'Choose your stage. Before you leave. Arrival. Your next steps and browser-saved progress.'),
   entry('About Sajilo NZ', 'Page', '/about', 'For Nepalese students, workers, partners, families and newcomers. Privacy and browser storage.'),
   entry('Explore', 'Page', '/explore', 'A new country. A world of possibilities. Explore available topics, categories and city preparation.'),

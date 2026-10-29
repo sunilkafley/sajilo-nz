@@ -1,4 +1,4 @@
-import type { Language } from '../guides/api';
+export { withLanguage } from '../../routing/language';
 
 type Related = { title: string; to: string };
 // Navigation only; guidance stays in separately reviewed Article records.
@@ -32,9 +32,3 @@ export const introductionPages = [
   {slug:'weather-climate',title:'Weather & climate'}, {slug:'healthcare',title:'Healthcare'},
   {slug:'laws-everyday-rules',title:'Laws & everyday rules'}, {slug:'student-life',title:'Student life'},
 ];
-export const withLanguage = (to: string, language: Language) => {
-  const [path, search=''] = to.split('?');
-  const params=new URLSearchParams(search);
-  if(language==='ne')params.set('lang','ne');else params.delete('lang');
-  return path+(params.size?'?'+params.toString():'');
-};
