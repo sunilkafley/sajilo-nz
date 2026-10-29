@@ -26,7 +26,7 @@ test('published course filters, detail, shortlist reload and comparison preserve
   expect(await page.evaluate(()=>localStorage.getItem('sajilo-nz:predeparture:v1'))).toBe(progress);
   const stored=await page.evaluate(()=>localStorage.getItem('sajilo-nz:courses:v1'));
   expect(stored).not.toContain('Synthetic course');
-  await page.getByLabel('Language / भाषा').selectOption('ne');
+  await page.getByRole('button',{name:'Switch to Nepali'}).click();
   await expect(page.getByRole('link',{name:'परीक्षण पाठ्यक्रम',exact:true})).toBeVisible();
   await expect(page.getByRole('heading',{name:'Course unavailable'})).toBeVisible();
   await expect(page.getByText('Synthetic course 1',{exact:true})).toHaveCount(0);

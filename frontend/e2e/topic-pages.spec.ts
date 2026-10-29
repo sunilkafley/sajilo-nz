@@ -28,7 +28,7 @@ test('topic articles use real public API publication/language rules and safe nav
   await expect(page.getByRole('heading',{name:'Synthetic published article',exact:true})).toBeVisible();
   await expect(page.getByRole('link',{name:'Explore',exact:true}).first()).toHaveAttribute('aria-current','page');
   await expect(page.getByRole('link',{name:/Official source:/})).toHaveAttribute('href','https://official.example.org/test');
-  await page.getByLabel('Language / भाषा').selectOption('ne');
+  await page.getByRole('button',{name:'Switch to Nepali'}).click();
   await expect(page.getByRole('heading',{name:'This article is not available'})).toBeVisible();
   await expect(page.getByText('Not real guidance.',{exact:true})).toHaveCount(0);
   await page.getByRole('link',{name:'Study & courses',exact:true}).click();

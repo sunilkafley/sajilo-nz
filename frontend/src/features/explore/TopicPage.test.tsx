@@ -72,7 +72,7 @@ it('ignores late English responses after switching to Nepali',async()=>{
   let finish!:(value:unknown)=>void;
   const fetch=vi.fn().mockImplementationOnce(()=>new Promise(resolve=>{finish=resolve;})).mockResolvedValue(response([]));vi.stubGlobal('fetch',fetch);
   render(<MemoryRouter initialEntries={['/explore/study']}><App repository={createLocalRepository(()=>localStorage)}/></MemoryRouter>);
-  await userEvent.selectOptions(screen.getByLabelText('Language / भाषा'),'ne');
+  await userEvent.click(screen.getByRole('button',{name:'Switch to Nepali'}));
   await screen.findByRole('heading',{name:'No published articles yet'});
   await act(async()=>finish(response([article])));
   expect(screen.queryByText(article.title)).toBeNull();
@@ -96,7 +96,7 @@ it('unknown topics including inherited object keys do not fetch content',()=>{
 it('hides the old article immediately while a new language request is loading',async()=>{
   const fetch=vi.fn().mockResolvedValueOnce(response([article])).mockImplementation(()=>new Promise(()=>{}));vi.stubGlobal('fetch',fetch);
   render(<MemoryRouter initialEntries={['/explore/study']}><App repository={createLocalRepository(()=>localStorage)}/></MemoryRouter>);
-  await screen.findByText(article.title);await userEvent.selectOptions(screen.getByLabelText('Language / भाषा'),'ne');
+  await screen.findByText(article.title);await userEvent.click(screen.getByRole('button',{name:'Switch to Nepali'}));
   await waitFor(()=>expect(screen.queryByText(article.title)).toBeNull());
   expect(screen.getByText('Loading published information…')).toBeInTheDocument();
 });

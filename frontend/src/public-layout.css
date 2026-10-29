@@ -13,9 +13,12 @@ body{color:#10284b}p{color:#4f6477}
 .public-navigation a.active{color:#006e6c}
 .public-navigation a.active::after{content:"";position:absolute;height:3px;border-radius:3px;background:#008a86;bottom:0;left:0;right:0}
 .header-controls{display:flex;align-items:center;gap:14px}
-.header-controls select{border:1px solid var(--line);border-radius:8px;min-height:44px;max-width:150px;color:#006e6c;background:white;padding:7px;font-size:14px}
+.header-controls .language-toggle{border:1px solid var(--line);border-radius:8px;min-height:44px;max-width:150px;color:#006e6c;background:white;padding:7px;font-size:14px}
 .header-search{display:grid;place-items:center;min-height:44px;min-width:44px;color:#10284b}
 .header-search .nav-icon{width:25px;height:25px}
+.language-toggle{cursor:pointer;min-width:76px;font-weight:600}
+.language-toggle:hover{background:#e8f5f2}
+.language-toggle:focus-visible{outline:3px solid #008a86;outline-offset:3px}
 .landing-hero{position:relative;isolation:isolate;min-height:410px;padding:44px clamp(24px,4vw,64px) 95px;background:linear-gradient(90deg,#ffffffed 0%,#ffffffe6 22%,#ffffffa6 40%,#ffffff00 63%),url('./assets/journey-landscape.png') center/cover}
 .hero-copy{max-width:640px}.hero-copy h1{font-size:clamp(36px,3.6vw,52px);letter-spacing:-.045em;color:#0a244b;line-height:1.09;margin-bottom:12px}.hero-copy h1 span{color:#008781}
 .hero-copy p{font-size:19px;line-height:1.45;max-width:530px;color:#203c5c}
@@ -50,18 +53,33 @@ body{color:#10284b}p{color:#4f6477}
 .journey-stages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:24px 0}.journey-stages .card{margin:0;padding:20px;text-decoration:none}.journey-stages h2{font-size:18px;margin-top:10px}.journey-stages p{font-size:14px}
 .search-page>.site-search{max-width:none;padding:10px 16px;border:1px solid var(--line);border-radius:12px;background:white;margin:20px 0}
 .search-page .search-dropdown{max-width:100%}
-@media(max-width:1050px){.app-header-inner{gap:16px}.app-header .brand-link{width:190px}.public-navigation{gap:15px}.public-navigation a{font-size:14px}.header-controls{gap:6px}.header-controls select{max-width:115px}.landing-topics,.aotearoa-topics{grid-template-columns:repeat(2,minmax(0,1fr))}.journey-stages{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-copy{max-width:540px}.hero-copy h1{font-size:42px}}
+@media(max-width:1050px){.app-header-inner{gap:16px}.app-header .brand-link{width:190px}.public-navigation{gap:15px}.public-navigation a{font-size:14px}.header-controls{gap:6px}.header-controls .language-toggle{max-width:115px}.landing-topics,.aotearoa-topics{grid-template-columns:repeat(2,minmax(0,1fr))}.journey-stages{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-copy{max-width:540px}.hero-copy h1{font-size:42px}}
 @media(max-width:800px){
-  .app-header-inner{min-height:76px;padding:10px 18px;gap:8px}.app-header .brand-link{width:170px}.header-controls{gap:2px}.header-controls select{font-size:12px;max-width:105px}.header-search{min-width:40px}
+  .app-header-inner{min-height:76px;padding:10px 18px;gap:8px}.app-header .brand-link{width:170px}.header-controls{gap:2px}.header-controls .language-toggle{font-size:12px;max-width:105px}.header-search{min-width:40px}
   .public-navigation{position:fixed;inset:auto 0 0;z-index:70;background:#fffffff5;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:5px 8px calc(5px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 20px #183f5308}
   .public-navigation a{min-height:58px;flex-direction:column;gap:3px;font-size:11px}.public-navigation .nav-icon{display:block;width:23px;height:23px}.public-navigation .desktop-about{display:none}.public-navigation a.active::after{display:none}.public-navigation a.active{background:#e9f6f3;border-radius:10px}
   html{scroll-padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
   .workspace{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
   .workspace main{padding:26px 20px 36px}.workspace main.landing-main{padding:0}
-  .landing-hero{min-height:360px;padding:24px 20px 120px;background-image:linear-gradient(110deg,#fffffff2 10%,#ffffffce 45%,#ffffff00 88%),url('./assets/journey-landscape.png');background-position:70% center}
+  .landing-hero{min-height:0;padding:18px 20px 28px;background-image:linear-gradient(110deg,#fffffff2 10%,#ffffffce 45%,#ffffff00 88%),url('./assets/journey-landscape.png');background-position:70% center}
   .hero-copy{max-width:440px}.hero-copy h1{font-size:32px}.hero-copy .hero-nepali{font-size:23px}.hero-copy p{font-size:16px;max-width:330px}.hero-wave{height:38px}
   .landing-section{padding:0 20px 24px}.landing-section h2{font-size:24px}.landing-section-head{align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:12px}.landing-section-head>div>p{margin-bottom:0;font-size:14px}.landing-section-head>a{font-size:13px}
   .aotearoa-section{padding-top:12px;padding-bottom:30px}.aotearoa-topics{grid-template-columns:repeat(2,minmax(0,1fr))}.aotearoa-topics li{flex-wrap:wrap}.aotearoa-topics small{width:100%;margin-left:34px}
 }
 @media(max-width:600px){.landing-topics{grid-template-columns:1fr;gap:10px}.landing-topic{grid-template-columns:38px 1fr 28px;gap:12px;min-height:112px;padding:16px;align-items:center;align-content:center}.topic-icon{grid-column:auto}.landing-topic h3{font-size:16px;margin-bottom:4px}.landing-topic p{font-size:13px;margin-bottom:3px}.landing-topic small{font-size:10px}.topic-arrow{width:28px;height:28px}.topic-arrow .nav-icon{width:18px}.aotearoa-topics{grid-template-columns:1fr}.aotearoa-topics li{flex-wrap:nowrap}.aotearoa-topics small{width:auto;margin-left:auto}.journey-stages{grid-template-columns:1fr}}
-@media(max-width:350px){.app-header-inner{padding:8px 12px}.app-header .brand-link{width:145px}.header-controls select{max-width:98px}.hero-copy h1{font-size:28px}.hero-copy .hero-nepali{font-size:20px}}
+@media(max-width:350px){.app-header-inner{padding:8px 12px}.app-header .brand-link{width:145px}.header-controls .language-toggle{max-width:98px}.hero-copy h1{font-size:28px}.hero-copy .hero-nepali{font-size:20px}}
+/* Keep all six topic destinations within the initial mobile screen. */
+@media(max-width:800px){
+  .hero-copy h1{font-size:28px;margin:0 0 8px}
+  .hero-copy .hero-nepali{font-size:21px;margin:0 0 10px}
+  .hero-copy p{font-size:14px;line-height:1.4;margin:0;max-width:360px}
+  .hero-wave{height:20px}
+  .landing-section-head{margin-bottom:10px}
+  .landing-section-head h2{font-size:22px;margin:0}
+  .landing-section-head>div>p,.landing-section-head>a{display:none}
+  .landing-topics{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .landing-topic{grid-template-columns:24px 1fr;gap:8px;min-height:68px;padding:10px;align-items:center;align-content:center;border-radius:12px}
+  .topic-icon{grid-column:auto}.topic-icon .nav-icon{width:24px;height:24px}
+  .landing-topic h3{font-size:14px;line-height:1.25;margin:0;letter-spacing:normal}
+  .landing-topic p,.landing-topic small,.landing-topic .topic-arrow{display:none}
+}

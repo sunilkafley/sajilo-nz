@@ -16,7 +16,7 @@ test('practical hubs search their published content and preserve language',async
     await expect(page.locator('.topic-content')).toContainText('Synthetic');
     await expect(page.getByRole('checkbox')).toHaveCount(0);
   }
-  await page.getByLabel('Language / भाषा').selectOption('ne');
+  await page.getByRole('button',{name:'Switch to Nepali'}).click();
   await expect(page).toHaveURL(/q=Synthetic.*lang=ne/);
   await expect(page.getByRole('heading',{name:'No matching published articles'})).toBeVisible();
   await page.getByRole('link',{name:'Check English availability'}).click();

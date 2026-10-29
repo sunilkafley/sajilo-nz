@@ -27,11 +27,14 @@ it('opens a dedicated housing information page without a checklist',async()=>{
   expect(screen.queryByRole('checkbox')).toBeNull();
 });
 it('retains route and filter context when choosing Nepali, with explicit English interface fallback',async()=>{
-  mount('/explore?category=money&topic=documents');await userEvent.selectOptions(screen.getByLabelText('Language / भाषा'),'ne');
+  mount('/explore?category=money&topic=documents');await userEvent.click(screen.getByRole('button',{name:'Switch to Nepali'}));
   expect(screen.getByTestId('location')).toHaveTextContent('/explore/money?topic=documents&lang=ne');
   expect(screen.getByText(/Interface shown in English/)).toHaveAttribute('lang','en');
   expect(screen.getByRole('link',{name:'Journey'})).toHaveAttribute('href','/journey?lang=ne');
   expect(interfaceText('ne','tagline').language).toBe('ne');expect(interfaceText('ne','fallback').language).toBe('en');
+  await userEvent.click(screen.getByRole('button',{name:'Switch to English'}));
+  expect(screen.getByTestId('location')).toHaveTextContent('/explore/money?topic=documents');
+  expect(screen.getByRole('button',{name:'Switch to Nepali'})).toHaveTextContent('नेपाली');
 });
 it('Community offers real existing starting points without fictional listings or checklists',async()=>{
   const fetch=vi.spyOn(globalThis,'fetch').mockResolvedValue({ok:true,json:async()=>({results:[],count:0,next:null,facets:{city:[],kind:[],category:[]}})} as Response);

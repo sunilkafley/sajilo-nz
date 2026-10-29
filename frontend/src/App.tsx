@@ -57,7 +57,7 @@ export function App({ repository }: { repository: ProgressRepository }) {
       <main id="main" className={location.pathname === '/' ? 'landing-main' : location.pathname.startsWith('/guides/') ? 'reading-main' : undefined} tabIndex={-1} ref={main}>
         {warning && <div role="alert" className="notice warning"><p>{warning}</p>{!initial.blocked && <button onClick={() => setWarning(retrySave(repository, progress))}>Try saving again</button>}</div>}
         <OfflineStatus quiet={location.pathname === '/'}/>
-        {language === 'ne' && <p className="language-fallback" lang="en">{interfaceText(language,'fallback').text}</p>}
+        {language === 'ne' && location.pathname !== '/' && <p className="language-fallback" lang="en">{interfaceText(language,'fallback').text}</p>}
         <Routes>
           <Route path="/explore/money/budget" element={<BudgetPage/>}/>
           <Route path="/search" element={<SearchPage/>}/>
