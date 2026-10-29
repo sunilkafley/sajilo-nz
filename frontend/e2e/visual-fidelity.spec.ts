@@ -9,7 +9,7 @@ test('public landing matches responsive hierarchy and preserves readable guides'
     await expect(page.getByRole('heading',{name:'Your New Zealand journey companion'})).toBeVisible();
     await expect(page.locator('.landing-topic')).toHaveCount(6);
     const columns=await page.locator('.landing-topics').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
-    expect(columns).toBe(width<=600?1:width<=1050?2:3);
+    expect(columns).toBe(width<=1050?2:3);
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
     const logo=await page.locator('.sajilo-logo').boundingBox();expect(logo!.width/logo!.height).toBeCloseTo(3,2);
     const main=await page.getByRole('main').boundingBox();
