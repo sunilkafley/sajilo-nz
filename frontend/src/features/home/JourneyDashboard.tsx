@@ -23,7 +23,7 @@ export function JourneyDashboard({ progress, onTaskChange }: { progress: Progres
   const journey = homeJourney(progress);
   const { preview, error } = useSavedPreview();
   return <div className="home-page">
-    <header className="home-welcome"><div><p className="eyebrow">YOUR NEXT CHAPTER</p><h1>Your journey</h1><p>A little closer to your New Zealand dream. Let’s take the next step.</p></div><Link className="home-city-pill" to="/cities/christchurch"><Icon name="pin"/>Christchurch<Icon name="arrow"/></Link></header>
+    <header className="home-welcome"><div><p className="eyebrow">YOUR NEXT CHAPTER</p><h1>Journey Planner</h1><p>A little closer to your New Zealand dream. Let’s take the next step.</p></div><Link className="home-city-pill" to="/cities/christchurch"><Icon name="pin"/>Christchurch<Icon name="arrow"/></Link></header>
     <section className="journey-stages" aria-label="Journey stages">
       <Link className="card" to="/predeparture"><Icon name="plane"/><h2>Before you leave</h2><p>Open your pre-departure checklist →</p></Link>
       <Link className="card" to="/firstweek"><Icon name="journey"/><h2>Arrival / First week</h2><p>Open your independent first-week checklist →</p></Link>

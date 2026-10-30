@@ -42,10 +42,10 @@ it('first-week keyboard target, navigation and reload retain independent progres
   expect(document.title).toBe('First-week checklist · Sajilo NZ');
   const checkbox=screen.getByRole('checkbox',{name:'Review your first-week budget'});
   expect(checkbox).toHaveFocus(); await user.click(checkbox);
-  await user.click(screen.getByRole('link',{name:'Journey'}));
+  await user.click(screen.getByRole('link',{name:'Journey Planner'}));
   await user.click(screen.getByRole('link',{name:/Before you leave/}));
   await user.click(screen.getByRole('checkbox',{name:'Passport'}));
-  await user.click(screen.getByRole('link',{name:'Journey'}));
+  await user.click(screen.getByRole('link',{name:'Journey Planner'}));
   await user.click(screen.getByRole('link',{name:/Arrival \/ First week/}));
   expect(screen.getByRole('checkbox',{name:'Review your first-week budget'})).toBeChecked();
   view.unmount();mount();

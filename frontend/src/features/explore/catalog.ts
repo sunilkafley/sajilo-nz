@@ -29,7 +29,8 @@ export const categories = categoryDefinitions.map(category => ({...category,
 export const cities = ['Auckland', 'Christchurch', 'Wellington', 'Hamilton', 'Dunedin'];
 
 // Reuse the prototype's line icons without changing the preserved prototype.
-export const iconPaths: Record<IconName | 'search' | 'arrow' | 'book' | 'pin', string> = {
+export const iconPaths: Record<IconName | 'search' | 'arrow' | 'book' | 'pin' | 'weather', string> = {
+  weather: 'M12 3v2 M5 6l1.5 1.5 M3 13h2 M19 6l-1.5 1.5 M10 17a5 5 0 1 1 7-7 M8 21h11a3 3 0 0 0 0-6 5 5 0 0 0-9-1 3.5 3.5 0 0 0-2 7z',
   cap: 'M2 8l10-5 10 5-10 5z M6 10v7q6 5 12 0v-7 M22 8v8',
   shield: 'M12 2l9 4v6c0 6-9 10-9 10S3 18 3 12V6z M8 12l3 3 5-6',
   plane: 'M22 2l-7 20-4-9-9-4z M11 13L22 2',
