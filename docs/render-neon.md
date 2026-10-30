@@ -3,23 +3,7 @@
 Deployment is live at https://sajilo-nz-staging.onrender.com/. Acceptance evidence and remaining gates are in docs/sprint-4.md; recovery instructions are in docs/recovery-drill.md. Use one Render Free web service and one Neon Free PostgreSQL project; no Render database, worker, paid disk or purchased domain. Choose Singapore for both. Stay within free quotas. Render may sleep after 15 idle minutes, delaying first access; Neon compute can also suspend. Do not use artificial keepalive traffic to avoid platform limits.
 
 ## Before deploying
-Merge a reviewed PR with passing CI into main. `render.yaml` must be present on main. The Docker build bundles React assets and a Python 3.14.8 Django server. You do not need Docker on your Windows laptop. The Blueprint configures automatic deployment after CI checks pass, as described below.
-
-## Continuous deployment from main
-
-`render.yaml` sets `branch: main` and `autoDeployTrigger: checksPass`. After a PR is merged (or a commit is pushed) into main, the existing GitHub **Quality checks** workflow runs on that commit. Render waits for the checks before deploying the same-origin React/Django service. A push to a feature branch does not deploy this service. Render does not auto-deploy when no checks are detected or a check fails. GitHub checks with neutral or skipped conclusions count as passed, so keep the quality job mandatory and do not skip its validation steps.
-
-One-time activation for the existing service:
-
-1. Merge the reviewed configuration PR after its quality checks pass. If the service is Blueprint-managed, confirm the Blueprint sync has applied the new setting; the first sync may need dashboard attention.
-2. Open the existing **sajilo-nz-staging** service in Render, then **Settings**. Confirm its GitHub connection is `sunilkafley/sajilo-nz`, its linked branch is `main`, and **Auto-Deploy** is **After CI Checks Pass**. Set and save this value if it still shows Off. Use the existing service and Free plan.
-3. Check the service's **Events** after the next main commit passes CI. Confirm the deployed commit matches that main commit, the deployment becomes Live, and `/api/health/`, the homepage and `/admin/login/` respond successfully. A cold start can delay the first response.
-
-Acceptance: a main commit with passing checks deploys automatically; failed checks prevent automatic deployment; feature-branch commits do not deploy the staging service. Repository configuration alone is not evidence that the live Render setting is active. Live activation and a successful automatic deployment remain unverified until observed in Render.
-
-No deploy hook or additional GitHub secret is needed. Startup still runs database migrations, so review schema-changing PRs and complete the private backup/restore checks before merging them. Merging main now authorizes its automatic release; content publication still requires separate recorded human review. For an incident, set Auto-Deploy to Off and update the Blueprint to `autoDeployTrigger: "off"` so a later sync preserves the pause. Roll back to a compatible code release without blindly reversing database migrations.
-
-References: [Render automatic deployments](https://render.com/docs/deploys) and [Blueprint autoDeployTrigger](https://render.com/docs/blueprint-spec#autodeploytrigger).
+Merge the reviewed Sprint 4 PR with passing CI into main. `render.yaml` must be present on main. The Docker build bundles React assets and a Python 3.14.8 Django server. You do not need Docker on your Windows laptop. Automatic deployment is off; later releases must be deliberately deployed after CI passes.
 
 ## Neon values (keep private)
 Open the `sajilo-nz-staging` project and its Connect dialog. Select the intended staging branch/database/role. Turn connection pooling OFF for the direct connection used by this small, single-worker service and its startup migrations. Keep the original connection details private.
