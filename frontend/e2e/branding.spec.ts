@@ -14,7 +14,7 @@ test('approved logo stays complete and undistorted with keyboard navigation and 
   }
   const nav=page.getByRole('navigation',{name:'Main navigation'});
   await openNavigation(page);
-  await nav.getByRole('link',{name:'Journey',exact:true}).focus();await page.keyboard.press('Enter');
+  await nav.getByRole('link',{name:'Journey Planner',exact:true}).focus();await page.keyboard.press('Enter');
   await expect(page.getByRole('region',{name:'Journey stages'})).toBeVisible();
   await nav.getByRole('link',{name:'Explore',exact:true}).focus();await page.keyboard.press('Enter');
   await expect(nav.getByRole('link',{name:'Explore',exact:true})).toHaveAttribute('aria-current','page');

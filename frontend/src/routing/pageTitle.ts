@@ -2,7 +2,7 @@ import { topicConfig } from '../features/explore/topicConfig';
 
 const pageTitles: Record<string, string> = {
   '/': 'Home',
-  '/journey': 'Journey',
+  '/journey': 'Journey Planner',
   '/community': 'Community',
   '/about': 'About',
   '/faqs': 'FAQs',
