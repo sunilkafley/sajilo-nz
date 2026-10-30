@@ -3,8 +3,8 @@ import { test, expect } from '@playwright/test';
 
 test('Home matches prototype composition and connects next steps, city and guides',async({page},testInfo)=>{
   await page.goto('/#/journey');
-  await expect(page).toHaveTitle('Journey · Sajilo NZ');
-  await expect(page.getByRole('heading',{name:'Your journey'})).toBeVisible();
+  await expect(page).toHaveTitle('Journey Planner · Sajilo NZ');
+  await expect(page.getByRole('heading',{name:'Journey Planner'})).toBeVisible();
   await expect(page.getByRole('progressbar',{name:'Planning tasks completed'})).toHaveAttribute('aria-valuenow','0');
   await page.screenshot({path:testInfo.outputPath('home.png'),fullPage:true});
   for (const width of [320,768,1440]) {
@@ -21,13 +21,13 @@ test('Home matches prototype composition and connects next steps, city and guide
   await page.getByRole('link',{name:'Passport',exact:true}).focus(); await page.keyboard.press('Enter');
   await expect(page.getByRole('checkbox',{name:'Passport',exact:true})).toBeFocused();
   await page.getByRole('checkbox',{name:'Passport',exact:true}).check();
-  await navigateSidebar(page,'Journey');
+  await navigateSidebar(page,'Journey Planner');
   await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow','1');
   await page.reload(); await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow','1');
   await expect(page.getByRole('link',{name:'Passport',exact:true})).toHaveCount(0);
   await page.getByRole('link',{name:'Explore Christchurch'}).click();
   await expect(page.getByRole('heading',{name:'Christchurch',exact:true})).toBeVisible();
-  await navigateSidebar(page,'Journey');
+  await navigateSidebar(page,'Journey Planner');
   await page.getByRole('link',{name:'Search Sajilo NZ',exact:true}).click();
   await page.getByRole('combobox',{name:'Search Sajilo NZ guides, checklists and topics'}).fill('Passport');
   await page.getByRole('combobox',{name:'Search Sajilo NZ guides, checklists and topics'}).press('Enter');
@@ -46,7 +46,7 @@ test('Home completion, budget and Journey navigation work offline',async({page,c
   await page.getByRole('link',{name:'Open first-month budget step'}).click();
   await expect(page.getByRole('checkbox',{name:'First-month budget',exact:true})).toBeFocused();
   await page.getByRole('checkbox',{name:'First-month budget',exact:true}).check();
-  await navigateSidebar(page,'Journey');
+  await navigateSidebar(page,'Journey Planner');
   await expect(page.locator('.offline-status')).toHaveAttribute('data-offline-ready','true');
   await context.setOffline(true);await page.reload();
   await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow','2');
@@ -59,7 +59,7 @@ test('Home bookmarks retain language and open saved copies offline without bypas
   await page.goto('/#/guides/test-bilingual-documents?lang=ne');
   await expect(page.locator('.offline-status')).toHaveAttribute('data-offline-ready','true');
   await page.getByRole('button',{name:'Save guide',exact:true}).click();
-  await navigateSidebar(page,'Journey');
+  await navigateSidebar(page,'Journey Planner');
   await expect(page.getByText('1 saved bookmarks · 1 saved copies on this browser')).toBeVisible();
   await expect(page.getByText('यो नेपाली सामग्री परीक्षणका लागि मात्र हो।',{exact:true})).toHaveCount(0);
   await context.setOffline(true); await page.reload();
@@ -69,7 +69,7 @@ test('Home bookmarks retain language and open saved copies offline without bypas
   await page.route('**/api/guides/**',route=>route.fulfill({json:[]}));
   await context.setOffline(false);
   await expect(page.getByRole('heading',{name:'Guide unavailable in this language'})).toBeVisible();
-  await navigateSidebar(page,'Journey');
+  await navigateSidebar(page,'Journey Planner');
   await expect(page.getByText('1 saved bookmarks · 0 saved copies on this browser')).toBeVisible();
   await page.getByRole('link',{name:'परीक्षण यात्रा कागजात',exact:true}).click();
   await expect(page.getByRole('button',{name:'Remove unavailable guide'})).toBeVisible();

@@ -27,12 +27,12 @@ test('public landing matches responsive hierarchy and preserves readable guides'
     if(width===390) await page.screenshot({path:'../docs/screenshots/public-landing/home-390-viewport.png'});
   }
   await page.setViewportSize({width:390,height:844});
-  await page.getByRole('navigation').getByRole('link',{name:'Journey',exact:true}).focus();await page.keyboard.press('Enter');
+  await page.getByRole('navigation').getByRole('link',{name:'Journey Planner',exact:true}).focus();await page.keyboard.press('Enter');
   await expect(page.getByRole('main')).toBeFocused();
   await page.getByRole('region',{name:'Journey stages'}).getByRole('link',{name:/Before you leave/}).click();
   await page.getByRole('checkbox',{name:'Passport',exact:true}).check();await page.reload();
   await expect(page.getByRole('checkbox',{name:'Passport',exact:true})).toBeChecked();
-  await expect(page.getByRole('navigation').getByRole('link',{name:'Journey',exact:true})).toHaveAttribute('aria-current','page');
+  await expect(page.getByRole('navigation').getByRole('link',{name:'Journey Planner',exact:true})).toHaveAttribute('aria-current','page');
   await page.getByRole('link',{name:'Search Sajilo NZ',exact:true}).click();
   await page.getByRole('combobox',{name:'Search Sajilo NZ guides, checklists and topics'}).fill('budget');
   await expect(page.getByRole('listbox',{name:'Search suggestions'}).getByRole('option').first()).toContainText('Budget calculator');

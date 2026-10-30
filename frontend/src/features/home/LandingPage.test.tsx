@@ -30,7 +30,7 @@ it('retains route and filter context when choosing Nepali, with explicit English
   mount('/explore?category=money&topic=documents');await userEvent.click(screen.getByRole('button',{name:'Switch to Nepali'}));
   expect(screen.getByTestId('location')).toHaveTextContent('/explore/money?topic=documents&lang=ne');
   expect(screen.queryByText(/Interface shown in English/)).not.toBeInTheDocument();
-  expect(screen.getByRole('link',{name:'Journey'})).toHaveAttribute('href','/journey?lang=ne');
+  expect(screen.getByRole('link',{name:'Journey Planner'})).toHaveAttribute('href','/journey?lang=ne');
   expect(interfaceText('ne','tagline').language).toBe('ne');expect(interfaceText('ne','fallback').language).toBe('en');
   await userEvent.click(screen.getByRole('button',{name:'Switch to English'}));
   expect(screen.getByTestId('location')).toHaveTextContent('/explore/money?topic=documents');
@@ -46,6 +46,6 @@ it('Community offers real existing starting points without fictional listings or
 });
 it('exposes Journey as current to assistive technology on checklist detail routes',()=>{
   mount('/predeparture');
-  expect(screen.getByRole('link',{name:'Journey'})).toHaveAttribute('aria-current','page');
+  expect(screen.getByRole('link',{name:'Journey Planner'})).toHaveAttribute('aria-current','page');
   expect(screen.getByRole('link',{name:'Home'})).not.toHaveAttribute('aria-current');
 });

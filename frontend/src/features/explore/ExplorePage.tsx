@@ -27,7 +27,7 @@ export function ExplorePage() {
       </Link>)}</div>
     </section>
     <section className="explore-section" aria-labelledby="explore-aotearoa"><h2 id="explore-aotearoa">Get to know Aotearoa</h2><p>Read introductions when published in your selected language.</p>
-      <ul className="explore-topics">{introductionPages.map(topic=><li key={topic.slug}><Icon name="book"/><Link to={link('/explore/aotearoa/'+topic.slug)}>{topic.title}</Link></li>)}</ul>
+      <ul className="explore-topics">{introductionPages.map(topic=><li key={topic.slug}><Icon name={topic.icon}/><Link to={link('/explore/aotearoa/'+topic.slug)}>{topic.title}</Link></li>)}</ul>
     </section>
     <section className="explore-section" aria-labelledby="explore-cities"><h2 id="explore-cities">Find your city</h2><p>Christchurch preparation uses the existing city guide. Other city introductions appear when published.</p>
       <ul className="explore-cities">{cities.map(city=><li key={city}><Icon name="pin"/><Link to={link(city==='Christchurch'?'/cities/christchurch':'/explore/cities/'+city.toLowerCase())}>{city}</Link></li>)}</ul>

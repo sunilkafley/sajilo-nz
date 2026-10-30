@@ -33,10 +33,10 @@ it('renders prototype sections, honest planned tools and real zero progress with
   const fetch=vi.fn(); vi.stubGlobal('fetch',fetch);
   const write=vi.spyOn(Storage.prototype,'setItem');
   mount();
-  expect(document.title).toBe('Journey · Sajilo NZ');
+  expect(document.title).toBe('Journey Planner · Sajilo NZ');
   expect(screen.getByRole('main')).toHaveFocus();
-  expect(screen.getByRole('link',{name:'Journey'})).toHaveAttribute('aria-current','page');
-  expect(screen.getByRole('heading',{name:'Your journey'})).toBeInTheDocument();
+  expect(screen.getByRole('link',{name:'Journey Planner'})).toHaveAttribute('aria-current','page');
+  expect(screen.getByRole('heading',{name:'Journey Planner'})).toBeInTheDocument();
   expect(screen.getByRole('progressbar',{name:'Planning tasks completed'})).toHaveAttribute('aria-valuenow','0');
   expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuemax','27');
   expect(screen.getByText('0 saved bookmarks · 0 saved copies on this browser')).toBeInTheDocument();
@@ -53,7 +53,7 @@ it('next step focuses the real checklist and Home updates after completion and r
   await user.click(screen.getByRole('link',{name:'Passport'}));
   const checkbox=screen.getByRole('checkbox',{name:'Passport'});
   expect(checkbox).toHaveFocus(); await user.click(checkbox);
-  await user.click(screen.getByRole('link',{name:'Journey'}));
+  await user.click(screen.getByRole('link',{name:'Journey Planner'}));
   expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow','1');
   expect(screen.queryByRole('link',{name:'Passport'})).not.toBeInTheDocument();
   expect(screen.getByRole('link',{name:'Academic documents'})).toBeInTheDocument();
@@ -112,7 +112,7 @@ it('preserves failed-write checklist state in memory while retaining the warning
   await user.click(screen.getByRole('link',{name:'Passport'}));
   vi.spyOn(Storage.prototype,'setItem').mockImplementation(()=>{throw new Error('quota');});
   await user.click(screen.getByRole('checkbox',{name:'Passport'}));
-  await user.click(screen.getByRole('link',{name:'Journey'}));
+  await user.click(screen.getByRole('link',{name:'Journey Planner'}));
   expect(screen.getByRole('alert')).toHaveTextContent('Could not save');
   expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow','1');
   expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
