@@ -1,3 +1,4 @@
+import { featuredTopicMetadata } from './featuredTopicMetadata';
 // Availability describes implemented destinations, never editorial verification.
 type IconName = 'cap' | 'shield' | 'plane' | 'journey' | 'home' | 'wallet' | 'briefcase' | 'users' | 'globe' | 'car' | 'heart';
 type Category = {
@@ -24,7 +25,7 @@ const categoryDefinitions: Category[] = [
 
 // A working topic page is not a claim that editorial content has been published.
 export const categories = categoryDefinitions.map(category => ({...category,
-  status: 'available' as const, to: `/explore/${category.id}`, action: 'Explore topic'}));
+  ...featuredTopicMetadata.find(topic=>topic.id===category.id), status: 'available' as const, to: `/explore/${category.id}`, action: 'Explore topic'}));
 
 export const cities = ['Auckland', 'Christchurch', 'Wellington', 'Hamilton', 'Dunedin'];
 

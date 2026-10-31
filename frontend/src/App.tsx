@@ -34,11 +34,15 @@ export function App({ repository }: { repository: ProgressRepository }) {
     const task = new URLSearchParams(location.search).get('task');
     if (task && ((location.pathname === '/predeparture' && tasks.some(item => item.id === task)) || (location.pathname === '/firstweek' && arrivalTasks.some(item => item.id === task)))) {
       document.getElementById(task)?.focus();
+    } else if (location.pathname === '/' && location.hash === '#landing-aotearoa') {
+      const heading = document.getElementById('landing-aotearoa');
+      heading?.focus({ preventScroll: true });
+      heading?.scrollIntoView?.({ block: 'start' });
     } else {
       main.current?.focus({ preventScroll: true });
       if (document.documentElement.scrollTop) window.scrollTo(0, 0);
     }
-  }, [location.pathname, location.search]);
+  }, [location.pathname, location.search, location.hash]);
   function change(id: string, checked: boolean) {
     const result = updateTask(repository, progress, id, checked, initial.blocked);
     setProgress(result.progress); setWarning(result.warning);
