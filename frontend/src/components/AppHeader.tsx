@@ -3,6 +3,7 @@ import { SajiloLogo } from './SajiloLogo';
 import { PrototypeIcon } from './PrototypeIcon';
 import { MainNavigation } from './MainNavigation';
 import { NewZealandClock } from './NewZealandClock';
+import { LanguageFlag } from './LanguageFlag';
 import { languageFromSearch, withLanguage } from '../routing/language';
 
 export function AppHeader() {
@@ -16,7 +17,7 @@ export function AppHeader() {
     <div className="header-controls"><button className="language-toggle" type="button"
       lang={nextLanguage} aria-label={nextLanguage==='ne'?'Switch to Nepali':'Switch to English'}
       onClick={()=>navigate(withLanguage(location.pathname+location.search+location.hash,nextLanguage))}>
-      {nextLanguage==='ne'?'नेपाली':'English'}
+      <LanguageFlag language={nextLanguage}/><span>{nextLanguage==='ne'?'नेपाली':'English'}</span>
     </button>
       <Link className="header-search" to={language==='ne'?'/search?lang=ne':'/search'} aria-label="Search Sajilo NZ"><PrototypeIcon name="search"/></Link>
     </div>

@@ -1,0 +1,5 @@
+export function LanguageFlag({ language }: { language: 'en' | 'ne' }) {
+  return language === 'ne'
+    ? <svg className="language-flag" viewBox="0 0 30 24" aria-hidden="true"><path d="M6 1v22h20L14 12h11Z" fill="#dc143c" stroke="#003893" strokeWidth="2"/><path d="M10 8a3 3 0 0 0 5 0 2.5 2.5 0 0 1-5 0" fill="white"/><path d="m12 15 1 2 2-1-1 2 2 1-2 1 1 2-2-1-1 2-1-2-2 1 1-2-2-1 2-1-1-2 2 1Z" fill="white"/></svg>
+    : <svg className="language-flag" viewBox="0 0 30 20" aria-hidden="true"><path fill="#00247d" d="M0 0h30v20H0z"/><svg width="16" height="10" viewBox="0 0 16 10"><path stroke="white" strokeWidth="3" d="m0 0 16 10M16 0 0 10"/><path stroke="#cc142b" strokeWidth="1" d="m0 0 16 10M16 0 0 10"/><path stroke="white" strokeWidth="4" d="M8 0v10M0 5h16"/><path stroke="#cc142b" strokeWidth="2" d="M8 0v10M0 5h16"/></svg>{[[23,5],[19,10],[27,9],[23,16]].map(([x,y]) => <path key={x+','+y} d="m0-2 .6 1.3 1.4.1-1 1 .3 1.4L0 1.1l-1.3.7.3-1.4-1-1 1.4-.1Z" transform={`translate(${x} ${y})`} fill="#cc142b" stroke="white" strokeWidth=".5"/>)}</svg>;
+}

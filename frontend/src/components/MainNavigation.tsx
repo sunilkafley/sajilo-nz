@@ -4,8 +4,8 @@ import { languageFromSearch, withLanguage } from '../routing/language';
 
 export const navigationItems = [
   { to:'/', label:'Home', icon:'home' },
-  { to:'/journey', label:'Journey Planner', icon:'journey' },
   { to:'/explore', label:'Explore', icon:'compass' },
+  { to:'/journey', label:'Journey Planner', icon:'journey' },
   { to:'/faqs', label:'FAQs', icon:'help' },
   { to:'/about', label:'About', icon:'book' },
 ] as const;
