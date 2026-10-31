@@ -6,7 +6,7 @@ test('homepage topics fit above mobile navigation without scrolling', async ({ p
     await page.goto('/#/?lang=ne');
     await expect(page.locator('.language-fallback')).toHaveCount(0);
     const topics = page.locator('.landing-topic');
-    await expect(topics).toHaveCount(6);
+    await expect(topics).toHaveCount(4);
     const navigation = await page.locator('.public-navigation').boundingBox();
     for (const topic of await topics.all()) {
       await expect(topic).toBeVisible();

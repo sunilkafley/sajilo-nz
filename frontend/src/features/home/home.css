@@ -56,3 +56,13 @@
 .home-grid{grid-template-columns:minmax(0,1fr) clamp(300px,23vw,340px);gap:24px}
 @media(max-width:1200px){.home-grid{grid-template-columns:minmax(0,1fr)}.home-grid>aside{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.home-grid>aside{grid-template-columns:1fr}}
+.journey-stage-icon{display:grid;place-items:center;width:54px;height:54px;border-radius:14px;background:#e4f5ef;color:#008b80;margin-bottom:14px}
+.journey-stage-icon svg{width:36px;height:38px}
+.stage-arrival{background:#fff4db;color:#eea126}.stage-settling{background:#e6f5fd;color:#179bc7}.stage-work{background:#fff0dd;color:#e88a24}
+.journey-stages .card:has(.stage-departure){background:linear-gradient(135deg,#f0faf6,#fff)}
+.journey-stages .card:has(.stage-arrival){background:linear-gradient(135deg,#fff9eb,#fff)}
+.journey-stages .card:has(.stage-settling){background:linear-gradient(135deg,#f0f9ff,#fff)}
+.journey-stages .card:has(.stage-work){background:linear-gradient(135deg,#fff8eb,#fff)}
+.journey-flight-link{display:flex;align-items:center;gap:14px;padding:16px 20px;margin:0 0 24px;border:1px solid #cce5df;border-radius:14px;background:#f1faf7;font-weight:700}
+.journey-flight-link>span:nth-child(2){flex:1;min-width:0}.journey-flight-link small{display:block;font-size:12px;font-weight:400;color:#536772;margin-top:4px}
+.journey-flight-link:hover{border-color:#008b80}

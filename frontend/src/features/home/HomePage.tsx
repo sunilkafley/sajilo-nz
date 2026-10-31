@@ -18,6 +18,7 @@ export function HomePage() {
     <section className="landing-section" aria-labelledby="landing-topics">
       <div className="landing-section-head"><div><h2 id="landing-topics">Explore key topics</h2><p>Find the information you need for your New Zealand journey.</p></div><Link to={'/explore'+(lang ? '?lang=ne' : '')}>View all topics <PrototypeIcon name="arrow"/></Link></div>
       <div className="landing-topics">{landingTopics.map(topic=><Link key={topic.id} className={'landing-topic topic-'+topic.id} to={withLanguage('/explore/'+topic.id,lang?'ne':'en')} aria-labelledby={'landing-'+topic.id}>
+        <img className="topic-photo" src={topic.photo} alt="" width="600" height="400"/>
         <span className="topic-icon"><PrototypeIcon name={topic.icon}/></span><div><h3 id={'landing-'+topic.id}>{topic.title}</h3><p>{topic.description}</p><small>Explore topic</small></div><span className="topic-arrow"><PrototypeIcon name="arrow"/></span>
       </Link>)}</div>
     </section>
