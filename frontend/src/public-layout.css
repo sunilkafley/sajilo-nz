@@ -5,7 +5,7 @@ body{color:#10284b}p{color:#4f6477}
 .workspace main{max-width:1440px;padding:36px clamp(24px,3vw,48px) 48px}
 .workspace main.landing-main{max-width:1440px;padding:0}
 .app-header{background:#fff;border-bottom:1px solid var(--line)}
-.app-header-inner{max-width:1440px;min-height:100px;padding:12px clamp(24px,3vw,48px);margin:auto;display:flex;align-items:center;justify-content:space-between;gap:28px}
+.app-header-inner{max-width:1440px;min-height:92px;padding:8px clamp(24px,3vw,48px);margin:auto;display:flex;align-items:center;justify-content:space-between;gap:28px}
 .app-header .brand-link{width:230px;flex-shrink:0}
 .public-navigation{display:flex;align-items:center;gap:24px}
 .public-navigation a{position:relative;display:flex;align-items:center;justify-content:center;min-height:48px;text-decoration:none;color:#10284b;font-size:15px;font-weight:600}
@@ -21,6 +21,9 @@ body{color:#10284b}p{color:#4f6477}
 .header-search{display:grid;place-items:center;min-height:44px;min-width:44px;color:#10284b}
 .header-search .nav-icon{width:25px;height:25px}
 .language-toggle{cursor:pointer;min-width:76px;font-weight:600}
+.header-controls .language-toggle{display:flex;align-items:center;justify-content:center;gap:6px}
+.language-flag{width:22px;height:20px;flex-shrink:0}
+.hero-copy p:not(.hero-nepali){background:#e8f5f2;color:#173d46;border-radius:8px;padding:8px 12px;box-shadow:0 1px 4px #183f5310}
 .language-toggle:hover{background:#e8f5f2}
 .language-toggle:focus-visible{outline:3px solid #008a86;outline-offset:3px}
 .landing-hero{position:relative;isolation:isolate;min-height:410px;padding:44px clamp(24px,4vw,64px) 95px;background:linear-gradient(90deg,#ffffffed 0%,#ffffffe6 22%,#ffffffa6 40%,#ffffff00 63%),url('./assets/journey-landscape.png') center/cover}
@@ -60,7 +63,7 @@ body{color:#10284b}p{color:#4f6477}
 @media(max-width:1050px){.app-header-inner{gap:16px}.app-header .brand-link{width:190px}.public-navigation{gap:15px}.public-navigation a{font-size:14px}.header-controls{gap:6px}.header-controls .language-toggle{max-width:115px}.landing-topics,.aotearoa-topics{grid-template-columns:repeat(2,minmax(0,1fr))}.journey-stages{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-copy{max-width:540px}.hero-copy h1{font-size:42px}}
 @media(max-width:800px){
   .header-right{gap:3px}.nz-clock{font-size:10px;line-height:1.2}
-  .app-header-inner{min-height:76px;padding:10px 18px;gap:8px}.app-header .brand-link{width:170px}.header-controls{gap:2px}.header-controls .language-toggle{font-size:12px;max-width:105px}.header-search{min-width:40px}
+  .app-header-inner{min-height:76px;padding:6px 18px;gap:8px}.app-header .brand-link{width:170px}.header-controls{gap:2px}.header-controls .language-toggle{font-size:12px;max-width:105px}.header-search{min-width:40px}
   .public-navigation{position:fixed;inset:auto 0 0;z-index:70;background:#fffffff5;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:5px 8px calc(5px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 20px #183f5308}
   .public-navigation a{min-height:58px;flex-direction:column;gap:3px;font-size:11px}.public-navigation .nav-icon{display:block;width:23px;height:23px}.public-navigation .desktop-about{display:none}.public-navigation a.active::after{display:none}.public-navigation a.active{background:#e9f6f3;border-radius:10px}
   html{scroll-padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
@@ -72,9 +75,11 @@ body{color:#10284b}p{color:#4f6477}
   .aotearoa-section{padding-top:12px;padding-bottom:30px}.aotearoa-topics{grid-template-columns:repeat(2,minmax(0,1fr))}.aotearoa-topics li{flex-wrap:wrap}.aotearoa-topics small{width:100%;margin-left:34px}
 }
 @media(max-width:600px){.landing-topics{grid-template-columns:1fr;gap:10px}.landing-topic{grid-template-columns:38px 1fr 28px;gap:12px;min-height:112px;padding:16px;align-items:center;align-content:center}.topic-icon{grid-column:auto}.landing-topic h3{font-size:16px;margin-bottom:4px}.landing-topic p{font-size:13px;margin-bottom:3px}.landing-topic small{font-size:10px}.topic-arrow{width:28px;height:28px}.topic-arrow .nav-icon{width:18px}.aotearoa-topics{grid-template-columns:repeat(2,minmax(0,1fr))}.aotearoa-topics li{flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:8px;padding:16px;min-width:0}.aotearoa-topics li .nav-icon{color:var(--green);flex-shrink:0}.aotearoa-topics a{overflow-wrap:anywhere}.aotearoa-topics small{width:auto;margin-left:auto}.journey-stages{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.journey-stages .card{padding:16px;min-width:0}.journey-stages h2{font-size:16px;overflow-wrap:anywhere}.journey-stages p{font-size:13px}}
-@media(max-width:350px){.app-header-inner{padding:8px 12px}.app-header .brand-link{width:145px}.header-controls .language-toggle{max-width:98px}.hero-copy h1{font-size:28px}.hero-copy .hero-nepali{font-size:20px}}
+@media(max-width:350px){.app-header-inner{padding:6px 12px}.app-header .brand-link{width:145px}.header-controls .language-toggle{max-width:98px}.hero-copy h1{font-size:28px}.hero-copy .hero-nepali{font-size:20px}}
 /* Keep all six topic destinations within the initial mobile screen. */
 @media(max-width:800px){
+  .landing-hero{padding-top:14px;padding-bottom:20px}
+  .hero-copy p:not(.hero-nepali){padding:6px 10px}
   .hero-copy h1{font-size:28px;margin:0 0 8px}
   .hero-copy .hero-nepali{font-size:21px;margin:0 0 10px}
   .hero-copy p{font-size:14px;line-height:1.4;margin:0;max-width:360px}

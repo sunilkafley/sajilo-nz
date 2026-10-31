@@ -17,6 +17,7 @@ it('uses the unchanged approved image and both approved accessible taglines',()=
 it('keeps one reusable navigation with original routes and active states; audience is not student-only',()=>{
   localStorage.clear();render(<MemoryRouter><App repository={createLocalRepository(()=>localStorage)}/></MemoryRouter>);
   const nav=screen.getByRole('navigation',{name:'Main navigation'});
+  expect(within(nav).getAllByRole('link').map(link=>link.textContent)).toEqual(['Home','Explore','Journey Planner','FAQs','About']);
   expect(within(nav).getAllByRole('link')).toHaveLength(5);
   for(const item of navigationItems) expect(within(nav).getByRole('link',{name:item.label})).toHaveAttribute('href',item.to);
   expect(within(nav).getByRole('link',{name:'Home'})).toHaveAttribute('aria-current','page');

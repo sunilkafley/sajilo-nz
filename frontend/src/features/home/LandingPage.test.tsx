@@ -13,6 +13,7 @@ beforeEach(()=>localStorage.clear());
 it('offers exactly six specified topics without Home checklists, invented reviews or listings',()=>{
   const write=vi.spyOn(Storage.prototype,'setItem');mount();
   const region=screen.getByRole('region',{name:'Explore key topics'});
+  expect(within(region).getByRole('link',{name:'Living Expenses'})).toHaveAttribute('href','/explore/money');
   expect(within(region).getAllByRole('link')).toHaveLength(7);
   for(const topic of landingTopics)expect(within(region).getByRole('link',{name:topic.title})).toHaveAttribute('href','/explore/'+topic.id);
   expect(screen.queryByRole('checkbox')).toBeNull();
@@ -35,6 +36,7 @@ it('retains route and filter context when choosing Nepali, with explicit English
   await userEvent.click(screen.getByRole('button',{name:'Switch to English'}));
   expect(screen.getByTestId('location')).toHaveTextContent('/explore/money?topic=documents');
   expect(screen.getByRole('button',{name:'Switch to Nepali'})).toHaveTextContent('नेपाली');
+  expect(screen.getByRole('button',{name:'Switch to Nepali'}).querySelector('svg')).toHaveAttribute('aria-hidden','true');
 });
 it('Community offers real existing starting points without fictional listings or checklists',async()=>{
   const fetch=vi.spyOn(globalThis,'fetch').mockResolvedValue({ok:true,json:async()=>({results:[],count:0,next:null,facets:{city:[],kind:[],category:[]}})} as Response);
