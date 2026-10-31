@@ -11,15 +11,26 @@ test('Explore is keyboard accessible and every available destination works', asy
   await expect(page.getByRole('main')).toBeFocused();
   await expect(page.getByRole('link', {name:'Explore', exact:true, includeHidden:true})).toHaveAttribute('aria-current', 'page');
   await expect(page.getByRole('heading', {name:'A new country. A world of possibilities.'})).toBeVisible();
-  await expect(page.getByRole('link', {name:'Study & courses',exact:true})).toHaveAttribute('href','#/explore/study');
-  await expect(page.getByRole('region', {name:'Find your city'}).getByRole('link')).toHaveCount(6);
+  await expect(page.getByRole('link', {name:'Study & Education',exact:true})).toHaveAttribute('href','#/explore/study');
+  await expect(page.locator('.explore-city-grid').getByRole('link')).toHaveCount(5);
+  await expect(page.getByRole('region',{name:'Get to know Aotearoa'})).toHaveCount(0);
+  for(const image of await page.locator('.explore-city-card img').all()){
+    await image.scrollIntoViewIfNeeded();
+    await expect(image).toBeVisible();
+    await expect.poll(()=>image.evaluate(element=>(element as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  }
+  await page.getByRole('link',{name:'Learn about New Zealand'}).click();
+  const introduction=page.getByRole('heading',{name:'Get to know Aotearoa'});
+  await expect(introduction).toBeFocused();
+  await expect(introduction).toBeInViewport();
+  await navigateSidebar(page,'Explore');
   await page.screenshot({path: testInfo.outputPath('explore.png'), fullPage:true});
 
   const destinations = [
     ['Search Sajilo NZ', 'Search results'],
     ['Open saved guides', 'Saved guides'],
     ['Prepare to travel', 'Make room for your next chapter.'],
-    ['Immigration', 'Clear information. Trusted sources.'],
+    ['Immigration & Visas', 'Clear information. Trusted sources.'],
     ['Christchurch', 'Christchurch'],
   ];
   for (const [label, heading] of destinations) {

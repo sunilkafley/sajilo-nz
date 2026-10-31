@@ -10,13 +10,30 @@ function Location(){const location=useLocation();return <output data-testid="loc
 const mount=(path='/')=>render(<MemoryRouter initialEntries={[path]}><App repository={createLocalRepository(()=>localStorage)}/><Location/></MemoryRouter>);
 beforeEach(()=>localStorage.clear());
 
+it('keeps matching Home and Explore topic content and photos consistent',async()=>{
+  mount();
+  const home=screen.getByRole('region',{name:'Explore key topics'});
+  const cards=landingTopics.map(topic=>{
+    const card=within(home).getByRole('link',{name:topic.title});
+    return {title:topic.title,text:card.textContent,photo:card.querySelector('img')?.getAttribute('src'),href:card.getAttribute('href')};
+  });
+  await userEvent.click(within(home).getByRole('link',{name:'View all topics'}));
+  const explore=screen.getByRole('region',{name:'Explore by topic'});
+  for(const expected of cards){
+    const card=within(explore).getByRole('link',{name:expected.title});
+    expect(card.textContent).toBe(expected.text);
+    expect(card.querySelector('img')).toHaveAttribute('src',expected.photo);
+    expect(card).toHaveAttribute('href',expected.href);
+  }
+});
+
 it('offers exactly four specified photo topics without Home checklists, invented reviews or listings',()=>{
   const write=vi.spyOn(Storage.prototype,'setItem');mount();
   const region=screen.getByRole('region',{name:'Explore key topics'});
   expect(within(region).getByRole('link',{name:'Earnings & Living Expenses'})).toHaveAttribute('href','/explore/money');
   expect(within(region).getAllByRole('link')).toHaveLength(5);
   expect(landingTopics.map(topic=>topic.title)).toEqual(['Immigration & Visas','Study & Education','Earnings & Living Expenses','Work & Careers']);
-  expect(region.querySelectorAll('.topic-photo')).toHaveLength(4);
+  expect(region.querySelectorAll('.topic-card-photo')).toHaveLength(4);
   expect(within(region).queryByRole('link',{name:'Housing & Flatting'})).toBeNull();
   expect(within(region).queryByRole('link',{name:'Everyday Life & Services'})).toBeNull();
   for(const topic of landingTopics)expect(within(region).getByRole('link',{name:topic.title})).toHaveAttribute('href','/explore/'+topic.id);
