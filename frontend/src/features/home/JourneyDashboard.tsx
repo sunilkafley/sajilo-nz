@@ -6,6 +6,7 @@ import { homeJourney, plannedTools } from './domain';
 import { useSavedPreview } from './useSavedPreview';
 import { emergencyResource } from './discovery';
 import './home.css';
+import { JourneyStageIcon } from './JourneyStageIcon';
 
 function Icon({ name }: { name: keyof typeof iconPaths }) {
   return <svg className="home-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d={iconPaths[name]}/></svg>;
@@ -25,11 +26,12 @@ export function JourneyDashboard({ progress, onTaskChange }: { progress: Progres
   return <div className="home-page">
     <header className="home-welcome"><div><p className="eyebrow">YOUR NEXT CHAPTER</p><h1>Journey Planner</h1><p>A little closer to your New Zealand dream. Let’s take the next step.</p></div><Link className="home-city-pill" to="/cities/christchurch"><Icon name="pin"/>Christchurch<Icon name="arrow"/></Link></header>
     <section className="journey-stages" aria-label="Journey stages">
-      <Link className="card" to="/predeparture"><Icon name="plane"/><h2>Before you leave</h2><p>Open your pre-departure checklist →</p></Link>
-      <Link className="card" to="/firstweek"><Icon name="journey"/><h2>Arrival / First week</h2><p>Open your independent first-week checklist →</p></Link>
-      <article className="card"><h2>Settling in</h2><p>Coming soon — tasks are not available yet.</p></article>
-      <article className="card"><h2>Work / Study / Daily life</h2><p>Coming soon — tasks are not available yet.</p></article>
+      <Link className="card" to="/predeparture"><JourneyStageIcon stage="departure"/><h2>Before you leave</h2><p>Open your pre-departure checklist →</p></Link>
+      <Link className="card" to="/firstweek"><JourneyStageIcon stage="arrival"/><h2>Arrival / First week</h2><p>Open your independent first-week checklist →</p></Link>
+      <article className="card"><JourneyStageIcon stage="settling"/><h2>Settling in</h2><p>Coming soon — tasks are not available yet.</p></article>
+      <article className="card"><JourneyStageIcon stage="work"/><h2>Work / Study / Daily life</h2><p>Coming soon — tasks are not available yet.</p></article>
     </section>
+    <a className="journey-flight-link" href="https://www.aviation.govt.nz/passenger-information/what-can-i-bring/"><span className="home-icon-tile"><Icon name="plane"/></span><span>See what I can bring in flight<small>Aviation Security · External website</small></span><Icon name="arrow"/></a>
     <p>Your checklist progress is stored on this browser only. No account is needed.</p>
     <div className="home-grid">
       <div className="home-stack">

@@ -10,11 +10,15 @@ function Location(){const location=useLocation();return <output data-testid="loc
 const mount=(path='/')=>render(<MemoryRouter initialEntries={[path]}><App repository={createLocalRepository(()=>localStorage)}/><Location/></MemoryRouter>);
 beforeEach(()=>localStorage.clear());
 
-it('offers exactly six specified topics without Home checklists, invented reviews or listings',()=>{
+it('offers exactly four specified photo topics without Home checklists, invented reviews or listings',()=>{
   const write=vi.spyOn(Storage.prototype,'setItem');mount();
   const region=screen.getByRole('region',{name:'Explore key topics'});
-  expect(within(region).getByRole('link',{name:'Living Expenses'})).toHaveAttribute('href','/explore/money');
-  expect(within(region).getAllByRole('link')).toHaveLength(7);
+  expect(within(region).getByRole('link',{name:'Earnings & Living Expenses'})).toHaveAttribute('href','/explore/money');
+  expect(within(region).getAllByRole('link')).toHaveLength(5);
+  expect(landingTopics.map(topic=>topic.title)).toEqual(['Immigration & Visas','Study & Education','Earnings & Living Expenses','Work & Careers']);
+  expect(region.querySelectorAll('.topic-photo')).toHaveLength(4);
+  expect(within(region).queryByRole('link',{name:'Housing & Flatting'})).toBeNull();
+  expect(within(region).queryByRole('link',{name:'Everyday Life & Services'})).toBeNull();
   for(const topic of landingTopics)expect(within(region).getByRole('link',{name:topic.title})).toHaveAttribute('href','/explore/'+topic.id);
   expect(screen.queryByRole('checkbox')).toBeNull();
   expect(within(screen.getByRole('region',{name:'Get to know Aotearoa'})).getAllByRole('listitem')).toHaveLength(6);
@@ -22,7 +26,7 @@ it('offers exactly six specified topics without Home checklists, invented review
   expect(write).not.toHaveBeenCalled();write.mockRestore();
 });
 it('opens a dedicated housing information page without a checklist',async()=>{
-  mount();await userEvent.click(screen.getByRole('link',{name:'Housing & Flatting'}));
+  mount('/explore');await userEvent.click(screen.getByRole('link',{name:'Housing & flatting'}));
   expect(screen.getByTestId('location')).toHaveTextContent('/explore/housing');
   expect(screen.getByRole('heading',{name:'A place to feel settled.'})).toBeInTheDocument();
   expect(screen.queryByRole('checkbox')).toBeNull();

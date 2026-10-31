@@ -1,9 +1,12 @@
+import immigrationPhoto from '../../assets/topics/immigration.jpg';
+import studyPhoto from '../../assets/topics/study.jpg';
+import moneyPhoto from '../../assets/topics/money.jpg';
+import workPhoto from '../../assets/topics/work.jpg';
+
 // Select existing directory sections, never unpublished guide pages.
 export const landingTopics = [
-  { id:'immigration', title:'Immigration & Visas', description:'Official immigration information, visa conditions and authoritative links.', icon:'shield', status:'Official source links' },
-  { id:'study', title:'Study & Education', description:'Courses, providers, qualifications and student support.', icon:'cap', status:'Resources planned' },
-  { id:'work', title:'Work & Careers', description:'Employment rights, job-search resources and career preparation.', icon:'briefcase', status:'Resources planned' },
-  { id:'housing', title:'Housing & Flatting', description:'Accommodation, renting, tenancy and flatting resources.', icon:'home', status:'Resources planned' },
-  { id:'money', title:'Living Expenses', description:'Banking, budgeting, taxes and everyday living costs.', icon:'wallet', status:'Travel money guides' },
-  { id:'transport', title:'Everyday Life & Services', description:'Healthcare, transport, driving and essential public services.', icon:'heart', status:'Resources planned' },
+  { id:'immigration', title:'Immigration & Visas', description:'Official immigration information, visa conditions and authoritative links.', icon:'shield', photo:immigrationPhoto },
+  { id:'study', title:'Study & Education', description:'Courses, providers, qualifications and student support.', icon:'cap', photo:studyPhoto },
+  { id:'money', title:'Earnings & Living Expenses', description:'Earnings, banking, budgeting, taxes and everyday living costs.', icon:'wallet', photo:moneyPhoto },
+  { id:'work', title:'Work & Careers', description:'Employment rights, job-search resources and career preparation.', icon:'briefcase', photo:workPhoto },
 ] as const;
