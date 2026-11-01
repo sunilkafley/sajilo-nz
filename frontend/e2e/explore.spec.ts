@@ -74,3 +74,27 @@ test('Explore fits small phones and tablets without horizontal scrolling', async
     await expect(page.getByRole('link', {name:'Prepare to travel', exact:true})).toBeVisible();
   }
 });
+
+test('Explore opens with a compact search row and four topics above mobile navigation',async({page})=>{
+  for(const viewport of [{width:320,height:640},{width:360,height:640},{width:390,height:664}]){
+    await page.setViewportSize(viewport);
+    await page.goto('/#/explore');
+    await page.evaluate(()=>document.fonts.ready);
+    const navigation=await page.locator('.public-navigation').boundingBox();
+    const search=page.locator('.explore-search');
+    expect((await search.boundingBox())!.height).toBeLessThanOrEqual(48);
+    const cards=page.locator('.explore-topic-grid .topic-card');
+    for(let index=0;index<4;index++){
+      await expect(cards.nth(index)).toBeVisible();
+      const bounds=await cards.nth(index).boundingBox();
+      expect(bounds!.y+bounds!.height).toBeLessThanOrEqual(navigation!.y);
+      const icon=await cards.nth(index).locator('.topic-card-icon').boundingBox();
+      const title=await cards.nth(index).getByRole('heading').boundingBox();
+      expect(title!.x).toBeGreaterThanOrEqual(icon!.x+icon!.width);
+      expect(Math.abs(title!.y-icon!.y)).toBeLessThanOrEqual(12);
+    }
+    expect(await page.evaluate(()=>scrollY===0 && document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    await search.click();
+    await expect(page.getByRole('combobox',{name:'Search Sajilo NZ guides, checklists and topics'})).toBeVisible();
+  }
+});

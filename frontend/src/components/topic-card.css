@@ -10,3 +10,10 @@
 .topic-card.topic-card:hover{background:#f0f8f5;box-shadow:0 4px 16px #183f5326}
 @media(max-width:800px){.topic-card.topic-card{min-height:145px;padding:14px 16px}.topic-card.topic-card h3{font-size:15px}.topic-card.topic-card p{font-size:12px}}
 @media(max-width:560px){.landing-topics .topic-card{min-height:156px;padding:10px}.landing-topics .topic-card h3{font-size:13px;max-width:90%}.landing-topics .topic-card p{font-size:11px;max-width:80%}.landing-topics .topic-card-icon .nav-icon{width:24px;height:24px}.landing-topics .topic-card-arrow{width:25px;height:25px;right:7px;bottom:7px}.landing-topics .topic-card-arrow .nav-icon{width:17px;height:17px}}
+/* Keep the title beside its icon across both topic grids. */
+.topic-card.topic-card{display:grid;grid-template-columns:30px minmax(0,1fr);gap:8px 10px;align-content:start;align-items:center}
+.topic-card .topic-card-icon{grid-column:1;margin:0;align-self:start}
+.topic-card.topic-card h3{grid-column:2;max-width:100%;margin:0;min-width:0;overflow-wrap:normal}
+.topic-card.topic-card p{grid-column:1/-1;align-self:start}
+@media(max-width:800px){.topic-card.topic-card{grid-template-columns:24px minmax(0,1fr);column-gap:8px}.topic-card .topic-card-icon .nav-icon{width:24px;height:24px}}
+@media(max-width:560px){.landing-topics .topic-card h3{max-width:100%}}

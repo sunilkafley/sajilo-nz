@@ -25,7 +25,7 @@ export function ExplorePage() {
     <p className="intro">Find your topic, read published information and choose your next step.</p>
     <Link className="explore-search" to={link('/search')}><Icon name="search"/><span><strong>Search Sajilo NZ</strong><span>Find existing guides, checklists and topic pages.</span></span><Icon name="arrow"/></Link>
     <p className="explore-saved"><Link to={link('/saved')}>Open saved guides</Link><span>Keep reading previously saved guides offline.</span></p>
-    <section aria-labelledby="explore-categories"><h2 id="explore-categories">Explore by topic</h2><p>Articles appear after review and publication. Some topics may not have content in your language yet.</p>
+    <section className="explore-topic-section" aria-labelledby="explore-categories"><h2 id="explore-categories">Explore by topic</h2><p>Articles appear after review and publication. Some topics may not have content in your language yet.</p>
       <div className="explore-grid explore-topic-grid">{categories.map(category=><TopicCard key={category.id} to={link(category.to)} topic={featuredTopics.find(topic=>topic.id===category.id) ?? {...category,photo:topicPhotos[category.id]}}/>)}</div>
     </section>
     <p className="explore-section"><Link className="explore-learn-link" to={link('/#landing-aotearoa')}>Learn about New Zealand<Icon name="arrow"/></Link></p>
