@@ -26,4 +26,3 @@ try {
     await page.screenshot({path:`docs/screenshots/explore-compact/explore-${viewport.width}.png`});
   }
 } finally {await browser.close();server.kill();}
-
