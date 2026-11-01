@@ -112,3 +112,35 @@ body{color:#10284b}p{color:#4f6477}
   .topic-money::before{background:linear-gradient(90deg,#fff0e9 22%,#fff0e9dd 60%,#fff0e966)}
   .topic-work::before{background:linear-gradient(90deg,#f0edff 22%,#f0edffdd 60%,#f0edff66)}
 }
+/* Illustrative photos with a pale wash keep card links legible. */
+.aotearoa-topics li{position:relative;isolation:isolate;overflow:hidden;background:#eef8f5;min-height:96px}
+.aotearoa-topics li::before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#f0f8f5 15%,#f0f8f5ee 48%,#f0f8f555 100%)}
+.aotearoa-photo{position:absolute;inset:0 0 0 auto;width:65%;height:100%;object-fit:cover;z-index:-2}
+.aotearoa-topics li .nav-icon{color:#168d81;flex-shrink:0}
+.aotearoa-topics a{font-weight:700;color:#123e4a}
+/* Reuse the Explore card treatment for Aotearoa introductions. */
+.aotearoa-topics li{display:block;min-height:0;padding:0;border:0;background:none;overflow:visible}
+.aotearoa-topics li::before{content:none}
+.aotearoa-topics .topic-card{height:100%;min-height:110px}
+@media(max-width:800px){.aotearoa-topics .topic-card{min-height:96px;padding:10px}.aotearoa-topics .topic-card h3{font-size:13px}.aotearoa-topics .topic-card-arrow{width:24px;height:24px;right:7px;bottom:7px}.aotearoa-topics .topic-card-arrow .nav-icon{width:16px;height:16px}}
+/* Keep all journey stages on one row and bring progress into the first phone view. */
+@media(max-width:700px){
+  .home-page .home-welcome{margin-bottom:10px}
+  .home-page .home-welcome .eyebrow,.home-page .home-welcome p:last-child{display:none}
+  .home-page .home-welcome h1{font-size:24px;line-height:1.2;margin:0}
+  .home-page .journey-stages{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:12px 0}
+  .home-page .journey-stages .card{padding:8px 5px;min-width:0;min-height:106px;text-align:center}
+  .home-page .journey-stage-icon{width:32px;height:32px;border-radius:9px;margin:0 auto 6px}
+  .home-page .journey-stage-icon svg{width:23px;height:24px}
+  .home-page .journey-stages h2{font-size:10px;line-height:1.2;letter-spacing:0;margin:0;overflow-wrap:normal}
+  .home-page .journey-stages p{font-size:9px;line-height:1.2;margin:4px 0 0}
+  .home-page .journey-stages a.card p{display:none}
+  .home-page .journey-flight-link{padding:8px 10px;gap:8px;margin:0 0 10px;font-size:12px;min-height:48px}
+  .home-page .journey-flight-link .home-icon-tile{width:32px;height:32px}
+  .home-page .journey-flight-link small{font-size:10px;margin-top:1px}
+  .home-page .journey-flight-link+p{font-size:11px;line-height:1.3;margin:0 0 10px}
+  .home-page .home-hero{padding:16px}
+  .home-page .home-hero h2{font-size:19px}
+  .home-page .home-hero p{font-size:11px}
+  .home-page .home-hero-bottom{margin-top:10px;padding-top:8px}
+}

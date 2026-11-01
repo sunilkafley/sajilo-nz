@@ -4,6 +4,7 @@ import { interfaceText } from '../../components/interfaceLanguage';
 import { introductionPages, withLanguage } from '../explore/topicConfig';
 import { landingTopics } from './landingTopics';
 import { TopicCard } from '../../components/TopicCard';
+import { aotearoaPhotos } from './aotearoaPhotos';
 
 export function HomePage() {
   const [params] = useSearchParams();
@@ -21,7 +22,7 @@ export function HomePage() {
       <div className="landing-topics">{landingTopics.map(topic=><TopicCard key={topic.id} topic={topic} to={withLanguage('/explore/'+topic.id,lang?'ne':'en')} home/>)}</div>
     </section>
     <section className="landing-section aotearoa-section" aria-labelledby="landing-aotearoa"><h2 id="landing-aotearoa" tabIndex={-1}>Get to know Aotearoa</h2><p>Useful information about life in New Zealand. Read introductions as they become available.</p>
-      <ul className="aotearoa-topics">{introductionPages.map(topic=><li key={topic.slug}><PrototypeIcon name={topic.icon}/><Link to={withLanguage('/explore/aotearoa/'+topic.slug,lang?'ne':'en')}>{topic.title}</Link></li>)}</ul>
+      <ul className="aotearoa-topics">{introductionPages.map(topic=><li key={topic.slug}><TopicCard topic={{id:topic.slug,title:topic.title,description:'',icon:topic.icon,photo:aotearoaPhotos[topic.slug]}} to={withLanguage('/explore/aotearoa/'+topic.slug,lang?'ne':'en')}/></li>)}</ul>
     </section>
   </div>;
 }
