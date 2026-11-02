@@ -3,7 +3,7 @@
 body{color:#10284b}p{color:#4f6477}
 .workspace{margin-left:0}
 .workspace main{max-width:1440px;padding:36px clamp(24px,3vw,48px) 48px}
-.workspace main.landing-main{max-width:1440px;padding:0}
+.workspace main.landing-main{max-width:none;padding:0}
 .app-header{background:#fff;border-bottom:1px solid var(--line)}
 .app-header-inner{max-width:1440px;min-height:92px;padding:8px clamp(24px,3vw,48px);margin:auto;display:flex;align-items:center;justify-content:space-between;gap:28px}
 .app-header .brand-link{width:230px;flex-shrink:0}
@@ -160,6 +160,12 @@ body{color:#10284b}p{color:#4f6477}
   .aotearoa-topics .topic-card-arrow{left:15px;right:auto;background:transparent;box-shadow:none;color:#006e6c}
 }
 @media(max-width:800px){.landing-welcome{grid-template-columns:1fr;padding-top:36px;padding-bottom:36px}.landing-welcome img{height:200px}.workspace:has(.landing-main) .app-footer span{width:100%}}
+
+/* Full-width backgrounds and curves, with the content aligned to the header. */
+@media(min-width:801px){
+  .landing-hero{padding-inline:max(clamp(24px,4vw,64px),calc((100% - 1344px)/2))}
+  .landing-section,.aotearoa-section{padding-inline:max(clamp(24px,3vw,48px),calc((100% - 1344px)/2))}
+}
 /* Keep all journey stages on one row and bring progress into the first phone view. */
 @media(max-width:700px){
   .home-page .home-welcome{margin-bottom:10px}
