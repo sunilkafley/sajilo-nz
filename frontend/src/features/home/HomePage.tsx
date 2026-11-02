@@ -5,13 +5,14 @@ import { introductionPages, withLanguage } from '../explore/topicConfig';
 import { landingTopics } from './landingTopics';
 import { TopicCard } from '../../components/TopicCard';
 import { aotearoaPhotos } from './aotearoaPhotos';
+import newcomerStudents from '../../assets/newcomer-students.png';
 
 export function HomePage() {
   const [params] = useSearchParams();
   const lang = params.get('lang') === 'ne' ? '&lang=ne' : '';
   return <div className="landing-page" lang="en">
     <section className="landing-hero" aria-labelledby="landing-heading">
-      <div className="hero-copy"><h1 id="landing-heading">Your New Zealand <br/><span>journey companion</span></h1>
+      <div className="hero-copy"><h1 id="landing-heading">Your New Zealand <br/><span>Journey Companion</span></h1>
         <p className="hero-nepali" lang="ne">{interfaceText('ne','tagline').text}</p>
         <p>Practical guides, checklists and trusted resources — from planning your move to finding your feet.</p>
       </div>
@@ -23,6 +24,10 @@ export function HomePage() {
     </section>
     <section className="landing-section aotearoa-section" aria-labelledby="landing-aotearoa"><h2 id="landing-aotearoa" tabIndex={-1}>Get to know Aotearoa</h2><p>Useful information about life in New Zealand. Read introductions as they become available.</p>
       <ul className="aotearoa-topics">{introductionPages.map(topic=><li key={topic.slug}><TopicCard topic={{id:topic.slug,title:topic.title,description:'',icon:topic.icon,photo:aotearoaPhotos[topic.slug]}} to={withLanguage('/explore/aotearoa/'+topic.slug,lang?'ne':'en')}/></li>)}</ul>
+    </section>
+    <section className="landing-section landing-welcome" aria-labelledby="landing-welcome-heading">
+      <div><p className="landing-eyebrow">YOUR JOURNEY, AT YOUR PACE</p><h2 id="landing-welcome-heading">You’re not alone.</h2><p>Sajilo NZ is here for students, families and newcomers navigating their journey to life in New Zealand.</p><Link className="landing-welcome-link" to={withLanguage('/about',lang?'ne':'en')}>Discover our story <PrototypeIcon name="arrow"/></Link></div>
+      <img src={newcomerStudents} alt="" loading="lazy"/>
     </section>
   </div>;
 }
