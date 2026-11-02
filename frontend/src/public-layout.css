@@ -123,6 +123,45 @@ body{color:#10284b}p{color:#4f6477}
 .aotearoa-topics li::before{content:none}
 .aotearoa-topics .topic-card{height:100%;min-height:110px}
 @media(max-width:800px){.aotearoa-topics .topic-card{min-height:96px;padding:10px}.aotearoa-topics .topic-card h3{font-size:13px}.aotearoa-topics .topic-card-arrow{width:24px;height:24px;right:7px;bottom:7px}.aotearoa-topics .topic-card-arrow .nav-icon{width:16px;height:16px}}
+
+/* Homepage presentation: the desktop cards keep the same links as Explore. */
+.hero-students{display:none}
+.landing-welcome{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:clamp(24px,5vw,72px);padding-top:64px;padding-bottom:64px}
+.landing-welcome img{display:block;width:100%;height:260px;object-fit:cover;border-radius:18px}
+.landing-welcome h2{font-size:clamp(28px,3vw,40px);margin:0 0 12px}
+.landing-welcome p{max-width:520px}
+.landing-welcome .landing-eyebrow{color:#00746f;font-size:11px;font-weight:800;letter-spacing:.14em}
+.landing-welcome-link{display:inline-flex;align-items:center;gap:10px;background:#006e6c;color:white!important;border-radius:999px;padding:12px 20px;font-weight:700;text-decoration:none}
+.landing-welcome-link .nav-icon{width:18px;height:18px}
+.workspace:has(.landing-main) .app-footer{background:#f3f7f7;border-top:0;align-items:center;padding-top:30px;padding-bottom:30px}
+.workspace:has(.landing-main) .app-footer span{font-weight:800;color:#10284b;margin-right:auto}
+@media(min-width:801px){
+  .landing-hero{min-height:440px;padding-top:58px}
+  .hero-copy{position:relative;z-index:1;max-width:48%}
+  .hero-students{display:block;position:absolute;right:4%;bottom:65px;width:29%;height:180px;object-fit:cover;border:5px solid white;border-radius:18px;box-shadow:0 12px 28px #10284b33}
+  .landing-page>.landing-section:not(.aotearoa-section):not(.landing-welcome){padding-top:50px;padding-bottom:105px}
+  .landing-section-head{margin-bottom:22px}
+  .landing-topics{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+  .landing-topics .topic-card.topic-card{display:grid;grid-template-columns:32px minmax(0,1fr);grid-template-rows:150px auto 1fr;align-content:start;gap:10px;padding:0 18px 22px;min-height:330px;background:#fff;box-shadow:0 4px 20px #10284b16}
+  .landing-topics .topic-card::before{content:none}
+  .landing-topics .topic-card-photo{position:static;grid-column:1/-1;width:calc(100% + 36px);height:150px;max-width:none;margin:0 -18px;z-index:auto;object-fit:cover}
+  .landing-topics .topic-card-icon{grid-column:1;grid-row:2;display:grid;place-items:center;background:#e5f5f0;border-radius:50%;width:32px;height:32px}
+  .landing-topics .topic-card-icon .nav-icon{width:21px;height:21px}
+  .landing-topics .topic-card h3{grid-column:2;grid-row:2;font-size:16px}
+  .landing-topics .topic-card p{grid-column:1/-1;max-width:none;padding-right:15px;line-height:1.5}
+  .landing-topics .topic-card-arrow{box-shadow:none;background:#edf7f5;color:#006e6c}
+  .aotearoa-section{position:relative;background:#102e50;color:white;padding:78px clamp(24px,3vw,48px) 90px}
+  .aotearoa-section::before{content:'';position:absolute;top:-60px;left:0;width:100%;height:62px;background:#102e50;clip-path:ellipse(75% 100% at 50% 100%)}
+  .aotearoa-section h2{color:white;font-size:34px}
+  .aotearoa-section>p{color:#e1edf3;margin-bottom:24px}
+  .aotearoa-topics{grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}
+  .aotearoa-topics .topic-card.topic-card{display:flex;flex-direction:column;align-items:flex-start;gap:14px;min-height:190px;padding:20px 16px 42px;background:#fff;box-shadow:none}
+  .aotearoa-topics .topic-card::before,.aotearoa-topics .topic-card-photo{display:none}
+  .aotearoa-topics .topic-card-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#e4f4ef}
+  .aotearoa-topics .topic-card h3{font-size:15px;line-height:1.3}
+  .aotearoa-topics .topic-card-arrow{left:15px;right:auto;background:transparent;box-shadow:none;color:#006e6c}
+}
+@media(max-width:800px){.landing-welcome{grid-template-columns:1fr;padding-top:36px;padding-bottom:36px}.landing-welcome img{height:200px}.workspace:has(.landing-main) .app-footer span{width:100%}}
 /* Keep all journey stages on one row and bring progress into the first phone view. */
 @media(max-width:700px){
   .home-page .home-welcome{margin-bottom:10px}
