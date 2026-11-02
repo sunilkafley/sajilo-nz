@@ -6,7 +6,7 @@ test('public landing matches responsive hierarchy and preserves readable guides'
     await page.setViewportSize({width,height:1000});
     await page.goto('/');
     await page.evaluate(() => document.fonts.ready);
-    await expect(page.getByRole('heading',{name:'Your New Zealand journey companion'})).toBeVisible();
+    await expect(page.getByRole('heading',{name:'Your New Zealand Journey Companion'})).toBeVisible();
     await expect(page.locator('.landing-topic')).toHaveCount(4);
     const columns=await page.locator('.landing-topics').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
     expect(columns).toBe(2);

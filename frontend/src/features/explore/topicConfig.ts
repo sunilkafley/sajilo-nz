@@ -28,7 +28,7 @@ export const topicConfig: Record<string, TopicConfig> = {
   cities: {title:'City information', heading:'Find your city.', intro:'Explore published city introductions, starting with Christchurch preparation.', section:'City introductions', related:[{title:'Christchurch preparation',to:'/cities/christchurch'},{title:'Arrival information',to:'/explore/arrival'}]},
 };
 export const introductionPages = [
-  {slug:'about-new-zealand',title:'About New Zealand',icon:'globe'}, {slug:'culture-maori-culture',title:'Culture & Māori culture',icon:'users'},
+  {slug:'about-new-zealand',title:'About New Zealand',icon:'globe'}, {slug:'culture-maori-culture',title:'Māori Culture',icon:'users'},
   {slug:'weather-climate',title:'Weather & climate',icon:'weather'}, {slug:'healthcare',title:'Healthcare',icon:'heart'},
   {slug:'laws-everyday-rules',title:'Laws & everyday rules',icon:'shield'}, {slug:'student-life',title:'Student life',icon:'cap'},
 ] as const;

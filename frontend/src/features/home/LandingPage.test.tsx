@@ -40,6 +40,7 @@ it('offers exactly four specified photo topics without Home checklists, invented
   expect(screen.queryByRole('checkbox')).toBeNull();
   expect(within(screen.getByRole('region',{name:'Get to know Aotearoa'})).getAllByRole('listitem')).toHaveLength(6);
   expect(within(screen.getByRole('region',{name:'Get to know Aotearoa'})).getAllByRole('link')).toHaveLength(6);
+  expect(within(screen.getByRole('region',{name:'Get to know Aotearoa'})).getByRole('link',{name:'Māori Culture'})).toHaveAttribute('href','/explore/aotearoa/culture-maori-culture');
   expect(write).not.toHaveBeenCalled();write.mockRestore();
 });
 it('opens a dedicated housing information page without a checklist',async()=>{

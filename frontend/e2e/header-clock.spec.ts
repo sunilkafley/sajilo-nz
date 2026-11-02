@@ -12,6 +12,12 @@ test('New Zealand clock fits the top-right header alongside working controls', a
     const logo = (await page.locator('.brand-link').boundingBox())!;
     expect(box.x).toBeGreaterThan(logo.x + logo.width);
     expect(box.x + box.width).toBeLessThanOrEqual(width);
+    if (width > 800) {
+      const search = (await page.getByRole('link', { name: 'Search Sajilo NZ' }).boundingBox())!;
+      const language = (await page.getByRole('button', { name: 'Switch to Nepali' }).boundingBox())!;
+      expect(search.x + search.width).toBeLessThanOrEqual(language.x);
+      expect(language.x + language.width).toBeLessThanOrEqual(box.x);
+    }
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
   }
   await page.getByRole('button', { name: 'Switch to Nepali' }).click();

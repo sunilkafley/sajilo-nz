@@ -12,7 +12,7 @@ export function HomePage() {
   const lang = params.get('lang') === 'ne' ? '&lang=ne' : '';
   return <div className="landing-page" lang="en">
     <section className="landing-hero" aria-labelledby="landing-heading">
-      <div className="hero-copy"><h1 id="landing-heading">Your New Zealand <br/><span>journey companion</span></h1>
+      <div className="hero-copy"><h1 id="landing-heading">Your New Zealand <br/><span>Journey Companion</span></h1>
         <p className="hero-nepali" lang="ne">{interfaceText('ne','tagline').text}</p>
         <p>Practical guides, checklists and trusted resources — from planning your move to finding your feet.</p>
       </div>

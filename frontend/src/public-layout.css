@@ -1,5 +1,5 @@
 /* Public landing shell. Existing feature styles and storage/UI contracts remain. */
-:root{color:#10284b;background:#fff;--green:#006e6c;--mint:#e8f5f2;--line:#e2eaeb}
+:root{color:var(--brand-ink);background:var(--brand-surface);--brand-ink:#10284b;--brand-navy:#102e50;--brand-teal:#006e6c;--brand-mint:#e8f5f2;--brand-surface:#fff;--brand-line:#e2eaeb;--green:var(--brand-teal);--mint:var(--brand-mint);--line:var(--brand-line)}
 body{color:#10284b}p{color:#4f6477}
 .workspace{margin-left:0}
 .workspace main{max-width:1440px;padding:36px clamp(24px,3vw,48px) 48px}
@@ -12,7 +12,7 @@ body{color:#10284b}p{color:#4f6477}
 .public-navigation .nav-icon{display:none}
 .public-navigation a.active{color:#006e6c}
 .public-navigation a.active::after{content:"";position:absolute;height:3px;border-radius:3px;background:#008a86;bottom:0;left:0;right:0}
-.header-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.header-right{display:flex;align-items:center;gap:16px;flex-shrink:0}
 .nz-clock{text-align:right;font-size:11px;line-height:1.4;color:#4f6477}
 .nz-clock span{display:block;font-weight:600;color:#006e6c}
 .nz-clock time{display:block;white-space:nowrap;font-variant-numeric:tabular-nums}
@@ -30,6 +30,7 @@ body{color:#10284b}p{color:#4f6477}
 .hero-copy{max-width:640px}.hero-copy h1{font-size:clamp(36px,3.6vw,52px);letter-spacing:-.045em;color:#0a244b;line-height:1.09;margin-bottom:12px}.hero-copy h1 span{color:#008781}
 .hero-copy p{font-size:19px;line-height:1.45;max-width:530px;color:#203c5c}
 .hero-copy .hero-nepali{font-size:30px;font-weight:700;line-height:1.4;color:#008781}
+.hero-copy h1 span,.hero-copy .hero-nepali{color:#005d5b;text-shadow:0 1px 2px #fff,0 0 12px #fff,0 0 22px #fff}
 .hero-wave{position:absolute;bottom:-1px;left:0;width:100%;height:65px;z-index:-1}
 .landing-section{padding:0 clamp(24px,3vw,48px) 28px}
 .landing-section h2{font-size:28px;color:#0a244b}
@@ -62,7 +63,7 @@ body{color:#10284b}p{color:#4f6477}
 .search-page .search-dropdown{max-width:100%}
 @media(max-width:1050px){.app-header-inner{gap:16px}.app-header .brand-link{width:190px}.public-navigation{gap:15px}.public-navigation a{font-size:14px}.header-controls{gap:6px}.header-controls .language-toggle{max-width:115px}.landing-topics,.aotearoa-topics{grid-template-columns:repeat(2,minmax(0,1fr))}.journey-stages{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-copy{max-width:540px}.hero-copy h1{font-size:42px}}
 @media(max-width:800px){
-  .header-right{gap:3px}.nz-clock{font-size:10px;line-height:1.2}
+  .header-right{flex-direction:column;align-items:flex-end;gap:3px}.nz-clock{order:-1;font-size:10px;line-height:1.2}
   .app-header-inner{min-height:76px;padding:6px 18px;gap:8px}.app-header .brand-link{width:170px}.header-controls{gap:2px}.header-controls .language-toggle{font-size:12px;max-width:105px}.header-search{min-width:40px}
   .public-navigation{position:fixed;inset:auto 0 0;z-index:70;background:#fffffff5;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:5px 8px calc(5px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 20px #183f5308}
   .public-navigation a{min-height:58px;flex-direction:column;gap:3px;font-size:11px}.public-navigation .nav-icon{display:block;width:23px;height:23px}.public-navigation .desktop-about{display:none}.public-navigation a.active::after{display:none}.public-navigation a.active{background:#e9f6f3;border-radius:10px}
@@ -135,24 +136,24 @@ body{color:#10284b}p{color:#4f6477}
 .workspace:has(.landing-main) .app-footer{background:#f3f7f7;border-top:0;align-items:center;padding-top:30px;padding-bottom:30px}
 .workspace:has(.landing-main) .app-footer span{font-weight:800;color:#10284b;margin-right:auto}
 @media(min-width:801px){
-  .landing-hero{min-height:380px;padding-top:40px;padding-bottom:70px;background:linear-gradient(90deg,#ffffff7a 0%,#ffffffad 30%,#ffffff38 60%,transparent 80%),url('./assets/journey-landscape.png') center 55%/cover no-repeat}
-  .landing-hero::before{content:'';position:absolute;inset:0;z-index:-1;background:url('./assets/home-campus.jpg') right 56%/auto 180% no-repeat;mask-image:linear-gradient(to right,transparent calc(100% - 912px),#000 calc(100% - 500px));pointer-events:none}
-  .landing-hero::after{content:'';position:absolute;inset:0 30% 0 0;z-index:-1;background:linear-gradient(90deg,#ffffff7a 0%,#ffffffad 35%,transparent 80%),url('./assets/journey-landscape.png') center 60%/cover no-repeat;mask-image:linear-gradient(to right,#000 0%,#000 84%,transparent 100%);pointer-events:none}
+  .landing-hero{min-height:350px;padding-top:30px;padding-bottom:55px;background:linear-gradient(90deg,#ffffff7a 0%,#ffffffad 30%,#ffffff38 60%,transparent 80%),url('./assets/journey-landscape.png') center 55%/cover no-repeat}
+  .landing-hero::before{content:'';position:absolute;inset:0;z-index:-1;background:url('./assets/home-campus.jpg') right 56%/auto 180% no-repeat;mask-image:linear-gradient(to right,transparent calc(100% - 840px),#000 calc(100% - 460px));pointer-events:none}
+  .landing-hero::after{content:'';position:absolute;inset:0 30% 0 0;z-index:-1;background:url('./assets/hero-landscape-preview.jpg') 80% center/auto 100% no-repeat;mask-image:radial-gradient(ellipse 345px 100% at calc(80% - 207px) center,#000 50%,transparent 100%);filter:brightness(1.16);pointer-events:none}
   .landing-hero .hero-wave{z-index:0;pointer-events:none}
   .hero-copy{position:relative;z-index:1;max-width:48%}
-  .landing-page>.landing-section:not(.aotearoa-section):not(.landing-welcome){padding-top:50px;padding-bottom:105px}
-  .landing-section-head{margin-bottom:22px}
+  .landing-page>.landing-section:not(.aotearoa-section):not(.landing-welcome){padding-top:16px;padding-bottom:60px}
+  .landing-section-head{margin-bottom:12px}
   .landing-topics{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
-  .landing-topics .topic-card.topic-card{display:grid;grid-template-columns:32px minmax(0,1fr);grid-template-rows:150px auto 1fr;align-content:start;gap:10px;padding:0 18px 22px;min-height:330px;background:#fff;box-shadow:0 4px 20px #10284b16}
+  .landing-topics .topic-card.topic-card{display:grid;grid-template-columns:32px minmax(0,1fr) 30px;grid-template-rows:105px auto 1fr;align-content:start;gap:10px;padding:0 18px 18px;min-height:240px;background:#fff;box-shadow:0 4px 20px #10284b16}
   .landing-topics .topic-card::before{content:none}
-  .landing-topics .topic-card-photo{position:static;grid-column:1/-1;width:calc(100% + 36px);height:150px;max-width:none;margin:0 -18px;z-index:auto;object-fit:cover}
+  .landing-topics .topic-card-photo{position:static;grid-column:1/-1;width:calc(100% + 36px);height:105px;max-width:none;margin:0 -18px;z-index:auto;object-fit:cover}
   .landing-topics .topic-card-icon{grid-column:1;grid-row:2;display:grid;place-items:center;background:#e5f5f0;border-radius:50%;width:32px;height:32px}
   .landing-topics .topic-card-icon .nav-icon{width:21px;height:21px}
   .landing-topics .topic-card h3{grid-column:2;grid-row:2;font-size:16px}
-  .landing-topics .topic-card p{grid-column:1/-1;max-width:none;padding-right:15px;line-height:1.5}
-  .landing-topics .topic-card-arrow{box-shadow:none;background:#edf7f5;color:#006e6c}
-  .aotearoa-section{position:relative;background:#102e50;color:white;padding:78px clamp(24px,3vw,48px) 115px}
-  .aotearoa-section::before{content:'';position:absolute;top:-88px;left:0;width:100%;height:90px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 100' preserveAspectRatio='none'%3E%3Cpath fill='%23102e50' d='M0 65 C240 -20 490 35 760 58 S1220 78 1440 0 V100 H0Z'/%3E%3C/svg%3E") center/100% 100% no-repeat;pointer-events:none}
+  .landing-topics .topic-card p{grid-column:1/-1;max-width:none;line-height:1.5}
+  .landing-topics .topic-card-arrow{position:static;grid-column:3;grid-row:2;width:30px;height:30px;box-shadow:none;background:#edf7f5;color:#006e6c}
+  .aotearoa-section{position:relative;background:var(--brand-navy);color:white;padding:28px clamp(24px,3vw,48px) 115px}
+  .aotearoa-section::before{content:'';position:absolute;top:-60px;left:0;width:100%;height:62px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 100' preserveAspectRatio='none'%3E%3Cpath fill='%23102e50' d='M0 65 C240 -20 490 35 760 58 S1220 78 1440 0 V100 H0Z'/%3E%3C/svg%3E") center/100% 100% no-repeat;pointer-events:none}
   .aotearoa-section::after{content:'';position:absolute;bottom:-1px;left:0;width:100%;height:52px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 100' preserveAspectRatio='none'%3E%3Cpath fill='white' d='M0 75 C350 25 750 100 1100 53 S1350 25 1440 0 V100 H0Z'/%3E%3C/svg%3E") center/100% 100% no-repeat;pointer-events:none}
   .aotearoa-section h2{color:white;font-size:34px}
   .aotearoa-section>p{color:#e1edf3;margin-bottom:24px}
@@ -162,8 +163,15 @@ body{color:#10284b}p{color:#4f6477}
   .aotearoa-topics .topic-card-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#e4f4ef}
   .aotearoa-topics .topic-card h3{font-size:15px;line-height:1.3}
   .aotearoa-topics .topic-card-arrow{left:15px;right:auto;background:transparent;box-shadow:none;color:#006e6c}
+  .aotearoa-topics{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .aotearoa-topics .topic-card.topic-card{display:grid;grid-template-columns:88px minmax(0,1fr) 24px;align-items:center;gap:16px;min-height:122px;padding:16px;background:var(--brand-surface);border-radius:18px}
+  .aotearoa-topics .topic-card .topic-card-photo{display:block;position:static;grid-column:1;grid-row:1;width:88px;height:88px;border-radius:12px;object-fit:cover;z-index:auto}
+  .aotearoa-topics .topic-card .topic-card-icon{display:none}
+  .aotearoa-topics .topic-card.topic-card h3{grid-column:2;grid-row:1;font-size:17px}
+  .aotearoa-topics .topic-card .topic-card-arrow{position:static;grid-column:3;grid-row:1;width:24px;height:24px}
 }
 @media(max-width:800px){.landing-welcome{grid-template-columns:1fr;padding-top:36px;padding-bottom:36px}.landing-welcome img{height:200px}.workspace:has(.landing-main) .app-footer span{width:100%}}
+@media(min-width:801px) and (max-width:1050px){.app-header-inner{gap:8px}.app-header .brand-link{width:160px}.public-navigation{gap:10px}.public-navigation a{font-size:13px}.header-right{gap:6px}.header-controls{gap:2px}.nz-clock{font-size:9px}}
 
 /* Full-width backgrounds and curves, with the content aligned to the header. */
 @media(min-width:801px){
