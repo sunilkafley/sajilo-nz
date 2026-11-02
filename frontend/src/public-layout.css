@@ -135,7 +135,7 @@ body{color:#10284b}p{color:#4f6477}
 .workspace:has(.landing-main) .app-footer{background:#f3f7f7;border-top:0;align-items:center;padding-top:30px;padding-bottom:30px}
 .workspace:has(.landing-main) .app-footer span{font-weight:800;color:#10284b;margin-right:auto}
 @media(min-width:801px){
-  .landing-hero{min-height:clamp(500px,25vw,650px);padding-top:58px;background-position:center 53%}
+  .landing-hero{min-height:440px;padding-top:58px;background-color:#f4f6f5;background-image:linear-gradient(90deg,#fff 0%,#ffffffed 30%,#ffffff9c 53%,#ffffff00 75%),url('./assets/home-campus.jpg');background-size:100% 100%,auto 180%;background-position:center,right 56%;background-repeat:no-repeat}
   .hero-copy{position:relative;z-index:1;max-width:48%}
   .landing-page>.landing-section:not(.aotearoa-section):not(.landing-welcome){padding-top:50px;padding-bottom:105px}
   .landing-section-head{margin-bottom:22px}
