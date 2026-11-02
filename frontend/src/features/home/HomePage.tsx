@@ -16,7 +16,6 @@ export function HomePage() {
         <p className="hero-nepali" lang="ne">{interfaceText('ne','tagline').text}</p>
         <p>Practical guides, checklists and trusted resources — from planning your move to finding your feet.</p>
       </div>
-      <img className="hero-students" src={newcomerStudents} alt=""/>
       <svg className="hero-wave" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true"><path fill="#e9f6f3" d="M0 60 Q240 -15 480 45 T960 65 T1440 25 V100 H0Z"/><path fill="white" d="M0 75 Q260 0 580 65 T1060 70 T1440 60 V100 H0Z"/></svg>
     </section>
     <section className="landing-section" aria-labelledby="landing-topics">
