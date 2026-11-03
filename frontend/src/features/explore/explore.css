@@ -1,5 +1,9 @@
 .explore-page { overflow-wrap: anywhere; }
 .topic-page { overflow-wrap: anywhere; }
+.immigration-resources { margin: 28px 0; }
+.immigration-resources ul { padding-left: 20px; }
+.immigration-resources li { margin: 10px 0; }
+.immigration-news { margin-top: 24px; }
 .topic-search { display:flex; flex-wrap:wrap; align-items:end; gap:12px; margin:24px 0; }
 .topic-search label { flex:1 1 260px; }
 .topic-search input { display:block; width:100%; margin-top:8px; padding:12px; border:1px solid var(--line); border-radius:10px; font:inherit; }
@@ -91,3 +95,4 @@
   .explore-topic-grid .topic-card-arrow{width:24px;height:24px;right:7px;bottom:7px}
   .explore-topic-grid .topic-card-arrow .nav-icon{width:16px;height:16px}
 }
+
