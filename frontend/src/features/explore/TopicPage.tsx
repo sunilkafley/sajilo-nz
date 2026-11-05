@@ -4,6 +4,7 @@ import { fetchArticles, type Article, type ArticlePage } from './articles';
 import { introductionPages, practicalResources, topicConfig, withLanguage } from './topicConfig';
 import './explore.css';
 import { StudyDirectory } from '../study/StudyDirectory';
+import { ImmigrationResources } from './ImmigrationResources';
 
 function Attribution({article}:{article:Article}) {
   return <div className="article-attribution" lang="en">
@@ -52,6 +53,7 @@ export function TopicPage() {
     <p className="intro" lang={article?language:undefined}>{article?.summary || config.intro}</p>
     {!slug && (topicId==='study' || topicId==='education') && <p><Link className="button" to={link('/explore/study/courses')}>Find courses and compare options</Link></p>}
     {!slug && topicId==='money' && <p><Link className="button" to={link('/explore/money/budget')}>Open budget calculator</Link></p>}
+    {!slug && topicId==='immigration' && <ImmigrationResources/>}
     {searchable && <form className="topic-search" role="search" aria-label="Search this topic" onSubmit={event=>{event.preventDefault();const next=new URLSearchParams(params);next.delete('page');if(query.trim())next.set('q',query.trim());else next.delete('q');setParams(next);}}>
       <label htmlFor="topic-query">Search {config.title.toLowerCase()}<input id="topic-query" type="search" maxLength={200} value={query} onChange={event=>setQuery(event.target.value)}/></label><button>Search topic</button>
       {search && <button type="button" onClick={()=>{const next=new URLSearchParams(params);next.delete('q');next.delete('page');setParams(next);}}>Clear search</button>}
