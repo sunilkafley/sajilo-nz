@@ -1,0 +1,32 @@
+{% extends "admin/login.html" %}
+{% load static i18n %}
+
+{% block title %}{% if form.errors %}{% translate "Error:" %} {% endif %}Sign in · Sajilo NZ editorial{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'editorial/branding/login.css' %}">
+{% endblock %}
+
+{% block branding %}
+<a class="sajilo-admin-brand" href="/" aria-label="Sajilo NZ home">
+  <img src="{% static 'editorial/branding/sajilonz-logo.png' %}" alt="Sajilo NZ — Your New Zealand journey companion" width="2172" height="724">
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="sajilo-login-intro">
+  <p class="sajilo-eyebrow">EDITORIAL WORKSPACE</p>
+  <h1>Welcome back.</h1>
+  <p>Sign in to manage Sajilo NZ content.</p>
+</div>
+{{ block.super }}
+<div class="sajilo-login-help">
+  <p>Use your staff username and password.</p>
+  <p>Need help signing in? Contact your site administrator.</p>
+</div>
+{% endblock %}
+
+{% block footer %}
+<a href="/">← Back to Sajilo NZ</a>
+{% endblock %}
