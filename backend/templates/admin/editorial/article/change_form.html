@@ -1,0 +1,27 @@
+{% extends 'admin/change_form.html' %}
+{% load static %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'editorial/branding/publishing.css' %}">{% endblock %}
+{% block form_top %}
+<section class="article-publishing-intro" aria-labelledby="publishing-heading">
+  <div><p class="publishing-eyebrow">WRITE → PREVIEW → PUBLISH</p><h2 id="publishing-heading">{{ article_status }}</h2><p>Start with the title, topic, summary and content. Save a draft whenever you need to pause.</p></div>
+  {% if original %}<a href="{% url 'admin:editorial_article_preview' original.pk %}">Preview saved version →</a>{% endif %}
+</section>
+<details class="article-readiness"{% if errors %} open{% endif %}>
+  <summary>{% if publication_issues %}What’s needed before publishing{% else %}Saved version passes publication checks{% endif %}</summary>
+  <p>This checks the last saved version. Unsaved changes and your review confirmation are validated when you submit.</p>
+  {% if publication_issues %}<ul>{% for issue in publication_issues %}<li>{{ issue }}</li>{% endfor %}</ul>{% endif %}
+  <p>{% if can_publish_article %}You will publish as <strong>{{ publishing_reviewer }}</strong>.{% else %}Publishing requires permission to change articles.{% endif %} Each language needs its own review.</p>
+</details>
+{{ block.super }}
+{% endblock %}
+{% block submit_buttons_bottom %}
+{% if has_change_permission or add %}
+<div class="article-publishing-actions">
+  <input type="submit" name="_save_draft" value="Save draft" class="publishing-draft">
+  {% if has_view_permission or has_change_permission %}<input type="submit" name="_preview" value="Save &amp; preview" class="publishing-preview">{% endif %}
+  {% if original %}<input type="submit" name="_publish" value="Publish article" class="default publishing-publish">{% endif %}
+  {% if original and has_delete_permission %}<a class="deletelink" href="{% url 'admin:editorial_article_delete' original.pk %}">Delete article</a>{% endif %}
+  <p>Saving a draft keeps it off the public site. Publishing requires a completed review. To edit a published article, save your changes as a draft first.</p>
+</div>
+{% endif %}
+{% endblock %}

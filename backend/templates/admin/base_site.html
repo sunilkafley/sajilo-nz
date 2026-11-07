@@ -1,0 +1,15 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Sajilo NZ editorial{% endblock %}
+{% block bodyclass %}{{ block.super }} sajilo-admin{% endblock %}
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'editorial/branding/workspace.css' %}">
+{% endblock %}
+{% block branding %}
+<a class="sajilo-workspace-brand" href="{% url 'admin:index' %}">
+  <img src="{% static 'editorial/branding/sajilonz-logo.png' %}" alt="Sajilo NZ editorial home" width="2172" height="724">
+  <span>Content workspace</span>
+</a>
+{% endblock %}

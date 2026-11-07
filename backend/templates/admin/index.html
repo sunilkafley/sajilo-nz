@@ -1,0 +1,36 @@
+{% extends "admin/index.html" %}
+{% load i18n %}
+
+{% block content_title %}
+<div class="sajilo-workspace-intro">
+  <p class="sajilo-eyebrow">SAJILO NZ / EDITORIAL</p>
+  <h1>Your content workspace</h1>
+  <p>Create useful information for the next step in someone’s journey.</p>
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main" class="sajilo-dashboard-main">
+  {% if app_list %}
+  <section class="sajilo-review-note" aria-labelledby="review-heading">
+    <span class="sajilo-review-symbol" aria-hidden="true">✓</span>
+    <div><h2 id="review-heading">Draft first. Review before publishing.</h2>
+    <p>Check required sources and record a human review before publishing. Review each translation separately.</p></div>
+  </section>
+  <div class="sajilo-apps">
+    {% for app in app_list %}{% if app.app_label != 'auth' %}
+      {% include 'admin/sajilo_app_cards.html' %}
+    {% endif %}{% endfor %}
+    {% for app in app_list %}{% if app.app_label == 'auth' %}
+      {% include 'admin/sajilo_app_cards.html' %}
+    {% endif %}{% endfor %}
+  </div>
+  {% else %}
+  <section class="sajilo-review-note"><div><h2>No content access yet</h2><p>Your staff account has no content permissions. Contact your site administrator to request access.</p></div></section>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<aside class="sajilo-recent" aria-label="Recent actions">{{ block.super }}</aside>
+{% endblock %}
