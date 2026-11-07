@@ -4,6 +4,7 @@
 {% block content %}
 <p><strong>Staff-only saved-record preview — not public.</strong> This is an editorial preview, not the final website layout.</p>
 <p><a href="{{ change_url }}">Return to record</a></p>
+{% if can_review_article %}<p><a href="{{ change_url }}#id_verified_on">Continue to review &amp; publish →</a></p>{% endif %}
 <article class="editorial-preview" lang="{{ record.language }}">
   <h1>{{ record.title }}</h1>
   <p>{{ record.get_language_display }} · {{ record.get_topic_display }} · {{ record.get_status_display }}</p>

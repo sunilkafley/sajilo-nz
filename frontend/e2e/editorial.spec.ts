@@ -12,19 +12,18 @@ test('simple general article draft and publication needs review but no source', 
   await page.getByLabel('Article type:',{exact:true}).selectOption('general');
   await page.getByLabel('Summary:',{exact:true}).fill('Isolated browser test, not production content.');
   await page.getByLabel('Content:',{exact:true}).fill('Synthetic original introduction.');
-  await expect(page.getByLabel('Source URL:',{exact:true})).not.toBeVisible();
+  await expect(page.getByLabel('Official source link:',{exact:true})).toBeVisible();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
   await page.screenshot({path:fileURLToPath(new URL(`../../docs/screenshots/article-admin/form-${testInfo.project.name}.png`,import.meta.url)),fullPage:true});
-  await page.getByRole('button',{name:'Save and continue editing'}).click();
-  await expect(page.getByText('was added successfully',{exact:false})).toBeVisible();
-  await page.getByLabel('Status:',{exact:true}).selectOption('published');
-  await page.getByRole('button',{name:'Save and continue editing'}).click();
-  await expect(page.getByText('Publication requires an actual human reviewer, review date and next review date.',{exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'Save draft',exact:true}).click();
+  await expect(page.getByText('Draft saved. It is not published.',{exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'Publish article',exact:true}).click();
+  await expect(page.locator('.errorlist.nonfield')).toContainText('Publication requires an actual human reviewer, review date and next review date.');
   // Explicit synthetic review only inside the temporary test database.
-  await page.getByLabel('Reviewed by:',{exact:true}).selectOption({label:'editorial-test-admin'});
+  await page.getByLabel('I have reviewed this saved version in the selected language.',{exact:true}).check();
   await page.getByLabel('Reviewed on:',{exact:true}).fill('2026-01-01');
   await page.getByLabel('Next review on:',{exact:true}).fill('2026-02-01');
-  await page.getByRole('button',{name:'Save and continue editing'}).click();
+  await page.getByRole('button',{name:'Publish article',exact:true}).click();
   const slug=`synthetic-welcome-${testInfo.project.name}`;
   const result=await (await request.get(`/api/explore/articles/${slug}/`)).json();
   expect(result.article_type).toBe('general');expect(result.source_kind).toBeNull();
@@ -52,7 +51,7 @@ test('admin saved-draft preview is private, readable and non-cacheable', async (
   await page.getByLabel('Password:', { exact: true }).fill('isolated-editorial-test-only');
   await page.getByRole('button', { name: 'Log in' }).click();
   await page.getByRole('link', { name: 'Synthetic draft article', exact: true }).click();
-  await expect(page.getByLabel('Status:', { exact: true })).toHaveValue('draft');
+  await expect(page.locator('input[name="status"]')).toHaveValue('draft');
   const previewResponse = page.waitForResponse(response => response.url().endsWith('/preview/'));
   await page.getByRole('link', { name: 'Preview saved record' }).click();
   expect((await previewResponse).headers()['cache-control']).toContain('no-store');
@@ -77,7 +76,7 @@ test('admin saved-draft preview is private, readable and non-cacheable', async (
   await returnLink.focus();
   await expect(returnLink).toBeFocused();
   await returnLink.press('Enter');
-  await expect(page.getByLabel('Status:', { exact: true })).toHaveValue('draft');
+  await expect(page.locator('input[name="status"]')).toHaveValue('draft');
   await page.context().clearCookies();
   await page.goto(previewUrl);
   await expect(page.getByLabel('Username:')).toBeVisible();
