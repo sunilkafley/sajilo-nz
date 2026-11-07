@@ -253,6 +253,8 @@ class EditorialTests(TestCase):
                 if value: data[field.name] = 'on'
             else: data[field.name] = '' if value is None else str(value)
         data['_save'] = 'Save'
+        if isinstance(obj, Article):
+            data['confirm_review'] = 'on'
         return data
 
     def test_admin_publish_edit_preview_withdraw_and_history_for_all_types(self):
